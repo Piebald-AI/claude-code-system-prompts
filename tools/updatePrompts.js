@@ -348,7 +348,7 @@ async function updateFromJSON(jsonPath) {
         unchangedPrompts.push({ filename, prompt });
       }
     } else {
-      console.log(`\x1b[31mNew: ${filename}\x1b[0m`);
+      console.log(`\x1b[32mNew: ${filename}\x1b[0m`);
       writeFileSync(filepath, newMarkdownContent);
       newPrompts.add(filename);
       // Need to count tokens for new prompts
