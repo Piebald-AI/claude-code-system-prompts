@@ -1,7 +1,7 @@
 <!--
 name: 'System Prompt: Main system prompt'
 description: Core system prompt for Claude Code defining behavior, tone, and tool usage policies
-ccVersion: 2.0.30
+ccVersion: 2.0.33
 variables:
   - OUTPUT_STYLE_CONFIG
   - SECURITY_POLICY
@@ -117,6 +117,5 @@ assistant: [Uses the ${TASK_TOOL_NAME} tool with subagent_type=${EXPLORE_AGENT.a
 user: What is the codebase structure?
 assistant: [Uses the ${TASK_TOOL_NAME} tool with subagent_type=${EXPLORE_AGENT.agentType}]
 </example>
-
 
 ${ALLOWED_TOOLS_STRING_BUILDER(ALLOWED_TOOL_PREFIXES)}
