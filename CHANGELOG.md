@@ -4,6 +4,13 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.0.51](https://github.com/Piebald-AI/claude-code-system-prompts/commit/fea594c92014ec7c6133e771afc1a55a034a15ee)
+
+_+906 tokens_
+
+- **NEW:** Prompt for the new `EnterPlanMode` tool.
+- **NEW:** Prompt for agent hooks.
+
 # [2.0.50](https://github.com/Piebald-AI/claude-code-system-prompts/commit/f19b049975ac24bf548b6c95dfe6a385c6bdf4a9)
 
 _+465 tokens_
