@@ -4,6 +4,12 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+#### [2.0.59]
+
+<sub>_No substantive changes to the system prompts in v2.0.57-2.0.59._</sub>
+
+- Removed duplicate `WEBFETCH_TOOL_NAME` variable from Claude Code guide agent prompt metadata
+
 # [2.0.56](https://github.com/Piebald-AI/claude-code-system-prompts/commit/47571b6ad6110bebc89553bba49ebcf94f4605fc)
 
 - Reinforced note about using the current year in the WebSearch tool description
