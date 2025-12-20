@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: Bash (Git commit and PR creation instructions)'
 description: Instructions for creating git commits and GitHub pull requests
-ccVersion: 2.0.71
+ccVersion: 2.0.74
 variables:
   - BASH_TOOL_NAME
   - COMMIT_CO_AUTHORED_BY_CLAUDE_CODE
@@ -41,12 +41,7 @@ Git Safety Protocol:
    ${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE}`:"."}
    - Run git status after the commit completes to verify success.
    Note: git status depends on the commit completing, so run it sequentially after the commit.
-4. If the commit fails due to pre-commit hook:
-   - If hook REJECTED the commit (non-zero exit): Fix the issue, then create a NEW commit (NEVER amend)
-   - If commit SUCCEEDED but hook auto-modified files (e.g., formatting): You MAY amend to include them, but ONLY if:
-     * HEAD was created by you (verify: git log -1 --format='%an %ae')
-     * Commit is not pushed (verify: git status shows "Your branch is ahead")
-   - When in doubt, create a NEW commit instead of amending
+4. If the commit fails due to pre-commit hook, fix the issue and create a NEW commit (see amend rules above)
 
 Important notes:
 - NEVER run additional commands to read or explore code, besides git bash commands

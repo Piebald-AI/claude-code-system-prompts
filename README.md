@@ -28,7 +28,7 @@ Download it and try it out for free!  **https://piebald.ai/**
 
 [![Mentioned in Awesome Claude Code](https://awesome.re/mentioned-badge.svg)](https://github.com/hesreallyhim/awesome-claude-code)
 
-This repository contains an up-to-date list of all Claude Code's various system prompts and their associated token counts as of **[Claude Code v2.0.73](https://www.npmjs.com/package/@anthropic-ai/claude-code/v/2.0.73) (December 18th, 2025).**  It also contains a [**CHANGELOG.md**](./CHANGELOG.md) for the system prompts across 54 versions since v2.0.14.  From the team behind [<img src="https://github.com/Piebald-AI/piebald/raw/main/assets/logo.svg" width="15"> **Piebald.**](https://piebald.ai/)
+This repository contains an up-to-date list of all Claude Code's various system prompts and their associated token counts as of **[Claude Code v2.0.74](https://www.npmjs.com/package/@anthropic-ai/claude-code/v/2.0.74) (December 19th, 2025).**  It also contains a [**CHANGELOG.md**](./CHANGELOG.md) for the system prompts across 55 versions since v2.0.14.  From the team behind [<img src="https://github.com/Piebald-AI/piebald/raw/main/assets/logo.svg" width="15"> **Piebald.**](https://piebald.ai/)
 
 Why multiple "system prompts?"
 
@@ -84,9 +84,9 @@ Sub-agents and utilities.
 - [Agent Prompt: Claude guide agent](./system-prompts/agent-prompt-claude-guide-agent.md) (**763** tks) - System prompt for the claude-guide agent that helps users understand and use Claude Code, the Claude Agent SDK and the Claude API effectively..
 - [Agent Prompt: Conversation summarization with additional instructions](./system-prompts/agent-prompt-conversation-summarization-with-additional-instructions.md) (**1133** tks) - Extended summarization prompt with support for custom additional instructions.
 - [Agent Prompt: Conversation summarization](./system-prompts/agent-prompt-conversation-summarization.md) (**1121** tks) - System prompt for creating detailed conversation summaries.
-- [Agent Prompt: Exit plan mode with swarm](./system-prompts/agent-prompt-exit-plan-mode-with-swarm.md) (**466** tks) - System reminder for when ExitPlanMode is called with `isSwarm` set to true..
 - [Agent Prompt: Prompt Hook execution](./system-prompts/agent-prompt-prompt-hook-execution.md) (**134** tks) - Prompt given to Claude when acting evaluating whether to pass or fail a prompt hook..
 - [Agent Prompt: Prompt Suggestion Generator v2](./system-prompts/agent-prompt-prompt-suggestion-generator-v2.md) (**296** tks) - V2 instructions for generating prompt suggestions for Claude Code.
+- [Agent Prompt: Session Search Assistant](./system-prompts/agent-prompt-session-search-assistant.md) (**444** tks) - Agent prompt for the session search assistant that finds relevant sessions based on user queries and metadata.
 - [Agent Prompt: Session notes template](./system-prompts/agent-prompt-session-notes-template.md) (**292** tks) - Template structure for session notes tracking coding work and decisions.
 - [Agent Prompt: Session notes update instructions](./system-prompts/agent-prompt-session-notes-update-instructions.md) (**756** tks) - Instructions for updating session notes files during conversations.
 - [Agent Prompt: Session title and branch generation](./system-prompts/agent-prompt-session-title-and-branch-generation.md) (**333** tks) - System prompt for generating succinct titles and git branch names for coding sessions.
@@ -120,11 +120,12 @@ Parts of the main system prompt.
 
 Text for large system reminders.
 
-- [System Reminder: Delegate mode prompt](./system-prompts/system-reminder-delegate-mode-prompt.md) (**185** tks) - System reminder for delegate mode.
+> [!NOTE]
+> Note that we're planning to add a **system reminder creator/editor** to [tweakcc](https://github.com/Piebald-AI/tweakcc); :+1: [this issue](https://github.com/Piebald-AI/tweakcc/issues/113) if you're interested in that idea.
+
 - [System Reminder: Plan mode is active (for subagents)](./system-prompts/system-reminder-plan-mode-is-active-for-subagents.md) (**310** tks) - Simplified plan mode system reminder for sub agents.
 - [System Reminder: Plan mode is active](./system-prompts/system-reminder-plan-mode-is-active.md) (**1211** tks) - Enhanced plan mode system reminder with parallel exploration and multi-agent planning.
 - [System Reminder: Plan mode re-entry](./system-prompts/system-reminder-plan-mode-re-entry.md) (**236** tks) - System reminder sent when the user enters Plan mode after having previously exited it either via shift+tab or by approving Claude's plan..
-- [System Reminder: Team Coordination](./system-prompts/system-reminder-team-coordination.md) (**247** tks) - System reminder for team coordination.
 
 ### Builtin Tool Descriptions
 
@@ -142,10 +143,7 @@ Text for large system reminders.
 - [Tool Description: NotebookEdit](./system-prompts/tool-description-notebookedit.md) (**121** tks) - Tool description for editing Jupyter notebook cells.
 - [Tool Description: ReadFile](./system-prompts/tool-description-readfile.md) (**439** tks) - Tool description for reading files.
 - [Tool Description: Skill](./system-prompts/tool-description-skill.md) (**399** tks) - Tool description for executing skills in the main conversation.
-- [Tool Description: TaskList](./system-prompts/tool-description-tasklist.md) (**307** tks) - Description for the TaskList tool, which lists all tasks in the task list.
-- [Tool Description: TaskUpdate](./system-prompts/tool-description-taskupdate.md) (**615** tks) - Description for the TaskUpdate tool, which updates Claude's task list.
 - [Tool Description: Task](./system-prompts/tool-description-task.md) (**1214** tks) - Tool description for launching specialized sub-agents to handle complex tasks.
-- [Tool Description: TeammateTool's operation parameter](./system-prompts/tool-description-teammatetools-operation-parameter.md) (**209** tks) - Tool description for the TeammateTool's operation parameter.
 - [Tool Description: TodoWrite](./system-prompts/tool-description-todowrite.md) (**2167** tks) - Tool description for creating and managing task lists.
 - [Tool Description: WebFetch](./system-prompts/tool-description-webfetch.md) (**265** tks) - Tool description for web fetch functionality.
 - [Tool Description: WebSearch](./system-prompts/tool-description-websearch.md) (**334** tks) - Tool description for web search functionality.
@@ -153,7 +151,7 @@ Text for large system reminders.
 
 **Additional notes for some Tool Desscriptions**
 
-- [Tool Description: Bash (Git commit and PR creation instructions)](./system-prompts/tool-description-bash-git-commit-and-pr-creation-instructions.md) (**1723** tks) - Instructions for creating git commits and GitHub pull requests.
+- [Tool Description: Bash (Git commit and PR creation instructions)](./system-prompts/tool-description-bash-git-commit-and-pr-creation-instructions.md) (**1615** tks) - Instructions for creating git commits and GitHub pull requests.
 - [Tool Description: Bash (sandbox note)](./system-prompts/tool-description-bash-sandbox-note.md) (**454** tks) - Note about bash command sandboxing.
 - [Tool Description: MCPSearch (with available tools)](./system-prompts/tool-description-mcpsearch-with-available-tools.md) (**510** tks) - Tool description for the MCPSearch tool with available tools listed.
 - [Tool Description: Task (async return note)](./system-prompts/tool-description-task-async-return-note.md) (**201** tks) - Message returned to the model when a subagent launched successfully.
