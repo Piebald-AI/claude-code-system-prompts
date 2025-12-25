@@ -48,6 +48,10 @@ The result&mdash;40+ strings that are constantly changing and moving within a ve
 > - patches your npm-based or native (binary) Claude Code installation with them, and also
 > - provides diffing and conflict management for when both you and Anthropic have conflicting modifications to the same prompt file.
 
+## Extraction
+
+This repository contains the system prompts extracted using a script from the latest npm version of Claude Code.  As they're extracted directly from Claude Code's compiled source code, they're guaranteed to be exactly what Claude Code uses.  If you use [tweakcc](https://github.com/Piebald-AI/tweakcc) to customize the system prompts, it works in a similar way&mdash;it patches the exact same strings in your local installation as are extracted into this repository.
+
 ## Prompts
 
 Note that some prompts contain interpolated bits such as builtin tool name references, lists of available sub agents, and various other context-specific variables, so the actual counts in a particular Claude Code session will differ slightly&mdash;likely not beyond ±20 tokens, however.
