@@ -5,11 +5,14 @@
 
 <div align="left">
 
-### Announcement: Piebald is released!
+### Check out Piebald
 We've released **Piebald**, the ultimate agentic AI developer experience. \
 Download it and try it out for free!  **https://piebald.ai/**
 
-<sub>[Scroll down for Claude Code's system prompts.](#claude-code-system-prompts) :point_down:</sub>
+<a href="https://piebald.ai/discord"><img src="https://img.shields.io/badge/Join%20our%20Discord-5865F2?style=flat&logo=discord&logoColor=white" alt="Join our Discord"></a>
+<a href="https://x.com/PiebaldAI"><img src="https://img.shields.io/badge/Follow%20%40PiebaldAI-000000?style=flat&logo=x&logoColor=white" alt="X"></a>
+
+<sub>[**Scroll down for Claude Code's system prompts.**](#claude-code-system-prompts) :point_down:</sub>
 
 </div>
 </div>
@@ -19,7 +22,7 @@ Download it and try it out for free!  **https://piebald.ai/**
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://piebald.ai/screenshot-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="https://piebald.ai/screenshot-light.png">
-  <img alt="hero" width="600" src="https://piebald.ai/screenshot-light.png">
+  <img alt="hero" width="800" src="https://piebald.ai/screenshot-light.png">
 </picture>
 </a>
 </div>
