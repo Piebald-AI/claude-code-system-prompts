@@ -9,7 +9,7 @@
 We've released **Piebald**, the ultimate agentic AI developer experience. \
 Download it and try it out for free!  **https://piebald.ai/**
 
-<sub>[Scroll down for Claude Code's system prompts.](https://github.com/Piebald-AI/claude-code-system-prompts#claude-code-system-prompts) :point_down:</sub>
+<sub>[Scroll down for Claude Code's system prompts.](#claude-code-system-prompts) :point_down:</sub>
 
 </div>
 </div>
@@ -17,9 +17,9 @@ Download it and try it out for free!  **https://piebald.ai/**
 <div align="left">
 <a href="https://piebald.ai">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/79c18689-e2f0-4008-a13f-61c80756286a">
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/25cb5df8-cf15-4cae-9c1e-e88645f06ee1">
-  <img alt="hero" width="600" src="https://github.com/user-attachments/assets/25cb5df8-cf15-4cae-9c1e-e88645f06ee1">
+  <source media="(prefers-color-scheme: dark)" srcset="https://piebald.ai/screenshot-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://piebald.ai/screenshot-light.png">
+  <img alt="hero" width="600" src="https://piebald.ai/screenshot-light.png">
 </picture>
 </a>
 </div>
