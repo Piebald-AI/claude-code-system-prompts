@@ -4,6 +4,13 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.4](https://github.com/Piebald-AI/claude-code-system-prompts/commit/42537cb)
+
+_-19 tokens_
+
+- Tool Description: Bash - moved `run_in_background` parameter documentation to new `BASH_BACKGROUND_TASK_NOTES_FN` function variable; added `BASH_TOOL_EXTRA_NOTES()` placeholder; fixed misaligned variable references in dedicated tools list (file search, content search, read files, edit files, write files were each referencing the wrong tool name); corrected parallel command instruction references from `WRITE_TOOL_NAME` to `GIT_COMMIT_AND_PR_CREATION_INSTRUCTION`
+- Tool Description: Task - added `IS_TRUTHY_FN` and `PROCESS_OBJECT` variables; background task instructions now conditionally rendered based on `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS` environment variable; updated example variable references from `TASK_TOOL_OBJECT.name` to `IS_TRUTHY_FN.name` and from `WRITE_TOOL` to `PROCESS_OBJECT`
+
 # [2.1.3](https://github.com/Piebald-AI/claude-code-system-prompts/commit/3b9438c)
 
 _+1,047 tokens_
