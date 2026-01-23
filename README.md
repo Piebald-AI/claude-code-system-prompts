@@ -139,16 +139,49 @@ Parts of the main system prompt.
 
 Text for large system reminders.
 
-> [!NOTE]
-> Note that we're planning to add a **system reminder creator/editor** to [tweakcc](https://github.com/Piebald-AI/tweakcc); :+1: [this issue](https://github.com/Piebald-AI/tweakcc/issues/113) if you're interested in that idea.
-
+- [System Reminder: Agent mention](./system-prompts/system-reminder-agent-mention.md) (**45** tks) - Notification that user wants to invoke an agent.
+- [System Reminder: Compact file reference](./system-prompts/system-reminder-compact-file-reference.md) (**57** tks) - Reference to file read before conversation summarization.
 - [System Reminder: Delegate mode prompt](./system-prompts/system-reminder-delegate-mode-prompt.md) (**185** tks) - System reminder for delegate mode.
+- [System Reminder: Exited delegate mode](./system-prompts/system-reminder-exited-delegate-mode.md) (**50** tks) - Notification when exiting delegate mode in swarm.
+- [System Reminder: Exited plan mode](./system-prompts/system-reminder-exited-plan-mode.md) (**73** tks) - Notification when exiting plan mode.
+- [System Reminder: File exists but empty](./system-prompts/system-reminder-file-exists-but-empty.md) (**27** tks) - Warning when reading an empty file.
+- [System Reminder: File modified by user or linter](./system-prompts/system-reminder-file-modified-by-user-or-linter.md) (**97** tks) - Notification that a file was modified externally.
+- [System Reminder: File opened in IDE](./system-prompts/system-reminder-file-opened-in-ide.md) (**37** tks) - Notification that user opened a file in IDE.
+- [System Reminder: File shorter than offset](./system-prompts/system-reminder-file-shorter-than-offset.md) (**59** tks) - Warning when file read offset exceeds file length.
+- [System Reminder: File truncated](./system-prompts/system-reminder-file-truncated.md) (**74** tks) - Notification that file was truncated due to size.
+- [System Reminder: Hook additional context](./system-prompts/system-reminder-hook-additional-context.md) (**35** tks) - Additional context from a hook.
+- [System Reminder: Hook blocking error](./system-prompts/system-reminder-hook-blocking-error.md) (**52** tks) - Error from a blocking hook command.
+- [System Reminder: Hook stopped continuation](./system-prompts/system-reminder-hook-stopped-continuation.md) (**30** tks) - Message when a hook stops continuation.
+- [System Reminder: Hook success](./system-prompts/system-reminder-hook-success.md) (**29** tks) - Success message from a hook.
+- [System Reminder: Invoked skills](./system-prompts/system-reminder-invoked-skills.md) (**33** tks) - List of skills invoked in this session.
+- [System Reminder: Lines selected in IDE](./system-prompts/system-reminder-lines-selected-in-ide.md) (**66** tks) - Notification about lines selected by user in IDE.
+- [System Reminder: MCP resource no content](./system-prompts/system-reminder-mcp-resource-no-content.md) (**41** tks) - Shown when MCP resource has no content.
+- [System Reminder: MCP resource no displayable content](./system-prompts/system-reminder-mcp-resource-no-displayable-content.md) (**43** tks) - Shown when MCP resource has no displayable content.
+- [System Reminder: Malware analysis after Read tool call](./system-prompts/system-reminder-malware-analysis-after-read-tool-call.md) (**87** tks) - Instructions for analyzing malware without improving or augmenting it.
+- [System Reminder: Memory file contents](./system-prompts/system-reminder-memory-file-contents.md) (**38** tks) - Contents of a memory file by path.
+- [System Reminder: Nested memory contents](./system-prompts/system-reminder-nested-memory-contents.md) (**33** tks) - Contents of a nested memory file.
+- [System Reminder: New diagnostics detected](./system-prompts/system-reminder-new-diagnostics-detected.md) (**35** tks) - Notification about new diagnostic issues.
+- [System Reminder: Output style active](./system-prompts/system-reminder-output-style-active.md) (**32** tks) - Notification that an output style is active.
+- [System Reminder: Output token limit exceeded](./system-prompts/system-reminder-output-token-limit-exceeded.md) (**35** tks) - Warning when response exceeds output token limit.
+- [System Reminder: Plan file reference](./system-prompts/system-reminder-plan-file-reference.md) (**62** tks) - Reference to an existing plan file.
 - [System Reminder: Plan mode is active (5-phase)](./system-prompts/system-reminder-plan-mode-is-active-5-phase.md) (**1348** tks) - Enhanced plan mode system reminder with parallel exploration and multi-agent planning.
 - [System Reminder: Plan mode is active (iterative)](./system-prompts/system-reminder-plan-mode-is-active-iterative.md) (**854** tks) - Iterative plan mode system reminder for main agent with user interviewing workflow.
 - [System Reminder: Plan mode is active (subagent)](./system-prompts/system-reminder-plan-mode-is-active-subagent.md) (**310** tks) - Simplified plan mode system reminder for sub agents.
 - [System Reminder: Plan mode re-entry](./system-prompts/system-reminder-plan-mode-re-entry.md) (**236** tks) - System reminder sent when the user enters Plan mode after having previously exited it either via shift+tab or by approving Claude's plan..
+- [System Reminder: Queued command (prompt)](./system-prompts/system-reminder-queued-command-prompt.md) (**35** tks) - Queued user message to address (prompt variant).
+- [System Reminder: Queued command](./system-prompts/system-reminder-queued-command.md) (**31** tks) - Queued user message to address.
+- [System Reminder: Session continuation](./system-prompts/system-reminder-session-continuation.md) (**37** tks) - Notification that session continues from another machine.
+- [System Reminder: Session memory](./system-prompts/system-reminder-session-memory.md) (**105** tks) - Past session summaries that may be relevant.
+- [System Reminder: Task status](./system-prompts/system-reminder-task-status.md) (**18** tks) - Task status with TaskOutput tool reference.
+- [System Reminder: Task tools reminder](./system-prompts/system-reminder-task-tools-reminder.md) (**123** tks) - Reminder to use task tracking tools.
 - [System Reminder: Team Coordination](./system-prompts/system-reminder-team-coordination.md) (**247** tks) - System reminder for team coordination.
 - [System Reminder: Team Shutdown](./system-prompts/system-reminder-team-shutdown.md) (**136** tks) - System reminder for team shutdown.
+- [System Reminder: Todo list changed](./system-prompts/system-reminder-todo-list-changed.md) (**61** tks) - Notification that todo list has changed.
+- [System Reminder: Todo list empty](./system-prompts/system-reminder-todo-list-empty.md) (**83** tks) - Reminder that todo list is empty.
+- [System Reminder: TodoWrite reminder](./system-prompts/system-reminder-todowrite-reminder.md) (**98** tks) - Reminder to use TodoWrite tool for task tracking.
+- [System Reminder: Token usage](./system-prompts/system-reminder-token-usage.md) (**39** tks) - Current token usage statistics.
+- [System Reminder: USD budget](./system-prompts/system-reminder-usd-budget.md) (**42** tks) - Current USD budget statistics.
+- [System Reminder: Verify plan reminder](./system-prompts/system-reminder-verify-plan-reminder.md) (**47** tks) - Reminder to verify completed plan.
 
 ### Builtin Tool Descriptions
 
