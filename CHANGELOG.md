@@ -4,6 +4,19 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+#### [2.1.38](https://github.com/Piebald-AI/claude-code-system-prompts/commit/a547768)
+
+_+105 tokens_
+
+- **NEW:** Agent Prompt: Prompt Suggestion Generator (Coordinator) - Added new agent prompt for prompt suggestion generation in coordinator mode (283 tks).
+- **NEW:** System Prompt: Context compaction summary - Added new prompt used for context compaction summary for the SDK (278 tks).
+- **NEW:** Tool Description: TaskList (teammate workflow) - Added conditional section appended to the TaskList tool description for teammate workflows (133 tks).
+- **REMOVED:** Agent Prompt: Prompt Suggestion Generator (for Agent Teams) - Removed agent-teams-specific prompt suggestion generator (209 tks).
+- **REMOVED:** System Prompt: Accessing past sessions - Removed instructions for searching past session data including memory summaries and transcript logs (352 tks).
+- Tool Description: Sleep - Simplified description; replaced "Wakes early if the user sends a message" with "The user can interrupt the sleep at any time" and removed other references to early wake behavior.
+- Tool Description: Task - Fixed typo in example agent description ("when to respond" → "to respond") and corrected mismatched XML closing tag.
+- Tool Description: Bash (Git commit and PR creation instructions) - Minor formatting cleanup in the git amend warning text.
+
 #### [2.1.37](https://github.com/Piebald-AI/claude-code-system-prompts/commit/e687bd6)
 
 <sub>_No changes to the system prompts in v2.1.37._</sub>
