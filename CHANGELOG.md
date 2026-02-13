@@ -4,6 +4,13 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+#### [2.1.42](https://github.com/Piebald-AI/claude-code-system-prompts/commit/8a1123a)
+
+_-1,060 tokens_
+
+- **REMOVED:** Agent Prompt: Remember skill - Removed the `/remember` skill prompt that reviewed session memories and updated CLAUDE.local.md with recurring patterns and learnings (1048 tks).
+- Tool Description: WebSearch - Simplified date-awareness variables; replaced `GET_CURRENT_DATE_FN` and `CURRENT_YEAR` with a single `CURRENT_MONTH_YEAR` variable; updated example to use plain text ("with the current year, NOT last year") instead of template expressions (331 → 319 tks).
+
 #### [2.1.41](https://github.com/Piebald-AI/claude-code-system-prompts/commit/91732e4)
 
 _+262 tokens_
