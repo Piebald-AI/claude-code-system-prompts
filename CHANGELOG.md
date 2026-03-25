@@ -4,6 +4,35 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.83](https://github.com/Piebald-AI/claude-code-system-prompts/commit/a9eee87)
+
+_+5,960 tokens_
+
+- **NEW:** Data: Prompt Caching — Design & Optimization — New document covering how to design prompt-building code for effective caching, including placement patterns and anti-patterns.
+- **NEW:** System Prompt: Advisor tool instructions — Instructions for using the Advisor tool.
+- **NEW:** System Reminder: Ultraplan mode — System reminder for using Ultraplan mode to create a detailed implementation plan with multi-agent exploration and critique.
+- **NEW:** Skill: Verify CLI changes (example for Verify skill) — Example workflow for verifying a CLI change, as part of the Verify skill.
+- **NEW:** Skill: Verify server/API changes (example for Verify skill) — Example workflow for verifying a server/API change, as part of the Verify skill.
+- **NEW:** Skill: Verify skill — Opinionated verification workflow for validating code changes, replacing the previous verification specialist skill.
+- **REMOVED:** Skill: Verification specialist — Removed in favor of the new Verify skill and its example workflows.
+- **REMOVED:** System Reminder: Task status — Removed TaskOutput tool reference reminder.
+- Agent Prompt: Dream memory consolidation — Added a ~25KB size cap to the index file; tightened index entry format to one line under ~150 characters; changed verbose-entry demotion guidance to trigger on lines over ~200 chars.
+- Data: Agent SDK reference — Python — Added documentation for per-turn `usage` data on `AssistantMessage` for tracking costs.
+- Data: Agent SDK reference — TypeScript — Added comment noting optional `skills` and `mcpServers` for subagent customization in team definitions.
+- Data: Claude API reference — C# — Updated source-verified SDK version from 12.8.0 to 12.9.0; added prompt caching cross-reference to the shared design document; added cache-hit verification via usage fields.
+- Data: Claude API reference — cURL — Added Prompt Caching section with example, TTL options, top-level auto-placement, and cache-hit verification guidance.
+- Data: Claude API reference — Go — Added Prompt Caching section with system block caching example, TTL options, top-level auto-placement, and cache-hit verification.
+- Data: Claude API reference — Java — Bumped SDK version from 2.16.1 to 2.17.0; added prompt caching cross-reference to the shared design document; added cache-hit verification via usage fields.
+- Data: Claude API reference — PHP — Added beta tool runner documentation with `BetaRunnableTool` and `toolRunner()` examples; added structured outputs section with `StructuredOutputModel` and raw schema approaches; added Prompt Caching section; bumped recommended SDK version from ^0.6 to ^0.7; updated intro note to reflect new beta tool runner and structured output support.
+- Data: Claude API reference — Python — Expanded prompt caching intro with prefix-match explanation, architectural guidance, and silent-invalidator audit reference; added "Verifying Cache Hits" subsection with usage field examples and debugging tips.
+- Data: Claude API reference — Ruby — Added Prompt Caching section with system block caching example, TTL options, top-level auto-placement, and cache-hit verification.
+- Data: Claude API reference — TypeScript — Added prefix-match explanation and cross-reference to the shared caching design document; added "Verifying Cache Hits" subsection with usage field examples and silent-invalidator debugging tips.
+- Data: Tool use concepts — Updated tool runner language list to include PHP; noted PHP's `BetaRunnableTool` wraps a run closure around a hand-written schema.
+- Skill: Build with Claude API — Added PHP beta tool runner to the SDK feature table; added "Prompt Caching (Quick Reference)" section with prefix-match explanation, top-level auto-caching guidance, and silent-invalidator troubleshooting; added prompt caching routing entries to the reading guide.
+- Skill: Build with Claude API (reference guide) — Added prompt caching routing entry for quick task navigation.
+- Tool Description: CronCreate — Added durable mode documentation: jobs can now optionally persist to disk and survive session restarts, with guidance on when to use durable vs. session-only; expanded runtime behavior section for durable job catch-up semantics.
+- Tool Description: SendMessageTool — Significantly condensed from a detailed protocol reference to a compact quick-reference format; inlined addressing table, simplified protocol response examples, and removed verbose per-message-type sections.
+
 # [2.1.81](https://github.com/Piebald-AI/claude-code-system-prompts/commit/a82ade6)
 
 _+294 tokens_
