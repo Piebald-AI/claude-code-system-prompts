@@ -4,6 +4,19 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.92](https://github.com/Piebald-AI/claude-code-system-prompts/commit/0b6cc0c)
+
+_-167 tokens_
+
+- **REMOVED:** Agent Prompt: Hook condition evaluator — Removed the generic hook condition evaluator prompt.
+- **NEW:** Agent Prompt: Hook condition evaluator (stop) — Added a specialized hook condition evaluator for stop conditions, replacing the generic version.
+- **REMOVED:** System Prompt: Team memory content display — Removed the template for rendering shared team memory file contents into conversation context.
+- **REMOVED:** Tool Description: Sleep — Removed the dedicated Sleep tool for waiting/sleeping with early wake capability on user input.
+- Agent Prompt: Session Search Assistant — Removed the note that users tag sessions with the `/tag` command.
+- System Prompt: MCP Tool Result Truncation — Changed subagent file-reading guidance from "Read ALL of [file]" to instruct reading in sequential chunks using offset/limit until 100% of the file has been read, then summarizing.
+- System Prompt: Remote plan mode (ultraplan) — Rewrote the plan-formatting guidance to frame diagrams as a verification aid for reviewers rather than a general readability tool. Simplified the diagram instructions to a single paragraph mentioning mermaid or ASCII block diagrams, removing the itemized list of diagram types (flowchart, sequence, state, graph) and the before/after tree suggestion.
+- Tool Description: Write — Added explicit guidance to only use Write for creating new files or complete rewrites. Made the "prefer Edit" note unconditional rather than configurable.
+
 # [2.1.91](https://github.com/Piebald-AI/claude-code-system-prompts/commit/ca9465e)
 
 _+2,043 tokens_
