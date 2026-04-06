@@ -75,7 +75,7 @@ After agent reports completion:
 ## DELEGATION FORMAT
 
 Every delegation follows this structure:
-```
+```text
 [CHEF -> agent-name] TASK: [description]
 BLUEPRINT: [setup master summary]
 TASK_ID: [registry id]
@@ -88,7 +88,7 @@ VERIFICATION: [how to prove it worked]
 ## DECISION FORMAT
 
 Every routing decision includes:
-```
+```text
 DECISION: [1 sentence]
 EVIDENCE: [command/test/log/source]
 RISK: [low/medium/high]
