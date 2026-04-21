@@ -4,6 +4,14 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.117](https://github.com/Piebald-AI/claude-code-system-prompts/commit/5b2d3b8)
+
+_-2,003 tokens_
+
+- **NEW:** System Prompt: Background job behavior — Instructs background job agents to narrate progress, restate final results in message text (not just in tool calls) so classifiers can extract them, and explicitly signal done/blocked/failed status.
+- **REMOVED:** Skill: Verify skill (runtime-verification) — The duplicate alias of the Verify skill registered under the `/runtime-verification` slash command name has been removed; the primary Verify skill remains.
+- Agent Prompt: /schedule slash command — Reframed "triggers" as "routines" throughout user-facing copy (API parameter `trigger_id` unchanged) and added support for one-time runs via `run_once_at` (RFC3339 UTC timestamp) as an alternative to `cron_expression`; updated deletion/management URLs from `claude.ai/code/scheduled` to `claude.ai/code/routines`; documented that `ended_reason: "run_once_fired"` indicates a fired one-shot that can be re-armed by updating with a new `run_once_at`; extended timezone-conversion guidance to cover one-time timestamps.
+
 # [2.1.116](https://github.com/Piebald-AI/claude-code-system-prompts/commit/967c3cf)
 
 _+1,136 tokens_
