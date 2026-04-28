@@ -1,12 +1,13 @@
 <!--
 name: 'Skill: Debugging'
 description: Instructions for debugging an issue that the user is encountering in the Claude Code session
-ccVersion: 2.1.71
+ccVersion: 2.1.122
 variables:
   - DEBUG_LOGGING_WAS_ALREADY_ACTIVE
   - DEBUG_LOG_PATH
   - DEBUG_LOG_SUMMARY
   - ISSUE_DESCRIPTION
+  - DAEMON_DEBUG_CONTEXT
   - GET_SETTINGS_FILE_PATH_FN
   - LOG_LINE_COUNT
   - CLAUDE_CODE_GUIDE_SUBAGENT_NAME
@@ -29,9 +30,11 @@ ${DEBUG_LOG_SUMMARY}
 
 For additional context, grep for [ERROR] and [WARN] lines across the full file.
 
+${ISSUE_DESCRIPTION}
+
 ## Issue Description
 
-${ISSUE_DESCRIPTION||"The user did not describe a specific issue. Read the debug log and summarize any errors, warnings, or notable issues."}
+${DAEMON_DEBUG_CONTEXT||"The user did not describe a specific issue. Read the debug log and summarize any errors, warnings, or notable issues."}
 
 ## Settings
 

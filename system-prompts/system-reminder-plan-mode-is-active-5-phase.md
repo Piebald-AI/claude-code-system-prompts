@@ -1,7 +1,7 @@
 <!--
 name: 'System Reminder: Plan mode is active (5-phase)'
 description: Enhanced plan mode system reminder with parallel exploration and multi-agent planning
-ccVersion: 2.1.118
+ccVersion: 2.1.122
 variables:
   - PLAN_FILE_INFO_BLOCK
   - ADDITIONAL_PLAN_WORKFLOW_INSTRUCTIONS
@@ -10,7 +10,7 @@ variables:
   - PLAN_SUBAGENT
   - PLAN_V2_PLAN_AGENT_COUNT
   - ASK_USER_QUESTION_TOOL_NAME
-  - GET_PHASE_FOUR_FN
+  - PHASE_FOUR_INSTRUCTIONS
   - EXIT_PLAN_MODE_TOOL
   - GET_PHASE_FIVE_FN
 -->
@@ -67,7 +67,7 @@ Goal: Review the plan(s) from Phase 2 and ensure alignment with the user's inten
 2. Ensure that the plans align with the user's original request
 3. Use ${ASK_USER_QUESTION_TOOL_NAME} to clarify any remaining questions with the user
 
-${GET_PHASE_FOUR_FN()}
+${PHASE_FOUR_INSTRUCTIONS}
 
 ### Phase 5: Call ${EXIT_PLAN_MODE_TOOL.name}
 ${GET_PHASE_FIVE_FN()}
