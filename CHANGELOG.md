@@ -4,6 +4,36 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.145](https://github.com/Piebald-AI/claude-code-system-prompts/commit/58f08ba)
+
+_+20,218 tokens_
+
+- **NEW:** Data: Managed Agents self-hosted sandboxes — Adds reference documentation for `self_hosted` Managed Agents environments, covering outbound worker polling, environment keys, SDK and CLI worker paths, webhook-driven wakeups, orchestration, monitoring, cloud-vs-self-hosted differences, credential handling, and customer-owned security responsibilities.
+- **NEW:** Skill: Run app — Adds a general skill for launching and driving a project's actual runtime surface, first preferring project-specific run skills and otherwise choosing patterns for CLIs, servers, browser apps, Electron apps, TUIs, and libraries.
+- **NEW:** Skill: Run skill generator — Adds guidance for creating project-specific `run-<unit>` skills, including verified setup/build/run steps, driver or smoke-harness creation, clean-environment verification, and examples for browser, CLI, Electron, library, TUI, and server/API projects.
+- **NEW:** Skill: Run skill template — Adds a reusable template for project-specific run skills with sections for prerequisites, setup, build, agent and human run paths, tests, gotchas, and troubleshooting.
+- **NEW:** Skill: Run browser-driven web app example — Adds an example run skill pattern for web apps that starts a dev server, waits on real readiness, drives it with `chromium-cli`, captures screenshots, and records recurring gotchas.
+- **NEW:** Skill: Run CLI tool example — Adds an example run skill pattern for CLI tools covering installation, representative invocations, expected output, exit codes, and stdin behavior.
+- **NEW:** Skill: Run Electron desktop GUI app example — Adds an example run skill pattern for Electron apps that launches under `xvfb`, exposes a Playwright-driven REPL, captures screenshots, and documents desktop automation pitfalls.
+- **NEW:** Skill: Run library SDK example — Adds an example run skill pattern for libraries and SDKs focused on build/test steps plus a minimal public-boundary smoke example.
+- **NEW:** Skill: Run TUI interactive terminal app example — Adds an example run skill pattern for terminal UIs using `tmux` to launch, send input, capture panes, document key commands, and clean up.
+- **NEW:** Skill: Run web server API example — Adds an example run skill pattern for servers and APIs with background launch, readiness polling, smoke `curl` verification, and shutdown guidance.
+- **REMOVED:** System Reminder: Plan mode is active (iterative) — Removes the iterative plan-mode reminder that told agents to maintain a plan file while repeatedly exploring, updating the plan, and asking the user questions before exiting plan mode.
+- Agent Prompt: Managed Agents onboarding flow — Updates the introductory Managed Agents explanation to include `self_hosted` environments where the user's own worker runs tool execution, and distinguishes `cloud` environment networking/packages from self-hosted infrastructure.
+- Agent Prompt: /review-pr slash command — Changes the PR detail command to request specific JSON fields from `gh pr view`, including title, body, author, refs, state, diff stats, changed file count, and labels.
+- Agent Prompt: Status line setup — Adds repository identity and current-branch PR metadata to the status-line input schema, with examples for displaying `owner/name` and PR number/review state.
+- Data: Anthropic CLI — Adds self-hosted environment CLI references for `ant beta:worker poll/run` and `ant beta:environments:work stats/stop`.
+- Data: Claude Platform on AWS reference — Clarifies that Claude Platform on AWS has first-party API parity except for self-hosted sandboxes, which are unavailable there and should use `cloud` environments instead.
+- Data: Live documentation sources — Adds Managed Agents self-hosted sandbox and self-hosted sandbox security documentation URLs to the live documentation source list.
+- Data: Managed Agents core concepts — Documents `sessions.update()` for changing `agent.tools`, `agent.mcp_servers`, and `vault_ids` on an idle existing session as a session-local override.
+- Data: Managed Agents endpoint reference — Adds self-hosted environment work queue endpoints and clarifies that session updates can replace tools, MCP servers, and vault IDs; also notes that self-hosted environment configs are just `{"type":"self_hosted"}`.
+- Data: Managed Agents environments and resources — Replaces the old restricted-networking example with `limited` networking plus `allow_package_managers` and `allow_mcp_servers`, and adds self-hosted sandbox guidance for running tool execution in user-controlled infrastructure.
+- Data: Managed Agents overview — Adds self-hosted sandboxes as a use case and updates environment guidance so `config.type` can be either `cloud` or `self_hosted`; also points to `sessions.update()` for per-session tool/MCP/vault changes.
+- Data: Managed Agents reference — cURL — Updates the environment creation example to use `limited` networking with package-manager and MCP-server allowances.
+- Data: Managed Agents tools and skills — Clarifies where prebuilt agent tools and MCP tools run for cloud vs. self-hosted environments, and adds notes about session-local tool/MCP/vault updates, large MCP outputs being offloaded to files, and invalid vault credentials surfacing as session errors rather than blocking session creation.
+- Data: Prompt Caching — Design & Optimization — Adds cache pre-warming guidance using `max_tokens: 0`, including when to use it, when to skip it, re-warming cadence, breakpoint placement, rejected parameter combinations, and why it replaces the older `max_tokens: 1` workaround.
+- Skill: Building LLM-powered applications with Claude — Notes that Claude Platform on AWS supports Managed Agents except self-hosted sandboxes, and adds `max_tokens: 0` as the intentional low-token exception for prompt-cache pre-warming.
+
 # [2.1.144](https://github.com/Piebald-AI/claude-code-system-prompts/commit/4b5fcf6)
 
 _-105 tokens_
