@@ -1,0 +1,374 @@
+================================================================================
+ID 1: Agent Prompt: Plan Mode (Enhanced) (agent-prompt-plan-mode-enhanced.md)
+Category: Agent Prompts | Status: Adopted & Highly Adapted
+Description: System instructions for the Plan subagent, guiding architectural design and codebase analysis.
+Audit Details: In Claude Code, this prompt instructs a specialized 'Plan' subagent to explore file structures, evaluate architectural styles, and propose detailed designs. It emphasizes tracing dependencies and compiling a step-by-step strategy. It is designed to run in a separate, isolated subagent container.
+Gemini Rationale:
+In Antigravity, we utilize Gemini Pro's massive 2M token context window, eliminating the need to isolate the planner in a separate docker container to save context. However, Gemini models are susceptible to instruction dilution when loaded with too much conversational prose or redundant warnings. This requires converting the detailed architectural principles into explicit directives and strict tool-usage policies.
+Gemini Strategy:
+We integrate these planning rules into the Antigravity `planning-and-verification` skill. To enforce the read-only boundary during exploration, the agent's write tools (`write_to_file`, `replace_file_content`, `multi_replace_file_content`) are disabled, and a `pre_tool_call_decide` hook blocks state-altering shell commands (like `touch`, `mkdir`, `git add`, `npm install`). We also register a post-turn validation hook that rejects the turn unless the response ends with the structured '### Critical Files for Implementation' section listing exactly 3-5 files.
+================================================================================
+
+================================================================================
+ID 2: System Reminder: Plan Mode is Active (5-Phase) (system-reminder-plan-mode-is-active-5-phase.md)
+Category: System Reminders | Status: Adopted & Enforced
+Description: System reminder injected to keep the agent inside the strict 5-phase gated planning pipeline.
+Audit Details: Instructs the coordinator model to systematically proceed through five distinct phases: 1. Exploration (reading codebase), 2. Design (proposing alternatives), 3. Review (auditing solutions), 4. Plan compilation (writing implementation_plan.md), and 5. Approval (calling ExitPlanMode).
+Gemini Rationale:
+Without a structured gating pipeline, Gemini tends to skip exploration and immediately start editing source files, resulting in broken builds and redundant code. Enforcing a multi-phase workflow ensures that existing helpers and codebase conventions are identified before modification.
+Gemini Strategy:
+We implement the 5-phase planning flow directly in the Antigravity `planning-and-verification` skill, managed by the coordinator state machine. Rather than spawning expensive external subagents for exploration (Phase 1) and design (Phase 2), we leverage Gemini Flash's parallel tool calling to run up to 10 codebase searches (`grep_search`, `list_dir`) simultaneously. We restrict writing permissions exclusively to `implementation_plan.md` throughout the planning phase.
+================================================================================
+
+================================================================================
+ID 3: System Reminder: Plan Mode Approval Tool Enforcement (system-reminder-plan-mode-approval-tool-enforcement.md)
+Category: System Reminders | Status: Adopted & Enforced
+Description: Enforces that the planning turn must terminate exclusively with a specific approval tool call.
+Audit Details: Strictly forbids the agent from asking if the plan is okay in raw text or using informal questions. The agent must call 'ExitPlanMode' to request plan approval or 'AskUserQuestion' to choose between specific designs. Any other termination triggers a system rejection.
+Gemini Rationale:
+Gemini frequently concludes planning turns with conversational text questions (e.g., 'Does this plan look good?') rather than programmatic tool calls. This halts automated scripts that rely on tool responses to proceed.
+Gemini Strategy:
+We enforce the approval gate in the agent's turn loop using the `post_turn` lifecycle hook. The hook scans the output for approval queries (e.g., 'Is this plan okay?', 'Should I proceed?'); if found without a corresponding call to `ExitPlanMode` or `ask_question`, the hook rejects the turn and returns a system error: 'You must call ExitPlanMode to submit the plan for approval or ask_question to clarify designs.'
+================================================================================
+
+================================================================================
+ID 4: System Reminder: Plan File Reference (system-reminder-plan-file-reference.md)
+Category: System Reminders | Status: Adopted
+Description: Injects a direct reference pointer to the current implementation_plan.md path.
+Audit Details: Informs the model of the exact relative path of the active planning document so that it can write to it or read from it without guessing the directory structure.
+Gemini Rationale:
+Gemini models are prone to hallucinating paths and locations of active planning documents (e.g., creating `docs/plan.md` or `plan.md` at the root) if not given a specific path.
+Gemini Strategy:
+When plan mode is active, the Antigravity pre-turn hook reads the current content of `implementation_plan.md` from the local workspace and injects its absolute path and current contents into the system instructions under `[Active Plan File]`, ensuring the agent edits the correct file directly.
+================================================================================
+
+================================================================================
+ID 5: System Reminder: Plan Mode Re-Entry (system-reminder-plan-mode-re-entry.md)
+Category: System Reminders | Status: Adopted
+Description: Fires when the agent re-enters Plan Mode after a previous rejection or modification request.
+Audit Details: Warns the agent that the previous plan was rejected or modified, and instructs it to re-orient, read the user's feedback, and update the existing plan instead of writing a new one from scratch.
+Gemini Rationale:
+Upon returning to plan mode after a rejection or modification request, Gemini can suffer from recency bias and forget the developer's original feedback, leading to the same rejected designs.
+Gemini Strategy:
+We mount the user's rejection comments and feedback history directly into the re-entry prompt. We configure the `ExitPlanMode` tool to calculate the hash of the plan file on re-entry; if the hash matches the exit hash, the tool call fails with a validation error, forcing the agent to modify the plan before submitting.
+================================================================================
+
+================================================================================
+ID 6: Agent Prompt: Explore (agent-prompt-explore.md)
+Category: Agent Prompts | Status: Replaced by Parallel Tools
+Description: System prompt for the Explore subagent to discover codebase structures.
+Audit Details: In Claude Code, this prompt instructs a lightweight Explore subagent container to map files, find existing utilities, and trace code dependencies to help the Plan subagent.
+Gemini Rationale:
+Launchings separate, isolated subagent containers for simple read-only code exploration incurs significant startup latency. Gemini's native parallel tool execution handles multi-file grepping and directory listing much faster.
+Gemini Strategy:
+We bypass the Explore subagent. Instead, the main agent runs exploration using parallel calls to `grep_search`, `list_dir`, and `view_file` (up to 10 in a single turn). The prompt's thoroughness directives ('quick', 'medium', 'very thorough') are mapped directly to query parameter limits in the tool definitions.
+================================================================================
+
+================================================================================
+ID 7: Skill: Verify Skill (skill-verify-skill.md)
+Category: Builtin Tool Descriptions | Status: Adopted & Highly Adapted
+Description: Instructions for verifying and testing the final implementation at the runtime surface.
+Audit Details: A massive instruction set teaching the agent how to test changes. It requires locating the 'runtime surface' (CLI output, API responses, GUI pixels) and executing empirical manual tests rather than relying strictly on unit tests.
+Gemini Rationale:
+LLM agents often default to running unit tests or typecheck scripts rather than validating the runtime behavior of their changes. Verification must happen at the user-facing 'surface' (CLI, API socket, Web GUI) to prevent undetected integration failures.
+Gemini Strategy:
+We implement these rules in our custom `verification` skill. The SDK inspects git diffs using `git log --oneline` and `git diff` to determine the change scope. It prioritizes executing local Python verification scripts (stored in `scratch/test_verify.py`) over generic test runners. If no verifier script is found, the agent is forced to perform a 'cold start' verification by launching the service and using `curl` to assert responses, writing stdout/stderr verbatim to `walkthrough.md`.
+================================================================================
+
+================================================================================
+ID 8: System Reminder: Verify Plan Reminder (system-reminder-verify-plan-reminder.md)
+Category: System Reminders | Status: Adopted
+Description: Reminder to review and run the verification recipe defined in the plan.
+Audit Details: Reminds the model to execute the exact verification steps listed in the approved plan before concluding the task.
+Gemini Rationale:
+Reinforces task discipline by reminding the agent of its planned verification recipe right before completing the task.
+Gemini Strategy:
+When the agent enters the validation state, the Antigravity lifecycle hook parses `implementation_plan.md`, extracts the verification recipe, and appends it to the system instructions: 'Run the exact Verification Recipe defined in your approved plan and capture the outputs.'
+================================================================================
+
+================================================================================
+ID 9: Skill: Create Verifier Skills (skill-create-verifier-skills.md)
+Category: Builtin Tool Descriptions | Status: Optional / Simplified
+Description: Guides the agent in creating custom, automated verifier scripts for the codebase.
+Audit Details: A large guide teaching the agent to write automated, self-contained scripts (e.g. bash or python testing scripts) that boot the app, send requests, and assert on outputs.
+Gemini Rationale:
+Claude's JavaScript-based verifier skill setup is complex and introduces heavy prompt overhead. Gemini is highly proficient at writing clean Python scripts, enabling a simplified verifier creation process.
+Gemini Strategy:
+We simplify the verifier creation instructions. The agent is directed to create a standalone Python script under `scratch/test_verify.py` that handles port acquisition (scanning for free ports), boots the service as a subprocess, runs test requests, asserts JSON schemas, and terminates the subprocess on exit.
+================================================================================
+
+================================================================================
+ID 10: Agent Prompt: Code Review Base Finder Angles (agent-prompt-code-review-part-1-base-finder-angles.md)
+Category: Agent Prompts | Status: Adopted & Simplified
+Description: Base instructions for auditing git diff hunks and identifying code regressions.
+Audit Details: Claude Code scans diff hunks from multiple concurrent 'angles' (Line-by-Line conds, Deleted guards, and Caller tracing) running in parallel containers to ensure high precision.
+Gemini Rationale:
+Running multiple parallel models/containers to scan a diff from different 'angles' is inefficient. Gemini Pro's long context window allows auditing all three angles (Condition logic, Deleted guards, and Caller signatures) simultaneously.
+Gemini Strategy:
+We combine the three finder angles into a single prompt for our `code-review` tool hook. When a PR or commit is analyzed, the hook passes the diff along with full source files to Gemini Pro, instructing the model to audit all three angles and return findings in a structured markdown table.
+================================================================================
+
+================================================================================
+ID 11: Agent Prompt: Code Review 3-State Verification Phase (agent-prompt-code-review-part-4-three-state-verification-phase.md)
+Category: Agent Prompts | Status: Adopted
+Description: Applies a strict 3-state classification schema to candidate code review findings.
+Audit Details: Requires a verifier agent to analyze proposed bugs and classify them as: CONFIRMED (factually certain), PLAUSIBLE (state-dependent or speculative), or REFUTED (impossible due to type constraints or adjacent guards).
+Gemini Rationale:
+Code reviewers are prone to reporting false positives by overlooking adjacent guards. Enforcing a strict 3-state classification forces the model to look for counter-proofs before flagging a bug.
+Gemini Strategy:
+We embed the CONFIRMED, PLAUSIBLE, and REFUTED classification directly in the schema of our code review tool. The reviewer must cite the exact file and line of the counter-proof or guard logic before classifying any potential bug as REFUTED.
+================================================================================
+
+================================================================================
+ID 12: Agent Prompt: Code Review Recall-Biased Verification (agent-prompt-code-review-part-5-recall-biased-verification-phase.md)
+Category: Agent Prompts | Status: Adopted
+Description: Configures the verifier's threshold to favor recall (catching all potential bugs) over precision.
+Audit Details: In high-effort modes, this instructs the verifier to classify suspicious or highly speculative code issues as PLAUSIBLE (retaining them in the report) unless the codebase explicitly refutes them.
+Gemini Rationale:
+For security audits, catching suspicious edge cases (high recall) is more critical than avoiding false positives. In standard reviews, precision is favored to avoid developer alert fatigue.
+Gemini Strategy:
+We expose a `sensitivity_mode` parameter in the Antigravity code review configuration. In `recall_bias` mode, we append the recall-biased verification prompt, instructing the model to classify ambiguous bugs as PLAUSIBLE rather than refuting them.
+================================================================================
+
+================================================================================
+ID 13: System Prompt: Memory Instructions (system-prompt-memory-instructions.md)
+Category: System Prompt | Status: Adopted & Optimized
+Description: Behavioral guidelines for managing persistent, file-based memory files.
+Audit Details: Instructs Claude to write persistent fact-based Markdown files under a local .claude memory index, defining templates and naming slugs. Claude prioritizes creating a large number of very small, narrow memory files.
+Gemini Rationale:
+Claude's system uses many tiny, fragmented Markdown memory files. Gemini's attention works best on large, coherent documents, and reading dozens of small files introduces listing overhead.
+Gemini Strategy:
+We consolidate local workspace memories into three key documents: `user_profile.md` (preferences), `past_corrections.md` (successful build/test fixes), and `project_scope.md` (architectural context). The pre-turn hook mounts these files into the context as structured markdown blocks.
+================================================================================
+
+================================================================================
+ID 14: Agent Prompt: Memory Synthesis (agent-prompt-memory-synthesis.md)
+Category: Agent Prompts | Status: Redundant / Bypassed
+Description: System prompt for the fact-synthesizer agent that extracts relevant facts from memory.
+Audit Details: In Claude Code, this prompt instructs an out-of-band synthesizer subagent to read selected memory Markdown files and compile a JSON array of up to 7 discrete, highly relevant facts to feed into the main prompt.
+Gemini Rationale:
+Launching an out-of-band synthesis subagent to select and extract exactly 7 facts is an optimization for small context windows that is unnecessary and slow under Gemini's 2M context window.
+Gemini Strategy:
+Bypassed. We eliminate the synthesis step entirely. The Antigravity loader reads the consolidated memory files directly from disk and mounts them in the context, allowing Gemini Pro to perform direct, in-context semantic retrieval.
+================================================================================
+
+================================================================================
+ID 15: Agent Prompt: Determine Memory Files to Attach (agent-prompt-determine-which-memory-files-to-attach.md)
+Category: Agent Prompts | Status: Redundant / Bypassed
+Description: System instructions for the selector subagent that identifies relevant memory files.
+Audit Details: Instructs a lightweight selector subagent to read MEMORY.md (the manifest index) and choose a maximum of 5 memory files to pass to the synthesizer, based on semantic matching.
+Gemini Rationale:
+Running a selector subagent to identify which memory files to load adds API latency. Gemini can ingest the entire memory folder at 0ms.
+Gemini Strategy:
+Bypassed. The Antigravity loader reads all markdown files from the workspace memory directory locally in Python and appends them to the context, removing the selector agent.
+================================================================================
+
+================================================================================
+ID 16: Agent Prompt: Dream Memory Consolidation (agent-prompt-dream-memory-consolidation.md)
+Category: Agent Prompts | Status: Adopted & Relocated
+Description: Instructions for the background memory consolidation pass ('Dreaming') to clean up logs.
+Audit Details: Runs a 4-phase nocturnal 'Dreaming' cycle: 1. Orient (scanning manifest), 2. Signal Extraction (reading daily session logs), 3. Consolidation (updating files), 4. Pruning and indexing (updating MEMORY.md).
+Gemini Rationale:
+Consolidation must happen offline to prevent active session latency. Running this as a background dreaming task keeps memory updated without blocking developer interaction.
+Gemini Strategy:
+We implement the 4-phase dreaming cycle (Orient, Signal Extraction, Consolidation, Pruning) as a background cron task managed by the Antigravity `schedule` tool or triggered at session shutdown. The task reads session logs and updates `past_corrections.md`.
+================================================================================
+
+================================================================================
+ID 17: Agent Prompt: Dream Memory Pruning (agent-prompt-dream-memory-pruning.md)
+Category: Agent Prompts | Status: Adopted & Relocated
+Description: Instructions for a memory pruning pass to delete duplicate or stale memory files.
+Audit Details: Instructs the dream agent to locate duplicate clusters of memory files, delete redundant copies, collapse them into a single file, and copy the oldest creation timestamp to maintain sorting integrity.
+Gemini Rationale:
+Memory indices must be kept clean to avoid conflicting guidelines. Collapsing similar entries keeps the memory compact.
+Gemini Strategy:
+The background dreaming task executes a self-pruning prompt on `past_corrections.md` and `user_profile.md`, merging duplicate preference rules and keeping the oldest creation timestamps.
+================================================================================
+
+================================================================================
+ID 18: System Prompt: Dream CLAUDE.md Memory Reconciliation (system-prompt-dream-claudemd-memory-reconciliation.md)
+Category: System Prompt | Status: Adopted
+Description: Instructs the dream agent to reconcile memory records against authoritative CLAUDE.md guidelines.
+Audit Details: Ensures memory tasks do not conflict with the repo's checked-in CLAUDE.md file. Stale memories are deleted. If the memory is newer and correct, it flags the contradiction so the user can manually update the guidelines.
+Gemini Rationale:
+Workspace rules (like CLAUDE.md) are the authoritative source of truth. Consolidated memories must be checked against them to prevent the agent from developing deviating rules.
+Gemini Strategy:
+During the background dreaming cycle, the agent reconciles memory files against the workspace `CLAUDE.md` or `.cursorrules`. Contradictory memories are pruned, and critical contradictions are flagged in a start-up warning.
+================================================================================
+
+================================================================================
+ID 19: System Prompt: Dream Team Memory Handling (system-prompt-dream-team-memory-handling.md)
+Category: System Prompt | Status: Adopted
+Description: Instructions for managing shared team memories safely during background dreaming passes.
+Audit Details: Blocks the consolidation agent from accidentally promoting personal memories to the shared team/ folder, and prevents it from deleting team files unless they are directly disproven by current codebase state.
+Gemini Rationale:
+Personal agent sessions should not delete or corrupt shared team memory assets (`memory/team/`), protecting collaborative rules in shared environments.
+Gemini Strategy:
+The consolidation script enforces strict boundaries: write access is restricted on `memory/team/` paths. Shared team memories are treated as read-only during personal dreaming cycles and can only be modified via explicit PR review.
+================================================================================
+
+================================================================================
+ID 20: System Prompt: Partial Compaction Instructions (system-prompt-partial-compaction-instructions.md)
+Category: System Prompt | Status: Adopted & Highly Adapted
+Description: Rules for compressing conversation history when exceeding active context boundaries.
+Audit Details: Instructs Claude to write a structured summary (Intents, concepts, files edited, pending tasks) to replace conversation history. It requires copying all user-stated security boundaries verbatim.
+Gemini Rationale:
+Compaction is rarely triggered under Gemini's 2M context window. When it does trigger (at 85% capacity), it is critical to copy all user safety limits verbatim to prevent security policy leakage.
+Gemini Strategy:
+We implement a sliding window compaction hook. The compaction handler extracts conversation history, constructs a structured summary, and appends a `[🛡️ VERBATIM SAFETY CONSTRAINTS]` block containing all active directory blocks and tool restrictions verbatim.
+================================================================================
+
+================================================================================
+ID 21: System Reminder: Compact File Reference (system-reminder-compact-file-reference.md)
+Category: System Reminders | Status: Adopted
+Description: Reference inject warning indicating that a conversation compaction occurred.
+Audit Details: Warns the agent that the history was compacted and directs it to orient on the newly injected summary block for current context.
+Gemini Rationale:
+Informs the agent that the conversation history has been compacted so it knows to orient on the newly injected summary block.
+Gemini Strategy:
+The compaction reminder header is prepended to the system prompt in the turn immediately following a history compaction.
+================================================================================
+
+================================================================================
+ID 22: System Reminder: Memory File Contents (system-reminder-memory-file-contents.md)
+Category: System Reminders | Status: Adopted
+Description: Standard reminder injected when memory files are attached to the prompt.
+Audit Details: Informs the model of the exact relative path of the active memory files that are being read, ensuring correct citation.
+Gemini Rationale:
+Ensuring clear citations of loaded memory sources helps prevent hallucinations and tracks the source of preferences.
+Gemini Strategy:
+The memory loader prepends `[Memory Source: memory/<filename>.md]` headers to each attached memory block in the context.
+================================================================================
+
+================================================================================
+ID 23: System Reminder: Nested Memory Contents (system-reminder-nested-memory-contents.md)
+Category: System Reminders | Status: Adopted
+Description: Warning warning when reading memory files nested inside shared sub-directories.
+Audit Details: Alerts the agent that a memory file resides under a nested directory scope, such as the shared team/ folder, and requires citation of the subdirectory.
+Gemini Rationale:
+Namespace conflicts must be avoided when personal and team memories share names or rules.
+Gemini Strategy:
+We format nested or team memories with explicit directory headers: `[Team Source: memory/team/<filename>.md]`.
+================================================================================
+
+================================================================================
+ID 24: Agent Prompt: Security Monitor (First Part) (agent-prompt-security-monitor-for-autonomous-agent-actions-first-part.md)
+Category: Agent Prompts | Status: Replaced by Python Hooks
+Description: System guidelines for evaluating autonomous coding agent actions against safety policies.
+Audit Details: Claude Code runs a separate, full LLM call to evaluate the security of *every single command* or file read/write before execution, to prevent prompt injection and scope creep.
+Gemini Rationale:
+Invoking an LLM to audit every single action adds significant latency (3-5s). Hard boundaries can be instantly validated in local Python code.
+Gemini Strategy:
+Bypassed as an LLM call. We implement the security monitor as a Python hook registered at `hooks.pre_tool_call_decide`. The hook analyzes command strings and intercepts shell injections (`&&`, `;`, `||`, `$()`) and path escapes in 0ms.
+================================================================================
+
+================================================================================
+ID 25: Agent Prompt: Security Monitor (Second Part) (agent-prompt-security-monitor-for-autonomous-agent-actions-second-part.md)
+Category: Agent Prompts | Status: Replaced by Python Hooks
+Description: Defines active environment context and permission boundaries for autonomous tools.
+Audit Details: Lists exact ALLOW exceptions and SOFT/HARD BLOCKS for tool calls, including Kubernetes execution, force-push limits, and Antigravity directory mount protections.
+Gemini Rationale:
+High-risk actions like force-pushing or accessing production environments should be blocked programmatically rather than depending on LLM judgment.
+Gemini Strategy:
+Bypassed as an LLM call. The hard block and soft block threat matrix is coded directly into the `pre_tool_call_decide` filter, immediately blocking `git push --force` or `kubectl` commands and raising permission validation prompts.
+================================================================================
+
+================================================================================
+ID 26: System Prompt: Executing Actions with Care (system-prompt-executing-actions-with-care.md)
+Category: System Prompt | Status: Adopted & Enforced
+Description: Behavioral constraints commanding caution and warning before destructive modifications.
+Audit Details: Instructs Claude to double-check file contents before editing, verify signatures before modifying libraries, and avoid taking the 'lazy path' of bypassing local checks (e.g. `--no-verify`).
+Gemini Rationale:
+Gemini is prone to using shortcuts (like bypassing checks with `--no-verify` or force-pushing) to finish tasks quickly. Forcing caution around destructive and hard-to-reverse actions maintains codebase integrity.
+Gemini Strategy:
+Adopted and adapted. The guidelines are injected into the agent system prompt. In addition, the Antigravity `run_command` tool hook programmatically intercepts commands with `--no-verify` or `git reset --hard` and prompts the user for explicit confirmation.
+================================================================================
+
+================================================================================
+ID 27: System Prompt: Action Safety & Truthful Reporting (system-prompt-action-safety-and-truthful-reporting.md)
+Category: System Prompt | Status: Adopted
+Description: Requires verification of targets before irreversible actions and honest outcome reporting.
+Audit Details: Mandates checking target file contents to ensure they match user descriptions, and requires reporting failed tests and skipped compilation steps factually without hedging.
+Gemini Rationale:
+Gemini models sometimes omit or hide test errors to make their execution appear successful. Factual reporting of outcomes is essential.
+Gemini Strategy:
+Enforced in verification hooks. The agent is instructed to write stdout/stderr of execution and test runs verbatim to `walkthrough.md`. The file edit tools verify target content before replacing, raising validation errors on mismatch.
+================================================================================
+
+================================================================================
+ID 28: Agent Prompt: Auto Mode Rule Reviewer (agent-prompt-auto-mode-rule-reviewer.md)
+Category: Agent Prompts | Status: Adopted & Simplified
+Description: Reviews and critiques custom safety policies and permission boundaries.
+Audit Details: A specialized reviewer model that checks custom user rules for clarity, completeness, conflicts, and actionability to ensure they do not bypass the core classifier.
+Gemini Rationale:
+Conflicting rules in safety configurations can cause unexpected locks or security escapes.
+Gemini Strategy:
+Adopted and simplified. When custom safety rules are modified (e.g. in `.cursorrules` or `.gemini/safety.json`), Antigravity executes a validation check during startup to verify that they do not conflict with the system's hard blocks.
+================================================================================
+
+================================================================================
+ID 29: System Prompt: Autonomous Loop Check (system-prompt-autonomous-loop-check.md)
+Category: System Prompt | Status: Adopted & Enforced
+Description: Pacing guidelines for background autonomous timer-based sessions.
+Audit Details: Directs Claude to act as a steward in background loops, focus on active PRs/conflicts, and stop immediately after 3 consecutive 'nothing to do' checks to avoid wasting token limits.
+Gemini Rationale:
+Runaway loops in background cron jobs can list directories endlessly and cause excessive API consumption if not capped.
+Gemini Strategy:
+The autonomous execution engine tracks empty runs. If 3 consecutive background ticks result in 'no modifications or actions needed', the engine shuts down the session. Git status and SCM PR threads are checked programmatically using git and SCM APIs.
+================================================================================
+
+================================================================================
+ID 30: System Prompt: Autonomous Loop Persistence (Persistent) (system-prompt-autonomous-loop-persistence-guidance-claude_code_loop_persistent.md)
+Category: System Prompt | Status: Adopted & Enforced
+Description: Instructs persistent loops to broaden scope and check sibling branches before exiting.
+Audit Details: Fires when CLAUDE_CODE_LOOP_PERSISTENT is enabled, commanding the agent to persistently search for tasks, check sibling branch merge conflicts, and sweep deferred items.
+Gemini Rationale:
+For persistent loops, the agent must proactively check adjacent branches and PR threads to resolve integration issues before human review.
+Gemini Strategy:
+When `persistent_loop=True` is enabled in the configuration, the idle check handler is modified. Instead of halting after 3 empty loops, the agent enters a 'broaden' state, checking sibling branches and SCM reviews, resolving threads, and ensuring rebases.
+================================================================================
+
+================================================================================
+ID 31: System Prompt: Tool Execution Denied (system-prompt-tool-execution-denied.md)
+Category: System Prompt | Status: Adopted
+Description: Behavioral guidelines instructing how to degrade gracefully when tool execution is denied.
+Audit Details: Commands the agent to degrade gracefully when a command is blocked by the monitor. It may try safe alternatives (e.g. head instead of cat) but must never attempt malicious bypasses.
+Gemini Rationale:
+If a tool call is blocked by a safety monitor, the agent should degrade gracefully (e.g., using specialized read tools instead of shell commands) rather than attempting to tunnel commands through other tools.
+Gemini Strategy:
+When the `pre_tool_call_decide` hook blocks a tool execution, the error message returned to the agent includes these graceful degradation instructions, prompting the model to use safer alternatives or stop and ask.
+================================================================================
+
+================================================================================
+ID 32: Tool Description: Default to Sandbox (tool-description-bash-sandbox-default-to-sandbox.md)
+Category: Builtin Tool Descriptions | Status: Replaced by Python Hooks
+Description: System prompt notifying that shell execution defaults to a secure sandbox environment.
+Audit Details: Instructs Claude that its commands run in a restricted container, warning it about path resolution limitations.
+Gemini Rationale:
+Sandbox isolation parameters are best managed at the environment level rather than relying on LLM parameters.
+Gemini Strategy:
+Replaced by Python hooks. Unsandboxed command execution requires explicit approval from the developer via the interactive SDK prompt, removing the need for `dangerouslyDisableSandbox: true` prompt logic.
+================================================================================
+
+================================================================================
+ID 33: Tool Description: Explain Sandbox Restriction (tool-description-bash-sandbox-explain-restriction.md)
+Category: Builtin Tool Descriptions | Status: Replaced by Python Hooks
+Description: Guides the model on how to explain sandbox permission errors to the user.
+Audit Details: Instructs Claude on how to explain why a shell command failed (network error, socket permission, etc.) without panicking.
+Gemini Rationale:
+The execution tool's error response should explain the failure details directly so the model does not have to guess.
+Gemini Strategy:
+Replaced by Python hooks. The Antigravity `run_command` tool wrapper catches permission errors and returns a structured message specifying the restricted boundary. Since Antigravity does not use the `/sandbox` command, that reference is bypassed.
+================================================================================
+
+================================================================================
+ID 34: System Prompt: Avoiding Unnecessary Sleep Commands (system-prompt-avoiding-unnecessary-sleep-commands-part-of-powershell-tool-description.md)
+Category: System Prompt | Status: Adopted & Enforced
+Description: Rules restricting shell sleep operations to prevent blocking agent loops.
+Audit Details: Commands the agent to never call 'sleep 5' or 'sleep 10' inside terminal windows to poll processes, requiring it to run proper check commands instead.
+Gemini Rationale:
+Sleep commands in scripts block execution threads and waste API call turns. The agent should run immediate checks or use background tasks instead.
+Gemini Strategy:
+Adopted and enforced. In the system prompt, sleeping in loops is prohibited. In addition, the shell tool hook blocks commands containing sleep durations over 2 seconds, instructing the model to use background tasks or event-driven checks.
+================================================================================
+

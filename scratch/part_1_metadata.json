@@ -1,0 +1,562 @@
+[
+  {
+    "id": 151,
+    "filename": "agent-prompt-agent-creation-architect.md",
+    "name": "Agent Prompt: Agent creation architect",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 959,
+    "word_count": 738
+  },
+  {
+    "id": 152,
+    "filename": "agent-prompt-background-agent-state-classifier.md",
+    "name": "Agent Prompt: Background agent state classifier",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 3081,
+    "word_count": 2370
+  },
+  {
+    "id": 153,
+    "filename": "agent-prompt-background-job-agent-instructions.md",
+    "name": "Agent Prompt: Background job agent instructions",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 412,
+    "word_count": 317
+  },
+  {
+    "id": 154,
+    "filename": "agent-prompt-bash-command-description-writer.md",
+    "name": "Agent Prompt: Bash command description writer",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 206,
+    "word_count": 159
+  },
+  {
+    "id": 155,
+    "filename": "agent-prompt-bash-command-prefix-detection.md",
+    "name": "Agent Prompt: Bash command prefix detection",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 668,
+    "word_count": 514
+  },
+  {
+    "id": 156,
+    "filename": "agent-prompt-claude-guide-agent.md",
+    "name": "Agent Prompt: Claude guide agent",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 603,
+    "word_count": 464
+  },
+  {
+    "id": 157,
+    "filename": "agent-prompt-code-review-part-2-low-effort-mode.md",
+    "name": "Agent Prompt: Code review part 2 low effort mode",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 239,
+    "word_count": 184
+  },
+  {
+    "id": 158,
+    "filename": "agent-prompt-code-review-part-3-extra-high-and-maximum-effort-modes.md",
+    "name": "Agent Prompt: Code review part 3 extra high and maximum effort modes",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 223,
+    "word_count": 172
+  },
+  {
+    "id": 159,
+    "filename": "agent-prompt-code-review-part-6-medium-effort-mode.md",
+    "name": "Agent Prompt: Code review part 6 medium effort mode",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 189,
+    "word_count": 146
+  },
+  {
+    "id": 160,
+    "filename": "agent-prompt-code-review-part-7-high-effort-mode.md",
+    "name": "Agent Prompt: Code review part 7 high effort mode",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 214,
+    "word_count": 165
+  },
+  {
+    "id": 161,
+    "filename": "agent-prompt-code-review-part-8-github-comment-posting.md",
+    "name": "Agent Prompt: Code review part 8 github comment posting",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 150,
+    "word_count": 116
+  },
+  {
+    "id": 162,
+    "filename": "agent-prompt-conversation-summarization.md",
+    "name": "Agent Prompt: Conversation summarization",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 1099,
+    "word_count": 846
+  },
+  {
+    "id": 163,
+    "filename": "agent-prompt-general-purpose.md",
+    "name": "Agent Prompt: General purpose",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 370,
+    "word_count": 285
+  },
+  {
+    "id": 164,
+    "filename": "agent-prompt-hook-condition-evaluator-stop.md",
+    "name": "Agent Prompt: Hook condition evaluator stop",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 309,
+    "word_count": 238
+  },
+  {
+    "id": 165,
+    "filename": "agent-prompt-prompt-suggestion-generator-v2.md",
+    "name": "Agent Prompt: Prompt suggestion generator v2",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 314,
+    "word_count": 242
+  },
+  {
+    "id": 166,
+    "filename": "agent-prompt-recent-message-summarization.md",
+    "name": "Agent Prompt: Recent message summarization",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 711,
+    "word_count": 547
+  },
+  {
+    "id": 167,
+    "filename": "agent-prompt-session-search.md",
+    "name": "Agent Prompt: Session search",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 176,
+    "word_count": 136
+  },
+  {
+    "id": 168,
+    "filename": "agent-prompt-status-line-setup.md",
+    "name": "Agent Prompt: Status line setup",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 1536,
+    "word_count": 1182
+  },
+  {
+    "id": 169,
+    "filename": "agent-prompt-webfetch-summarizer.md",
+    "name": "Agent Prompt: Webfetch summarizer",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 180,
+    "word_count": 139
+  },
+  {
+    "id": 170,
+    "filename": "agent-prompt-worker-fork.md",
+    "name": "Agent Prompt: Worker fork",
+    "category": "Agent Prompts",
+    "status": "",
+    "description": "<!--",
+    "tokens": 300,
+    "word_count": 231
+  },
+  {
+    "id": 171,
+    "filename": "data-github-actions-workflow-for-claude-mentions.md",
+    "name": "Data: Github actions workflow for claude mentions",
+    "category": "Data Templates",
+    "status": "",
+    "description": "<!--",
+    "tokens": 263,
+    "word_count": 203
+  },
+  {
+    "id": 172,
+    "filename": "data-github-app-installation-pr-description.md",
+    "name": "Data: Github app installation pr description",
+    "category": "Data Templates",
+    "status": "",
+    "description": "<!--",
+    "tokens": 390,
+    "word_count": 300
+  },
+  {
+    "id": 173,
+    "filename": "data-managed-agents-reference-curl.md",
+    "name": "Data: Managed agents reference curl",
+    "category": "Data Templates",
+    "status": "",
+    "description": "<!--",
+    "tokens": 1068,
+    "word_count": 822
+  },
+  {
+    "id": 174,
+    "filename": "data-managed-agents-reference-python.md",
+    "name": "Data: Managed agents reference python",
+    "category": "Data Templates",
+    "status": "",
+    "description": "<!--",
+    "tokens": 1329,
+    "word_count": 1023
+  },
+  {
+    "id": 175,
+    "filename": "data-managed-agents-reference-typescript.md",
+    "name": "Data: Managed agents reference typescript",
+    "category": "Data Templates",
+    "status": "",
+    "description": "<!--",
+    "tokens": 1450,
+    "word_count": 1116
+  },
+  {
+    "id": 176,
+    "filename": "data-managed-agents-webhooks.md",
+    "name": "Data: Managed agents webhooks",
+    "category": "Data Templates",
+    "status": "",
+    "description": "<!--",
+    "tokens": 877,
+    "word_count": 675
+  },
+  {
+    "id": 177,
+    "filename": "data-prompt-caching-design-optimization.md",
+    "name": "Data: Prompt caching design optimization",
+    "category": "Data Templates",
+    "status": "",
+    "description": "<!--",
+    "tokens": 2506,
+    "word_count": 1928
+  },
+  {
+    "id": 178,
+    "filename": "data-user-profile-memory-template.md",
+    "name": "Data: User profile memory template",
+    "category": "Data Templates",
+    "status": "",
+    "description": "<!--",
+    "tokens": 192,
+    "word_count": 148
+  },
+  {
+    "id": 179,
+    "filename": "skill-computer-use-mcp.md",
+    "name": "Skill: Computer use mcp",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 1047,
+    "word_count": 806
+  },
+  {
+    "id": 180,
+    "filename": "skill-debugging.md",
+    "name": "Skill: Debugging",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 323,
+    "word_count": 249
+  },
+  {
+    "id": 181,
+    "filename": "skill-dream-memory-consolidation.md",
+    "name": "Skill: Dream memory consolidation",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 470,
+    "word_count": 362
+  },
+  {
+    "id": 182,
+    "filename": "skill-generate-permission-allowlist-from-transcripts.md",
+    "name": "Skill: Generate permission allowlist from transcripts",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 1413,
+    "word_count": 1087
+  },
+  {
+    "id": 183,
+    "filename": "skill-insights-report-output.md",
+    "name": "Skill: Insights report output",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 159,
+    "word_count": 123
+  },
+  {
+    "id": 184,
+    "filename": "skill-run-browser-driven-web-app-example.md",
+    "name": "Skill: Run browser driven web app example",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 681,
+    "word_count": 524
+  },
+  {
+    "id": 185,
+    "filename": "skill-run-cli-tool-example.md",
+    "name": "Skill: Run cli tool example",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 413,
+    "word_count": 318
+  },
+  {
+    "id": 186,
+    "filename": "skill-run-electron-desktop-gui-app-example.md",
+    "name": "Skill: Run electron desktop gui app example",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 2817,
+    "word_count": 2167
+  },
+  {
+    "id": 187,
+    "filename": "skill-run-skill-template.md",
+    "name": "Skill: Run skill template",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 884,
+    "word_count": 680
+  },
+  {
+    "id": 188,
+    "filename": "skill-run-tui-interactive-terminal-app-example.md",
+    "name": "Skill: Run tui interactive terminal app example",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 789,
+    "word_count": 607
+  },
+  {
+    "id": 189,
+    "filename": "skill-update-config-7-step-verification-flow.md",
+    "name": "Skill: Update config 7 step verification flow",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 822,
+    "word_count": 633
+  },
+  {
+    "id": 190,
+    "filename": "skill-verify-cli-changes-example-for-verify-skill.md",
+    "name": "Skill: Verify cli changes example for verify skill",
+    "category": "Builtin Tool Descriptions",
+    "status": "",
+    "description": "<!--",
+    "tokens": 455,
+    "word_count": 350
+  },
+  {
+    "id": 191,
+    "filename": "system-prompt-advisor-tool-instructions.md",
+    "name": "System Prompt: Advisor tool instructions",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 455,
+    "word_count": 350
+  },
+  {
+    "id": 192,
+    "filename": "system-prompt-agent-memory-instructions.md",
+    "name": "System Prompt: Agent memory instructions",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 297,
+    "word_count": 229
+  },
+  {
+    "id": 193,
+    "filename": "system-prompt-auto-mode.md",
+    "name": "System Prompt: Auto mode",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 248,
+    "word_count": 191
+  },
+  {
+    "id": 194,
+    "filename": "system-prompt-censoring-assistance-with-malicious-activities.md",
+    "name": "System Prompt: Censoring assistance with malicious activities",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 113,
+    "word_count": 87
+  },
+  {
+    "id": 195,
+    "filename": "system-prompt-chrome-browser-mcp-tools.md",
+    "name": "System Prompt: Chrome browser mcp tools",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 109,
+    "word_count": 84
+  },
+  {
+    "id": 196,
+    "filename": "system-prompt-claude-in-chrome-browser-automation.md",
+    "name": "System Prompt: Claude in chrome browser automation",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 683,
+    "word_count": 526
+  },
+  {
+    "id": 197,
+    "filename": "system-prompt-communication-style.md",
+    "name": "System Prompt: Communication style",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 339,
+    "word_count": 261
+  },
+  {
+    "id": 198,
+    "filename": "system-prompt-context-compaction-summary.md",
+    "name": "System Prompt: Context compaction summary",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 404,
+    "word_count": 311
+  },
+  {
+    "id": 199,
+    "filename": "system-prompt-description-part-of-memory-instructions.md",
+    "name": "System Prompt: Description part of memory instructions",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 193,
+    "word_count": 149
+  },
+  {
+    "id": 200,
+    "filename": "system-prompt-doing-tasks-ambitious-tasks.md",
+    "name": "System Prompt: Doing tasks ambitious tasks",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 79,
+    "word_count": 61
+  },
+  {
+    "id": 201,
+    "filename": "system-prompt-doing-tasks-help-and-feedback.md",
+    "name": "System Prompt: Doing tasks help and feedback",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 49,
+    "word_count": 38
+  },
+  {
+    "id": 202,
+    "filename": "system-prompt-doing-tasks-no-compatibility-hacks.md",
+    "name": "System Prompt: Doing tasks no compatibility hacks",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 67,
+    "word_count": 52
+  },
+  {
+    "id": 203,
+    "filename": "system-prompt-doing-tasks-no-unnecessary-error-handling.md",
+    "name": "System Prompt: Doing tasks no unnecessary error handling",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 87,
+    "word_count": 67
+  },
+  {
+    "id": 204,
+    "filename": "system-prompt-doing-tasks-security.md",
+    "name": "System Prompt: Doing tasks security",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 74,
+    "word_count": 57
+  },
+  {
+    "id": 205,
+    "filename": "system-prompt-doing-tasks-software-engineering-focus.md",
+    "name": "System Prompt: Doing tasks software engineering focus",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 131,
+    "word_count": 101
+  },
+  {
+    "id": 206,
+    "filename": "system-prompt-fork-usage-guidelines.md",
+    "name": "System Prompt: Fork usage guidelines",
+    "category": "System Prompt",
+    "status": "",
+    "description": "<!--",
+    "tokens": 331,
+    "word_count": 255
+  }
+]

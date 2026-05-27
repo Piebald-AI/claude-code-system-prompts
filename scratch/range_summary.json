@@ -1,0 +1,1892 @@
+[
+  {
+    "id": 107,
+    "filename": "skill-model-migration-guide.md",
+    "name": "Skill: Model migration guide",
+    "category": "Agent Prompts",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Guides the agent through migrating Claude API requests from older models to the 4.6/4.7 family, highlighting parameter updates and API deprecations."
+  },
+  {
+    "id": 108,
+    "filename": "data-claude-model-catalog.md",
+    "name": "Data: Claude model catalog",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Lists and maps placeholders for friendly model names to official Anthropic Claude model version strings."
+  },
+  {
+    "id": 109,
+    "filename": "data-claude-api-reference-python.md",
+    "name": "Data: Claude API reference \u2014 Python",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Python SDK reference documentation for Claude, detailing basic requests, streaming, tool calling, and prompt caching."
+  },
+  {
+    "id": 110,
+    "filename": "data-claude-api-reference-typescript.md",
+    "name": "Data: Claude API reference \u2014 TypeScript",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "TypeScript/JavaScript SDK reference documentation for Claude, detailing client setup, streaming, and tool runners."
+  },
+  {
+    "id": 111,
+    "filename": "data-claude-api-reference-go.md",
+    "name": "Data: Claude API reference \u2014 Go",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Go SDK reference documentation for Claude, covering connection configuration, streaming, and tool use."
+  },
+  {
+    "id": 112,
+    "filename": "data-claude-api-reference-curl.md",
+    "name": "Data: Claude API reference \u2014 cURL",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Raw HTTP and cURL request/response examples for the Anthropic Messages API."
+  },
+  {
+    "id": 113,
+    "filename": "data-claude-api-reference-c.md",
+    "name": "Data: Claude API reference \u2014 C#",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "C# SDK reference documentation for Claude, detailing setup, basic requests, and tool use."
+  },
+  {
+    "id": 114,
+    "filename": "data-claude-api-reference-java.md",
+    "name": "Data: Claude API reference \u2014 Java",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Java SDK reference documentation for Claude, detailing client setup, Maven/Gradle dependencies, and tool use."
+  },
+  {
+    "id": 115,
+    "filename": "data-claude-api-reference-php.md",
+    "name": "Data: Claude API reference \u2014 PHP",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "PHP SDK reference documentation for Claude, detailing installation, Bedrock/Vertex clients, and tool runners."
+  },
+  {
+    "id": 116,
+    "filename": "data-claude-api-reference-ruby.md",
+    "name": "Data: Claude API reference \u2014 Ruby",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Ruby SDK reference documentation for Claude, detailing setup, basic requests, and tool runners."
+  },
+  {
+    "id": 117,
+    "filename": "data-claude-platform-on-aws-reference.md",
+    "name": "Data: Claude Platform on AWS reference",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Reference documentation for accessing the Anthropic Claude developer platform hosted on AWS infrastructure (SigV4 signing, IAM access, and workspaces)."
+  },
+  {
+    "id": 118,
+    "filename": "data-message-batches-api-reference-python.md",
+    "name": "Data: Message Batches API reference \u2014 Python",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Reference for the async Messages Batches API to run high-volume offline requests at 50% discount."
+  },
+  {
+    "id": 119,
+    "filename": "data-streaming-reference-python.md",
+    "name": "Data: Streaming reference \u2014 Python",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Reference for Python SDK streaming and event handling including text, thoughts, and tool deltas."
+  },
+  {
+    "id": 120,
+    "filename": "data-streaming-reference-typescript.md",
+    "name": "Data: Streaming reference \u2014 TypeScript",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Reference for TypeScript SDK streaming, tool runners with streaming, and raw Server-Sent Events (SSE) formats."
+  },
+  {
+    "id": 121,
+    "filename": "data-tool-use-concepts.md",
+    "name": "Data: Tool use concepts",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Explains the conceptual foundations of tool use, schema definitions, custom tool choice, manual loops vs. tool runner, handling tool results, and server-side tools (Code Execution, Web Search, Web Fetch, Computer Use, Advisor)."
+  },
+  {
+    "id": 122,
+    "filename": "data-tool-use-reference-python.md",
+    "name": "Data: Tool use reference \u2014 Python",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Python reference code for tool use, including the @beta_tool decorator, MCP tool conversion helpers (async_mcp_tool), manual agentic loops, error handling in tool results, code execution tool results, memory tool helpers, and structured outputs using Pydantic."
+  },
+  {
+    "id": 123,
+    "filename": "data-tool-use-reference-typescript.md",
+    "name": "Data: Tool use reference \u2014 TypeScript",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "TypeScript reference code for tool use, detailing betaZodTool, client.beta.messages.toolRunner(), manual agentic loops, streaming loops with finalMessage(), server-side tools types matching (ToolUnion), structured outputs with Zod, and strict tool use."
+  },
+  {
+    "id": 124,
+    "filename": "data-files-api-reference-python.md",
+    "name": "Data: Files API reference \u2014 Python",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Python reference guide for Anthropic's Files API, describing file upload, file usage in messages (document/image content blocks), listing, retrieving metadata, downloading, and deleting files."
+  },
+  {
+    "id": 125,
+    "filename": "data-files-api-reference-typescript.md",
+    "name": "Data: Files API reference \u2014 TypeScript",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "TypeScript reference guide for Anthropic's Files API, detailing file upload, document blocks, listing, deleting, and downloading files in TypeScript."
+  },
+  {
+    "id": 126,
+    "filename": "skill-build-with-claude-api-reference-guide.md",
+    "name": "Skill: Build with Claude API (reference guide)",
+    "category": "Agent Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "A reference guide template routing Claude to language-specific folders and files depending on the task type (e.g. streaming, long-running conversations, prompt caching, tool use, batch processing, files API, managed agents, error handling)."
+  },
+  {
+    "id": 127,
+    "filename": "skill-building-llm-powered-applications-with-claude.md",
+    "name": "Skill: Building LLM-powered applications with Claude",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Main orchestrator prompt for building LLM applications, guiding language detection, interface selection, model defaults (Opus 4.7/4.6, adaptive thinking, effort configurations), prompt compaction, caching, managed agents vs. raw API, and avoiding non-Anthropic providers."
+  },
+  {
+    "id": 128,
+    "filename": "skill-run-library-sdk-example.md",
+    "name": "Skill: Run library SDK example",
+    "category": "Data Templates",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Provides an example template for running, building, testing, and verifying a library/SDK from source instead of a web server application."
+  },
+  {
+    "id": 129,
+    "filename": "skill-run-web-server-api-example.md",
+    "name": "Skill: Run web server API example",
+    "category": "Data Templates",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Provides an example template for starting, verifying, and stopping a background web server/API process cleanly without blocking the shell."
+  },
+  {
+    "id": 130,
+    "filename": "skill-update-claude-code-config.md",
+    "name": "Skill: Update Claude Code Config",
+    "category": "Agent Prompts",
+    "status": "Replaced by Python Hooks",
+    "exists": true,
+    "desc": "Instructs on how to configure and modify Claude Code's settings.json file, specifically regarding permissions default modes, environment variables, MCP servers, and hooks (PreToolUse, PostToolUse, PreCompact, PostCompact, Stop, SessionStart)."
+  },
+  {
+    "id": 131,
+    "filename": "skill-verify-serverapi-changes-example-for-verify-skill.md",
+    "name": "Skill: Verify server/API changes (example for Verify skill)",
+    "category": "Data Templates",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "An example template demonstrating how to verify API modifications (like rate limit headers) by triggering code paths and analyzing output responses."
+  },
+  {
+    "id": 132,
+    "filename": "tool-description-repl.md",
+    "name": "Tool Description: REPL",
+    "category": "Builtin Tool Descriptions",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Describes the REPL tool, a JavaScript programming interface allowing the agent to loop, branch, and orchestrate other tool calls programmatically in a secure VM context."
+  },
+  {
+    "id": 133,
+    "filename": "tool-description-todowrite.md",
+    "name": "Tool Description: TodoWrite",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Describes the TodoWrite tool used by the agent to proactively create and manage a structured task list (pending, in_progress, completed) for complex multi-turn coding sessions."
+  },
+  {
+    "id": 134,
+    "filename": "tool-description-webfetch.md",
+    "name": "Tool Description: WebFetch",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Describes the WebFetch tool for retrieving web content from URLs, converting it to markdown, summarizing large pages, and handling redirects."
+  },
+  {
+    "id": 135,
+    "filename": "tool-description-workflow.md",
+    "name": "Tool Description: Workflow",
+    "category": "Builtin Tool Descriptions",
+    "status": "Replaced by Python Hooks",
+    "exists": true,
+    "desc": "Describes the Workflow tool for writing and executing deterministic multi-subagent orchestration scripts in Javascript (using pipeline, parallel, phase, and agent hooks) with concurrency caps and token budgets."
+  },
+  {
+    "id": 136,
+    "filename": "agent-prompt-claudemd-creation.md",
+    "name": "Agent Prompt: CLAUDE.md creation",
+    "category": "Agent Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "System prompt guiding the analysis of codebases to create or improve a CLAUDE.md instruction file containing common build/test/lint commands and high-level architecture details, without including generic advice or discoverable structures."
+  },
+  {
+    "id": 137,
+    "filename": "agent-prompt-onboarding-guide-draft-share-link-workflow.md",
+    "name": "Agent Prompt: Onboarding guide draft share link workflow",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Step-by-step instructions for utilizing a custom onboarding guide share tool to generate a shareable draft link, prompt the user for feedback questions, and subsequently update the shared link with final content."
+  },
+  {
+    "id": 138,
+    "filename": "agent-prompt-onboarding-guide-generator.md",
+    "name": "Agent Prompt: Onboarding guide generator",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Collaborative wizard prompt that scans a user's recent session histories, classifies tasks into standard categories, and generates a draft team onboarding guide (ONBOARDING.md) with ASCII progress visualizations."
+  },
+  {
+    "id": 139,
+    "filename": "agent-prompt-workflow-subagent-plain-text-output.md",
+    "name": "Agent Prompt: Workflow subagent plain text output",
+    "category": "Agent Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "System prompt instructing subagents executed by workflow scripts to return their final output verbatim as a plain string, without conversational fluff, confirmations, or markdown code blocks."
+  },
+  {
+    "id": 140,
+    "filename": "agent-prompt-workflow-subagent-structured-output.md",
+    "name": "Agent Prompt: Workflow subagent structured output",
+    "category": "Agent Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Prompt directing workflow subagents to return their results solely by calling a dedicated StructuredOutput tool exactly once, validating inputs against the required JSON schema."
+  },
+  {
+    "id": 141,
+    "filename": "skill-init-claudemd-and-skill-setup-new-version.md",
+    "name": "Skill: /init CLAUDE.md and skill setup (new version)",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "A comprehensive onboarding flow for setting up project-specific instructions (CLAUDE.md), personal user configs (CLAUDE.local.md), skills, git worktree mapping, formatters, and lifecycle hooks."
+  },
+  {
+    "id": 142,
+    "filename": "skill-team-onboarding-guide.md",
+    "name": "Skill: Team onboarding guide",
+    "category": "Agent Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "A Markdown template and agent instructions that welcome a new teammate, displaying developer usage statistics, setup checklists, MCP integrations, and team workflows."
+  },
+  {
+    "id": 143,
+    "filename": "skill-agent-design-patterns.md",
+    "name": "Skill: Agent Design Patterns",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Reference manual outlining core architectural patterns, parameter heuristics (thinking, effort), tool design (bash vs specialized), programmatic tool calling (PTC), context management (compaction, editing), and caching strategy."
+  },
+  {
+    "id": 144,
+    "filename": "skill-run-app.md",
+    "name": "Skill: Run app",
+    "category": "Agent Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Guidance instructing the agent on how to launch and interact with the application runtime (CLI, Server, TUI, GUI, Library) to verify changes, rather than relying solely on test suites."
+  },
+  {
+    "id": 145,
+    "filename": "skill-run-skill-generator.md",
+    "name": "Skill: Run skill generator",
+    "category": "Agent Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "System instructions for generating or improving a project-specific 'run' skill composed of a SKILL.md guide and an executable runner/driver script."
+  },
+  {
+    "id": 146,
+    "filename": "data-anthropic-cli.md",
+    "name": "Data: Anthropic CLI",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Reference documentation for the Anthropic CLI ('ant'), documenting commands for managing agents, environments, sessions, and files, along with shell scripting and streaming patterns."
+  },
+  {
+    "id": 147,
+    "filename": "data-assistant-voice-and-values-template.md",
+    "name": "Data: Assistant voice and values template",
+    "category": "Data Templates",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Template guiding the assistant's voice and developer-centric values, focusing on extreme conciseness, technical precision, collaborative partnership, and honesty when stuck."
+  },
+  {
+    "id": 148,
+    "filename": "data-live-documentation-sources.md",
+    "name": "Data: Live documentation sources",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Registry of URLs and extraction queries for scraping real-time Claude API details, feature guides, and SDK repository schemas on-demand."
+  },
+  {
+    "id": 149,
+    "filename": "data-http-error-codes-reference.md",
+    "name": "Data: HTTP error codes reference",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Reference catalog of Claude API HTTP error codes (400, 401, 403, 404, 413, 429, 500, 529), details of their causes, validation errors, and mappings to SDK exception classes."
+  },
+  {
+    "id": 150,
+    "filename": "system-prompt-skillify-current-session.md",
+    "name": "System Prompt: Skillify Current Session",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System prompt instructing the agent on how to capture a completed workspace session and package it into a repeatable workflow skill (SKILL.md) through a multi-step user interview."
+  },
+  {
+    "id": 151,
+    "filename": "agent-prompt-agent-creation-architect.md",
+    "name": "Agent Prompt: Agent creation architect",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System prompt for creating custom AI agents with detailed specifications"
+  },
+  {
+    "id": 152,
+    "filename": "agent-prompt-background-agent-state-classifier.md",
+    "name": "Agent Prompt: Background agent state classifier",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Classifies the tail of a background agent transcript as working, blocked, done, or failed and returns concise state JSON"
+  },
+  {
+    "id": 153,
+    "filename": "agent-prompt-background-job-agent-instructions.md",
+    "name": "Agent Prompt: Background job agent instructions",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructs the built-in background job agent to narrate progress, restate tool results, and emit explicit result, needs input, or failed status signals"
+  },
+  {
+    "id": 154,
+    "filename": "agent-prompt-bash-command-description-writer.md",
+    "name": "Agent Prompt: Bash command description writer",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructions for generating clear, concise command descriptions in active voice for bash commands"
+  },
+  {
+    "id": 155,
+    "filename": "agent-prompt-bash-command-prefix-detection.md",
+    "name": "Agent Prompt: Bash command prefix detection",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System prompt for detecting command prefixes and command injection"
+  },
+  {
+    "id": 156,
+    "filename": "agent-prompt-claude-guide-agent.md",
+    "name": "Agent Prompt: Claude guide agent",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System prompt for the claude-guide agent that helps users understand and use Claude Code, the Claude Agent SDK and the Claude API effectively"
+  },
+  {
+    "id": 157,
+    "filename": "agent-prompt-code-review-part-2-low-effort-mode.md",
+    "name": "Agent Prompt: Code review part 2 low effort mode",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Low-effort /code-review prompt that reads the diff once and returns up to four hunk-visible runtime correctness findings"
+  },
+  {
+    "id": 158,
+    "filename": "agent-prompt-code-review-part-3-extra-high-and-maximum-effort-modes.md",
+    "name": "Agent Prompt: Code review part 3 extra high and maximum effort modes",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Extra-high and maximum-effort /code-review prompt that runs five finder angles, one-vote verification, a gap sweep, and capped JSON findings"
+  },
+  {
+    "id": 159,
+    "filename": "agent-prompt-code-review-part-6-medium-effort-mode.md",
+    "name": "Agent Prompt: Code review part 6 medium effort mode",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Medium-effort /code-review prompt that favors precision with three finder angles, one-vote verification, and up to eight JSON findings"
+  },
+  {
+    "id": 160,
+    "filename": "agent-prompt-code-review-part-7-high-effort-mode.md",
+    "name": "Agent Prompt: Code review part 7 high effort mode",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "High-effort /code-review prompt that favors recall with three finder angles, recall-biased verification, and up to ten JSON findings"
+  },
+  {
+    "id": 161,
+    "filename": "agent-prompt-code-review-part-8-github-comment-posting.md",
+    "name": "Agent Prompt: Code review part 8 github comment posting",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Optional /code-review instructions for posting findings as GitHub inline PR comments when --comment is passed"
+  },
+  {
+    "id": 162,
+    "filename": "agent-prompt-conversation-summarization.md",
+    "name": "Agent Prompt: Conversation summarization",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System prompt for creating detailed conversation summaries"
+  },
+  {
+    "id": 163,
+    "filename": "agent-prompt-general-purpose.md",
+    "name": "Agent Prompt: General purpose",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System prompt for the general-purpose subagent that searches, analyzes, and edits code across a codebase while reporting findings concisely to the caller"
+  },
+  {
+    "id": 164,
+    "filename": "agent-prompt-hook-condition-evaluator-stop.md",
+    "name": "Agent Prompt: Hook condition evaluator stop",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System prompt for evaluating hook conditions, specifically stop conditions, in Claude Code"
+  },
+  {
+    "id": 165,
+    "filename": "agent-prompt-prompt-suggestion-generator-v2.md",
+    "name": "Agent Prompt: Prompt suggestion generator v2",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "V2 instructions for generating prompt suggestions for Claude Code"
+  },
+  {
+    "id": 166,
+    "filename": "agent-prompt-recent-message-summarization.md",
+    "name": "Agent Prompt: Recent message summarization",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Agent prompt used for summarizing recent messages"
+  },
+  {
+    "id": 167,
+    "filename": "agent-prompt-session-search.md",
+    "name": "Agent Prompt: Session search",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Subagent prompt for searching past Claude Code conversation sessions by scanning .jsonl transcript files and returning matching session IDs"
+  },
+  {
+    "id": 168,
+    "filename": "agent-prompt-status-line-setup.md",
+    "name": "Agent Prompt: Status line setup",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System prompt for the statusline-setup agent that configures status line display"
+  },
+  {
+    "id": 169,
+    "filename": "agent-prompt-webfetch-summarizer.md",
+    "name": "Agent Prompt: Webfetch summarizer",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Prompt for agent that summarizes verbose output from WebFetch for the main model"
+  },
+  {
+    "id": 170,
+    "filename": "agent-prompt-worker-fork.md",
+    "name": "Agent Prompt: Worker fork",
+    "category": "Agent Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System prompt for a forked worker sub-agent that executes a single directive from the parent agent and reports back concisely"
+  },
+  {
+    "id": 171,
+    "filename": "data-github-actions-workflow-for-claude-mentions.md",
+    "name": "Data: Github actions workflow for claude mentions",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "GitHub Actions workflow template for triggering Claude Code via @claude mentions"
+  },
+  {
+    "id": 172,
+    "filename": "data-github-app-installation-pr-description.md",
+    "name": "Data: Github app installation pr description",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Template for PR description when installing Claude Code GitHub App integration"
+  },
+  {
+    "id": 173,
+    "filename": "data-managed-agents-reference-curl.md",
+    "name": "Data: Managed agents reference curl",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Provides cURL and raw HTTP request examples for the Managed Agents API including environment, agent, and session lifecycle operations"
+  },
+  {
+    "id": 174,
+    "filename": "data-managed-agents-reference-python.md",
+    "name": "Data: Managed agents reference python",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Reference guide for using the Anthropic Python SDK to create and manage agents, sessions, environments, streaming, custom tools, files, and MCP servers"
+  },
+  {
+    "id": 175,
+    "filename": "data-managed-agents-reference-typescript.md",
+    "name": "Data: Managed agents reference typescript",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Reference guide for using the Anthropic TypeScript SDK to create and manage agents, sessions, environments, streaming, custom tools, file uploads, and MCP server integration"
+  },
+  {
+    "id": 176,
+    "filename": "data-managed-agents-webhooks.md",
+    "name": "Data: Managed agents webhooks",
+    "category": "Data Templates",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Reference documentation for Managed Agents webhooks, including endpoint registration, signature verification, payload envelopes, supported event types, delivery behavior, and pitfalls"
+  },
+  {
+    "id": 177,
+    "filename": "data-prompt-caching-design-optimization.md",
+    "name": "Data: Prompt caching design optimization",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Document on how to design prompt-building code for effective caching, including placement patterns and anti-patterns"
+  },
+  {
+    "id": 178,
+    "filename": "data-user-profile-memory-template.md",
+    "name": "Data: User profile memory template",
+    "category": "Data Templates",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Template content for the user profile memory file, covering personal details, work context, schedule, and communication preferences"
+  },
+  {
+    "id": 179,
+    "filename": "skill-computer-use-mcp.md",
+    "name": "Skill: Computer use mcp",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructions for using computer-use MCP tools including tool selection tiers, app access tiers, link safety, and financial action restrictions"
+  },
+  {
+    "id": 180,
+    "filename": "skill-debugging.md",
+    "name": "Skill: Debugging",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructions for debugging an issue that the user is encountering in the Claude Code session"
+  },
+  {
+    "id": 181,
+    "filename": "skill-dream-memory-consolidation.md",
+    "name": "Skill: Dream memory consolidation",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Skill definition for the /dream nightly housekeeping job that consolidates recent logs and transcripts into persistent memory topics, learnings, and a pruned MEMORY.md index"
+  },
+  {
+    "id": 182,
+    "filename": "skill-generate-permission-allowlist-from-transcripts.md",
+    "name": "Skill: Generate permission allowlist from transcripts",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Analyzes session transcripts to extract frequently used read-only tool-call patterns and adds them to the project's .claude/settings.json permission allowlist to reduce permission prompts"
+  },
+  {
+    "id": 183,
+    "filename": "skill-insights-report-output.md",
+    "name": "Skill: Insights report output",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Formats and displays the insights usage report results after the user runs the /insights slash command"
+  },
+  {
+    "id": 184,
+    "filename": "skill-run-browser-driven-web-app-example.md",
+    "name": "Skill: Run browser driven web app example",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Example file for the Run app skill showing how to start a web dev server, drive it with chromium-cli, capture screenshots, and document app-specific gotchas"
+  },
+  {
+    "id": 185,
+    "filename": "skill-run-cli-tool-example.md",
+    "name": "Skill: Run cli tool example",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Example file for the Run app skill showing how to document building, invoking, and testing a CLI tool"
+  },
+  {
+    "id": 186,
+    "filename": "skill-run-electron-desktop-gui-app-example.md",
+    "name": "Skill: Run electron desktop gui app example",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Example file for the Run app skill showing how to launch an Electron desktop app under xvfb and drive it through a Playwright REPL driver"
+  },
+  {
+    "id": 187,
+    "filename": "skill-run-skill-template.md",
+    "name": "Skill: Run skill template",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Template file for the Run skill generator showing the frontmatter and section structure for a project-specific run skill"
+  },
+  {
+    "id": 188,
+    "filename": "skill-run-tui-interactive-terminal-app-example.md",
+    "name": "Skill: Run tui interactive terminal app example",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Example file for the Run app skill showing how to drive an interactive terminal app with tmux, readiness polling, pane capture, key references, and cleanup"
+  },
+  {
+    "id": 189,
+    "filename": "skill-update-config-7-step-verification-flow.md",
+    "name": "Skill: Update config 7 step verification flow",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "A skill that guides Claude through a 7-step process to construct and verify hooks for Claude Code, ensuring they work correctly in the user's specific project environment"
+  },
+  {
+    "id": 190,
+    "filename": "skill-verify-cli-changes-example-for-verify-skill.md",
+    "name": "Skill: Verify cli changes example for verify skill",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Example workflow for verifying a CLI change, as part of the Verify skill"
+  },
+  {
+    "id": 191,
+    "filename": "system-prompt-advisor-tool-instructions.md",
+    "name": "System Prompt: Advisor tool instructions",
+    "category": "System Prompt",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Instructions for using the Advisor tool"
+  },
+  {
+    "id": 192,
+    "filename": "system-prompt-agent-memory-instructions.md",
+    "name": "System Prompt: Agent memory instructions",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructions for including memory update guidance in agent system prompts"
+  },
+  {
+    "id": 193,
+    "filename": "system-prompt-auto-mode.md",
+    "name": "System Prompt: Auto mode",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Continuous task execution, akin to a background agent"
+  },
+  {
+    "id": 194,
+    "filename": "system-prompt-censoring-assistance-with-malicious-activities.md",
+    "name": "System Prompt: Censoring assistance with malicious activities",
+    "category": "System Prompt",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Guidelines for assisting with authorized security testing, defensive security, CTF challenges, and educational contexts while censoring requests for malicious activities"
+  },
+  {
+    "id": 195,
+    "filename": "system-prompt-chrome-browser-mcp-tools.md",
+    "name": "System Prompt: Chrome browser mcp tools",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructions for loading Chrome browser MCP tools via MCPSearch before use"
+  },
+  {
+    "id": 196,
+    "filename": "system-prompt-claude-in-chrome-browser-automation.md",
+    "name": "System Prompt: Claude in chrome browser automation",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructions for using Claude in Chrome browser automation tools effectively"
+  },
+  {
+    "id": 197,
+    "filename": "system-prompt-communication-style.md",
+    "name": "System Prompt: Communication style",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructs Claude to give brief, user-facing updates at key moments during tool use, write concise end-of-turn summaries, match response format to task complexity, and avoid comments and planning documents in code"
+  },
+  {
+    "id": 198,
+    "filename": "system-prompt-context-compaction-summary.md",
+    "name": "System Prompt: Context compaction summary",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Prompt used for context compaction summary (for the SDK)"
+  },
+  {
+    "id": 199,
+    "filename": "system-prompt-description-part-of-memory-instructions.md",
+    "name": "System Prompt: Description part of memory instructions",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Field for describing _what_ the memory is. Part of a bigger effort to instruct Claude how to create memories"
+  },
+  {
+    "id": 200,
+    "filename": "system-prompt-doing-tasks-ambitious-tasks.md",
+    "name": "System Prompt: Doing tasks ambitious tasks",
+    "category": "System Prompt",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Allow users to complete ambitious tasks; defer to user judgement on scope"
+  },
+  {
+    "id": 201,
+    "filename": "system-prompt-doing-tasks-help-and-feedback.md",
+    "name": "System Prompt: Doing tasks help and feedback",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "How to inform users about help and feedback channels"
+  },
+  {
+    "id": 202,
+    "filename": "system-prompt-doing-tasks-no-compatibility-hacks.md",
+    "name": "System Prompt: Doing tasks no compatibility hacks",
+    "category": "System Prompt",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Delete unused code completely rather than adding compatibility shims"
+  },
+  {
+    "id": 203,
+    "filename": "system-prompt-doing-tasks-no-unnecessary-error-handling.md",
+    "name": "System Prompt: Doing tasks no unnecessary error handling",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Do not add error handling for impossible scenarios; only validate at boundaries"
+  },
+  {
+    "id": 204,
+    "filename": "system-prompt-doing-tasks-security.md",
+    "name": "System Prompt: Doing tasks security",
+    "category": "System Prompt",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Avoid introducing security vulnerabilities like injection, XSS, etc"
+  },
+  {
+    "id": 205,
+    "filename": "system-prompt-doing-tasks-software-engineering-focus.md",
+    "name": "System Prompt: Doing tasks software engineering focus",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Users primarily request software engineering tasks; interpret instructions in that context"
+  },
+  {
+    "id": 206,
+    "filename": "system-prompt-fork-usage-guidelines.md",
+    "name": "System Prompt: Fork usage guidelines",
+    "category": "System Prompt",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructions for when to fork subagents and rules against reading fork output mid-flight or fabricating fork results"
+  },
+  {
+    "id": 207,
+    "filename": "system-prompt-harness-instructions.md",
+    "name": "System Prompt: Harness instructions",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Core interactive-agent identity and harness instructions for terminal markdown output, permissions, system reminders, compaction, tool use, and code references"
+  },
+  {
+    "id": 208,
+    "filename": "system-prompt-hooks-configuration.md",
+    "name": "System Prompt: Hooks Configuration",
+    "category": "System Prompts",
+    "status": "Replaced by Python Hooks",
+    "exists": true,
+    "desc": "System prompt for hooks configuration.  Used for above Claude Code config skill."
+  },
+  {
+    "id": 209,
+    "filename": "system-prompt-how-to-use-the-sendusermessage-tool.md",
+    "name": "System Prompt: How to use the SendUserMessage tool",
+    "category": "System Prompts",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Instructions for using the SendUserMessage tool"
+  },
+  {
+    "id": 210,
+    "filename": "system-prompt-insights-at-a-glance-summary.md",
+    "name": "System Prompt: Insights at a glance summary",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Generates a concise 4-part summary (what's working, hindrances, quick wins, ambitious workflows) for the insights report"
+  },
+  {
+    "id": 211,
+    "filename": "system-prompt-insights-friction-analysis.md",
+    "name": "System Prompt: Insights friction analysis",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Analyzes aggregated usage data to identify friction patterns and categorize recurring issues"
+  },
+  {
+    "id": 212,
+    "filename": "system-prompt-insights-on-the-horizon.md",
+    "name": "System Prompt: Insights on the horizon",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Identifies ambitious future workflows and opportunities for autonomous AI-assisted development"
+  },
+  {
+    "id": 213,
+    "filename": "system-prompt-insights-session-facets-extraction.md",
+    "name": "System Prompt: Insights session facets extraction",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Extracts structured facets (goal categories, satisfaction, friction) from a single Claude Code session transcript"
+  },
+  {
+    "id": 214,
+    "filename": "system-prompt-insights-suggestions.md",
+    "name": "System Prompt: Insights suggestions",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Generates actionable suggestions including CLAUDE.md additions, features to try, and usage patterns"
+  },
+  {
+    "id": 215,
+    "filename": "system-prompt-learning-mode-insights.md",
+    "name": "System Prompt: Learning mode (insights)",
+    "category": "System Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Instructions for providing educational insights when learning mode is active"
+  },
+  {
+    "id": 216,
+    "filename": "system-prompt-learning-mode.md",
+    "name": "System Prompt: Learning mode",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Main system prompt for learning mode with human collaboration instructions"
+  },
+  {
+    "id": 217,
+    "filename": "system-prompt-memory-description-of-user-details.md",
+    "name": "System Prompt: Memory description of user details",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Describes the purpose and guidelines for per-user memory files that accumulate details about the user's role, goals, knowledge, and preferences across sessions"
+  },
+  {
+    "id": 218,
+    "filename": "system-prompt-memory-description-of-user-feedback-with-explicit-save.md",
+    "name": "System Prompt: Memory description of user feedback (with explicit save)",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Describes the feedback memory type that captures user guidance on work approaches, emphasizing recording both successes and failures and explicitly instructing to save a new memory noting contradictions with team feedback"
+  },
+  {
+    "id": 219,
+    "filename": "system-prompt-memory-description-of-user-feedback.md",
+    "name": "System Prompt: Memory description of user feedback",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Describes the user feedback memory type that stores guidance about work approaches, emphasizing recording both successes and failures and checking for contradictions with team memories"
+  },
+  {
+    "id": 220,
+    "filename": "system-prompt-memory-staleness-verification.md",
+    "name": "System Prompt: Memory staleness verification",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructs the agent to verify memory records against current file/resource state and delete stale memories that conflict with observed reality"
+  },
+  {
+    "id": 221,
+    "filename": "system-prompt-minimal-mode.md",
+    "name": "System Prompt: Minimal mode",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Describes the behavior and constraints of minimal mode, which skips hooks, LSP, plugins, auto-memory, and other features while requiring explicit context via CLI flags"
+  },
+  {
+    "id": 222,
+    "filename": "system-prompt-one-of-six-rules-for-using-sleep-command.md",
+    "name": "System Prompt: One of six rules for using sleep command",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "One of the six rules for using the sleep command."
+  },
+  {
+    "id": 223,
+    "filename": "system-prompt-option-previewer.md",
+    "name": "System Prompt: Option previewer",
+    "category": "System Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "System prompt for previewing UI options in a side-by-side layout"
+  },
+  {
+    "id": 224,
+    "filename": "system-prompt-phase-four-of-plan-mode.md",
+    "name": "System Prompt: Phase four of plan mode",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Phase four of plan mode."
+  },
+  {
+    "id": 225,
+    "filename": "system-prompt-powershell-edition-for-51.md",
+    "name": "System Prompt: PowerShell edition for 5.1",
+    "category": "System Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "System prompt for providing information about Windows PowerShell 5.1"
+  },
+  {
+    "id": 226,
+    "filename": "system-prompt-remote-plan-mode-ultraplan.md",
+    "name": "System Prompt: Remote plan mode (ultraplan)",
+    "category": "System Prompts",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "System reminder injected during remote planning sessions that instructs Claude to explore the codebase, produce a diagram-rich plan via ExitPlanMode, and implement it with a pull request upon approval"
+  },
+  {
+    "id": 227,
+    "filename": "system-prompt-remote-planning-session.md",
+    "name": "System Prompt: Remote planning session",
+    "category": "System Prompts",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "System reminder that configures a remote planning session to explore the codebase, produce an implementation plan via ExitPlanMode, and handle plan approval, rejection, or teleportation back to the user's local terminal"
+  },
+  {
+    "id": 228,
+    "filename": "system-prompt-repl-tool-usage-and-scripting-conventions.md",
+    "name": "System Prompt: REPL tool usage and scripting conventions",
+    "category": "System Prompts",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Instructs Claude on how to use the REPL tool effectively with dense JavaScript scripts, shorthands, batching rules, and API reference for investigation tasks"
+  },
+  {
+    "id": 229,
+    "filename": "system-prompt-subagent-delegation-examples.md",
+    "name": "System Prompt: Subagent delegation examples",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Provides example interactions showing how a coordinator agent should delegate tasks to subagents, handle waiting states, and report results"
+  },
+  {
+    "id": 230,
+    "filename": "system-prompt-subagent-prompt-writing-examples.md",
+    "name": "System Prompt: Subagent prompt-writing examples",
+    "category": "System Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Provides example usage patterns demonstrating how to write self-contained, well-structured prompts when delegating tasks to subagents"
+  },
+  {
+    "id": 231,
+    "filename": "system-prompt-tone-and-style-code-references.md",
+    "name": "System Prompt: Tone and style (code references)",
+    "category": "System Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Instruction to include file_path:line_number when referencing code"
+  },
+  {
+    "id": 232,
+    "filename": "system-prompt-tone-and-style-concise-output-short.md",
+    "name": "System Prompt: Tone and style (concise output \u2014 short)",
+    "category": "System Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Instruction for short and concise responses"
+  },
+  {
+    "id": 233,
+    "filename": "system-prompt-tool-usage-subagent-guidance.md",
+    "name": "System Prompt: Tool usage (subagent guidance)",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Guidance on when and how to use subagents effectively"
+  },
+  {
+    "id": 234,
+    "filename": "system-prompt-tool-usage-task-management.md",
+    "name": "System Prompt: Tool usage (task management)",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Use TodoWrite to break down and track work progress"
+  },
+  {
+    "id": 235,
+    "filename": "system-prompt-worker-instructions.md",
+    "name": "System Prompt: Worker instructions",
+    "category": "System Prompts",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructions for workers to follow when implementing a change"
+  },
+  {
+    "id": 236,
+    "filename": "system-prompt-writing-subagent-prompts.md",
+    "name": "System Prompt: Writing subagent prompts",
+    "category": "System Prompts",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Guidelines for writing effective prompts when delegating tasks to subagents, covering context-inheriting vs fresh subagent scenarios"
+  },
+  {
+    "id": 237,
+    "filename": "system-prompt-wsl-managed-settings-double-opt-in.md",
+    "name": "System Prompt: WSL managed settings double opt-in",
+    "category": "System Prompts",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Explains that WSL can read the Windows managed settings policy chain only when the admin-enabled flag is set, with HKCU requiring an additional user opt-in"
+  },
+  {
+    "id": 238,
+    "filename": "system-reminder-agent-mention.md",
+    "name": "System Reminder: Agent mention",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Notification that user wants to invoke an agent"
+  },
+  {
+    "id": 239,
+    "filename": "system-reminder-exited-plan-mode.md",
+    "name": "System Reminder: Exited plan mode",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Notification when exiting plan mode"
+  },
+  {
+    "id": 240,
+    "filename": "system-reminder-file-exists-but-empty.md",
+    "name": "System Reminder: File exists but empty",
+    "category": "System Reminders",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Warning when reading an empty file"
+  },
+  {
+    "id": 241,
+    "filename": "system-reminder-file-modification-detected-budget-exceeded.md",
+    "name": "System Reminder: File modification detected (budget exceeded)",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System reminder for when a file modification is detected - specifically when other modified files in the turn already exceeded the budget."
+  },
+  {
+    "id": 242,
+    "filename": "system-reminder-file-modified-by-user-or-linter.md",
+    "name": "System Reminder: File modified by user or linter",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Notification that a file was modified externally"
+  },
+  {
+    "id": 243,
+    "filename": "system-reminder-file-opened-in-ide.md",
+    "name": "System Reminder: File opened in IDE",
+    "category": "System Reminders",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Notification that user opened a file in IDE"
+  },
+  {
+    "id": 244,
+    "filename": "system-reminder-file-shorter-than-offset.md",
+    "name": "System Reminder: File shorter than offset",
+    "category": "System Reminders",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Warning when file read offset exceeds file length"
+  },
+  {
+    "id": 245,
+    "filename": "system-reminder-file-truncated.md",
+    "name": "System Reminder: File truncated",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Notification that file was truncated due to size"
+  },
+  {
+    "id": 246,
+    "filename": "system-reminder-hook-additional-context.md",
+    "name": "System Reminder: Hook additional context",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Additional context from a hook"
+  },
+  {
+    "id": 247,
+    "filename": "system-reminder-hook-blocking-error.md",
+    "name": "System Reminder: Hook blocking error",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Error from a blocking hook command"
+  },
+  {
+    "id": 248,
+    "filename": "system-reminder-hook-stopped-continuation-prefix.md",
+    "name": "System Reminder: Hook stopped continuation prefix",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Prefix for hook stopped continuation messages"
+  },
+  {
+    "id": 249,
+    "filename": "system-reminder-hook-stopped-continuation.md",
+    "name": "System Reminder: Hook stopped continuation",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Message when a hook stops continuation"
+  },
+  {
+    "id": 250,
+    "filename": "system-reminder-hook-success.md",
+    "name": "System Reminder: Hook success",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Success message from a hook"
+  },
+  {
+    "id": 251,
+    "filename": "system-reminder-lines-selected-in-ide.md",
+    "name": "System Reminder: Lines selected in IDE",
+    "category": "System Reminders",
+    "status": "Adopted",
+    "exists": true,
+    "desc": "Notification about lines selected by user in IDE"
+  },
+  {
+    "id": 252,
+    "filename": "system-reminder-mcp-resource-no-content.md",
+    "name": "System Reminder: MCP resource no content",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Shown when MCP resource has no content"
+  },
+  {
+    "id": 253,
+    "filename": "system-reminder-mcp-resource-no-displayable-content.md",
+    "name": "System Reminder: MCP resource no displayable content",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Shown when MCP resource has no displayable content"
+  },
+  {
+    "id": 254,
+    "filename": "system-reminder-new-diagnostics-detected.md",
+    "name": "System Reminder: New diagnostics detected",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Notification about new diagnostic issues"
+  },
+  {
+    "id": 255,
+    "filename": "system-reminder-output-style-active.md",
+    "name": "System Reminder: Output style active",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Notification that an output style is active"
+  },
+  {
+    "id": 256,
+    "filename": "system-reminder-plan-mode-is-active-subagent.md",
+    "name": "System Reminder: Plan mode is active (subagent)",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Simplified plan mode system reminder for sub agents"
+  },
+  {
+    "id": 257,
+    "filename": "system-reminder-previously-invoked-skills.md",
+    "name": "System Reminder: Previously invoked skills",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Restores skills invoked before conversation compaction as context only, warning not to re-execute their setup actions or treat prior inputs as current instructions"
+  },
+  {
+    "id": 258,
+    "filename": "system-reminder-session-continuation.md",
+    "name": "System Reminder: Session continuation",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Notification that session continues from another machine"
+  },
+  {
+    "id": 259,
+    "filename": "system-reminder-stop-hook-blocking-error.md",
+    "name": "System Reminder: Stop hook blocking error",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Error from a blocking hook command"
+  },
+  {
+    "id": 260,
+    "filename": "system-reminder-task-tools-reminder.md",
+    "name": "System Reminder: Task tools reminder",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Reminder to use task tracking tools"
+  },
+  {
+    "id": 261,
+    "filename": "system-reminder-team-coordination.md",
+    "name": "System Reminder: Team Coordination",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System reminder for team coordination"
+  },
+  {
+    "id": 262,
+    "filename": "system-reminder-team-shutdown.md",
+    "name": "System Reminder: Team Shutdown",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System reminder for team shutdown"
+  },
+  {
+    "id": 263,
+    "filename": "system-reminder-thinking-frequency-tuning.md",
+    "name": "System Reminder: Thinking frequency tuning",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructs Claude to treat system-reminder tags as harness instructions and calibrate thinking frequency based on task complexity"
+  },
+  {
+    "id": 264,
+    "filename": "system-reminder-token-usage.md",
+    "name": "System Reminder: Token usage",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Current token usage statistics"
+  },
+  {
+    "id": 265,
+    "filename": "system-reminder-ultraplan-mode.md",
+    "name": "System Reminder: Ultraplan mode",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "System reminder for using Ultraplan mode to create a detailed implementation plan with multi-agent exploration and critique."
+  },
+  {
+    "id": 266,
+    "filename": "system-reminder-usd-budget.md",
+    "name": "System Reminder: USD budget",
+    "category": "System Reminders",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Current USD budget statistics"
+  },
+  {
+    "id": 267,
+    "filename": "tool-description-agent-simple-usage-notes.md",
+    "name": "Tool Description: Agent (simple usage notes)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Simplified usage notes for the Agent tool, including when to delegate, fork behavior, resumption, worktree isolation, background execution, parallel launches, and context restrictions"
+  },
+  {
+    "id": 268,
+    "filename": "tool-description-agent-usage-notes.md",
+    "name": "Tool Description: Agent (usage notes)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Usage notes and instructions for the Task/Agent tool, including guidance on launching subagents, background execution, resumption, and worktree isolation"
+  },
+  {
+    "id": 269,
+    "filename": "tool-description-askuserquestion-preview-field.md",
+    "name": "Tool Description: AskUserQuestion (preview field)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Instructions for using the HTML preview field on single-select question options to display visual artifacts like UI mockups, code snippets, and diagrams"
+  },
+  {
+    "id": 270,
+    "filename": "tool-description-askuserquestion.md",
+    "name": "Tool Description: AskUserQuestion",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Tool description for asking user questions."
+  },
+  {
+    "id": 271,
+    "filename": "tool-description-bash-alternative-communication.md",
+    "name": "Tool Description: Bash (alternative \u2014 communication)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool alternative: output text directly instead of echo/printf"
+  },
+  {
+    "id": 272,
+    "filename": "tool-description-bash-alternative-content-search.md",
+    "name": "Tool Description: Bash (alternative \u2014 content search)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool alternative: use Grep for content search instead of grep/rg"
+  },
+  {
+    "id": 273,
+    "filename": "tool-description-bash-alternative-edit-files.md",
+    "name": "Tool Description: Bash (alternative \u2014 edit files)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool alternative: use Edit for file editing instead of sed/awk"
+  },
+  {
+    "id": 274,
+    "filename": "tool-description-bash-alternative-file-search.md",
+    "name": "Tool Description: Bash (alternative \u2014 file search)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool alternative: use Glob for file search instead of find/ls"
+  },
+  {
+    "id": 275,
+    "filename": "tool-description-bash-alternative-read-files.md",
+    "name": "Tool Description: Bash (alternative \u2014 read files)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool alternative: use Read for file reading instead of cat/head/tail"
+  },
+  {
+    "id": 276,
+    "filename": "tool-description-bash-alternative-write-files.md",
+    "name": "Tool Description: Bash (alternative \u2014 write files)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool alternative: use Write for file writing instead of echo/cat"
+  },
+  {
+    "id": 277,
+    "filename": "tool-description-bash-built-in-tools-note.md",
+    "name": "Tool Description: Bash (built-in tools note)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Note that built-in tools provide better UX than Bash equivalents"
+  },
+  {
+    "id": 278,
+    "filename": "tool-description-bash-sandbox-adjust-settings.md",
+    "name": "Tool Description: Bash (sandbox \u2014 adjust settings)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Work with user to adjust sandbox settings on failure"
+  },
+  {
+    "id": 279,
+    "filename": "tool-description-bash-sandbox-evidence-access-denied.md",
+    "name": "Tool Description: Bash (sandbox \u2014 evidence: access denied)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Sandbox evidence: access denied to paths outside allowed directories"
+  },
+  {
+    "id": 280,
+    "filename": "tool-description-bash-sandbox-evidence-list-header.md",
+    "name": "Tool Description: Bash (sandbox \u2014 evidence list header)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Header for list of sandbox-caused failure evidence"
+  },
+  {
+    "id": 281,
+    "filename": "tool-description-bash-sandbox-evidence-network-failures.md",
+    "name": "Tool Description: Bash (sandbox \u2014 evidence: network failures)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Sandbox evidence: network connection failures to non-whitelisted hosts"
+  },
+  {
+    "id": 282,
+    "filename": "tool-description-bash-sandbox-evidence-operation-not-permitted.md",
+    "name": "Tool Description: Bash (sandbox \u2014 evidence: operation not permitted)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Sandbox evidence: operation not permitted errors"
+  },
+  {
+    "id": 283,
+    "filename": "tool-description-bash-sandbox-evidence-unix-socket-errors.md",
+    "name": "Tool Description: Bash (sandbox \u2014 evidence: unix socket errors)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Sandbox evidence: unix socket connection errors"
+  },
+  {
+    "id": 284,
+    "filename": "tool-description-bash-sandbox-failure-evidence-condition.md",
+    "name": "Tool Description: Bash (sandbox \u2014 failure evidence condition)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Condition: command failed with evidence of sandbox restrictions"
+  },
+  {
+    "id": 285,
+    "filename": "tool-description-bash-sandbox-mandatory-mode.md",
+    "name": "Tool Description: Bash (sandbox \u2014 mandatory mode)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Policy: all commands must run in sandbox mode"
+  },
+  {
+    "id": 286,
+    "filename": "tool-description-bash-sandbox-no-exceptions.md",
+    "name": "Tool Description: Bash (sandbox \u2014 no exceptions)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Commands cannot run outside sandbox under any circumstances"
+  },
+  {
+    "id": 287,
+    "filename": "tool-description-bash-sandbox-no-sensitive-paths.md",
+    "name": "Tool Description: Bash (sandbox \u2014 no sensitive paths)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Do not suggest adding sensitive paths to sandbox allowlist"
+  },
+  {
+    "id": 288,
+    "filename": "tool-description-bash-sandbox-per-command.md",
+    "name": "Tool Description: Bash (sandbox \u2014 per-command)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Treat each command individually; default to sandbox for future commands"
+  },
+  {
+    "id": 289,
+    "filename": "tool-description-bash-sandbox-response-header.md",
+    "name": "Tool Description: Bash (sandbox \u2014 response header)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Header for how to respond when seeing sandbox-caused failures"
+  },
+  {
+    "id": 290,
+    "filename": "tool-description-bash-sandbox-retry-without-sandbox.md",
+    "name": "Tool Description: Bash (sandbox \u2014 retry without sandbox)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Immediately retry with dangerouslyDisableSandbox on sandbox failure"
+  },
+  {
+    "id": 291,
+    "filename": "tool-description-bash-sandbox-tmpdir.md",
+    "name": "Tool Description: Bash (sandbox \u2014 tmpdir)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Use $TMPDIR for temporary files in sandbox mode"
+  },
+  {
+    "id": 292,
+    "filename": "tool-description-bash-sandbox-user-permission-prompt.md",
+    "name": "Tool Description: Bash (sandbox \u2014 user permission prompt)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Note that disabling sandbox will prompt user for permission"
+  },
+  {
+    "id": 293,
+    "filename": "tool-description-bash-sleep-keep-short.md",
+    "name": "Tool Description: Bash (sleep \u2014 keep short)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool instruction: keep sleep duration to 1-5 seconds"
+  },
+  {
+    "id": 294,
+    "filename": "tool-description-bash-sleep-no-polling-background-tasks.md",
+    "name": "Tool Description: Bash (sleep \u2014 no polling background tasks)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool instruction: do not poll background tasks, wait for notification"
+  },
+  {
+    "id": 295,
+    "filename": "tool-description-bash-sleep-run-immediately.md",
+    "name": "Tool Description: Bash (sleep \u2014 run immediately)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool instruction: do not sleep between commands that can run immediately"
+  },
+  {
+    "id": 296,
+    "filename": "tool-description-bash-sleep-use-check-commands.md",
+    "name": "Tool Description: Bash (sleep \u2014 use check commands)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Bash tool instruction: use check commands rather than sleeping when polling"
+  },
+  {
+    "id": 297,
+    "filename": "tool-description-browserbatch.md",
+    "name": "Tool Description: BrowserBatch",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Tool description for BrowserBatch, which executes multiple browser tool calls sequentially in one round trip"
+  },
+  {
+    "id": 298,
+    "filename": "tool-description-computer.md",
+    "name": "Tool Description: Computer",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Main description for the Chrome browser computer automation tool"
+  },
+  {
+    "id": 299,
+    "filename": "tool-description-enterplanmode.md",
+    "name": "Tool Description: EnterPlanMode",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Tool description for entering plan mode to explore and design implementation approaches"
+  },
+  {
+    "id": 300,
+    "filename": "tool-description-enterworktree.md",
+    "name": "Tool Description: EnterWorktree",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Tool description for the EnterWorktree tool."
+  },
+  {
+    "id": 301,
+    "filename": "tool-description-exitplanmode.md",
+    "name": "Tool Description: ExitPlanMode",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Description for the ExitPlanMode tool, which presents a plan dialog for the user to approve"
+  },
+  {
+    "id": 302,
+    "filename": "tool-description-exitworktree.md",
+    "name": "Tool Description: ExitWorktree",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Roughly, the reverse of the ExitWorktree"
+  },
+  {
+    "id": 303,
+    "filename": "tool-description-notebookedit.md",
+    "name": "Tool Description: NotebookEdit",
+    "category": "Builtin Tool Descriptions",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Tool description for editing Jupyter notebook cells"
+  },
+  {
+    "id": 304,
+    "filename": "tool-description-powershell.md",
+    "name": "Tool Description: PowerShell",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Describes the PowerShell command execution tool with syntax guidance, timeout settings, and instructions to prefer specialized tools over PowerShell for file operations"
+  },
+  {
+    "id": 305,
+    "filename": "tool-description-remotetrigger-prompt.md",
+    "name": "Tool Description: RemoteTrigger prompt",
+    "category": "Builtin Tool Descriptions",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Tool prompt for calling the claude.ai RemoteTrigger API to list, get, create, update, or run scheduled remote agent routines"
+  },
+  {
+    "id": 306,
+    "filename": "tool-description-request_teach_access-part-of-teach-mode.md",
+    "name": "Tool Description: request_teach_access (part of teach mode)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Bypassed",
+    "exists": true,
+    "desc": "Describes a tool that requests permission to guide the user through a task step-by-step using fullscreen tooltip overlays instead of direct access"
+  },
+  {
+    "id": 307,
+    "filename": "tool-description-sendmessagetool-non-agent-teams.md",
+    "name": "Tool Description: SendMessageTool (non-agent-teams)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Send a message the user will read, describes this tool well."
+  },
+  {
+    "id": 308,
+    "filename": "tool-description-sendmessagetool.md",
+    "name": "Tool Description: SendMessageTool",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Agent teams version of SendMessageTool."
+  },
+  {
+    "id": 309,
+    "filename": "tool-description-senduserfile.md",
+    "name": "Tool Description: SendUserFile",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Describes the SendUserFile tool for surfacing generated deliverable files to the user, with optional captions and normal or proactive status"
+  },
+  {
+    "id": 310,
+    "filename": "tool-description-skill.md",
+    "name": "Tool Description: Skill",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Tool description for executing skills in the main conversation"
+  },
+  {
+    "id": 311,
+    "filename": "tool-description-tasklist-teammate-workflow.md",
+    "name": "Tool Description: TaskList (teammate workflow)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Conditional section appended to TaskList tool description"
+  },
+  {
+    "id": 312,
+    "filename": "tool-description-teamdelete.md",
+    "name": "Tool Description: TeamDelete",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Tool description for the TeamDelete tool"
+  },
+  {
+    "id": 313,
+    "filename": "tool-description-teammatetool.md",
+    "name": "Tool Description: TeammateTool",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Tool for managing teams and coordinating teammates in a swarm"
+  },
+  {
+    "id": 314,
+    "filename": "tool-description-toolsearch-second-part.md",
+    "name": "Tool Description: ToolSearch (second part)",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "The bulk of the tool description."
+  },
+  {
+    "id": 315,
+    "filename": "tool-description-websearch.md",
+    "name": "Tool Description: WebSearch",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Tool description for web search functionality"
+  },
+  {
+    "id": 316,
+    "filename": "tool-parameter-computer-action.md",
+    "name": "Tool Parameter: Computer action",
+    "category": "Builtin Tool Descriptions",
+    "status": "Adopted & Highly Adapted",
+    "exists": true,
+    "desc": "Action parameter options for the Chrome browser computer tool"
+  }
+]
