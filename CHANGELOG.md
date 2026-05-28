@@ -4,6 +4,13 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.153](https://github.com/Piebald-AI/claude-code-system-prompts/commit/83b436e)
+
+_+303 tokens_
+
+- **REMOVED:** System Reminder: Thinking frequency tuning — Removes the reminder that treated harness-added `<system-reminder>` messages as thinking-frequency instructions for simpler versus more complex tasks.
+- Tool Description: Workflow — Renames the explicit opt-in keyword from `ultrawork` to `workflow`, clarifies that model overrides should usually be omitted so agents inherit the resolved session model, and adds exhaustive-review guidance for deduping against all seen findings, using perspective-diverse verification, and looping until discovery runs dry.
+
 # [2.1.152](https://github.com/Piebald-AI/claude-code-system-prompts/commit/eb80790)
 
 _+4,566 tokens_
