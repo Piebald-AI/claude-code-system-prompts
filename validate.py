@@ -89,19 +89,13 @@ def validate():
                             'issue': f"File system-prompts/{record['filename']} is empty"
                         })
 
-    # Report anomalies
-    if anomalies:
-        print(f"\nFound {len(anomalies)} issues/anomalies:")
-        for i, a in enumerate(anomalies):
-            print(f"{i + 1}. [ID: {a['id']}] {a['name']}: {a['issue']}")
-    else:
-        print("\nNo anomalies found. All records in prompts_db.json are valid!")
-
     # Check for orphan files in system-prompts/
+    has_orphans = False
     try:
         all_files = [f for f in os.listdir(PROMPTS_DIR) if f.endswith('.md')]
         orphans = [f for f in all_files if f not in files_checked]
         if orphans:
+            has_orphans = True
             print(f"\nFound {len(orphans)} orphan markdown files in system-prompts/ not referenced in prompts_db.json:")
             for f in orphans[:10]:
                 print(f" - {f}")
@@ -110,5 +104,24 @@ def validate():
     except Exception as e:
         print(f"Error reading prompts directory: {e}")
 
+    # Report anomalies
+    if anomalies or has_orphans:
+        print(f"\nFound {len(anomalies)} issues/anomalies and orphan files.")
+        for i, a in enumerate(anomalies):
+            print(f"{i + 1}. [ID: {a['id']}] {a['name']}: {a['issue']}")
+        import sys
+        sys.exit(1)
+    else:
+        print("\nNo anomalies or orphan files found. All records in prompts_db.json are valid!")
+        try:
+            print("\nTriggering SQLite Auto-Synchronization...")
+            from tools.sync_sqlite import sync
+            sync()
+        except Exception as e:
+            print(f"Warning: SQLite Auto-Synchronization failed: {e}")
+        import sys
+        sys.exit(0)
+
 if __name__ == '__main__':
     validate()
+

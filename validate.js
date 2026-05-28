@@ -14,11 +14,11 @@ const REQUIRED_FIELDS = [
 ];
 
 const PLACEHOLDER_PATTERNS = [
-  /todo/i,
-  /placeholder/i,
+  /^\s*todo:?/i,
+  /^placeholder$/i,
   /\[insert/i,
-  /tbd/i,
-  /n\/a/i,
+  /^tbd$/i,
+  /^n\/a$/i,
   /^no description/i,
   /^none$/i,
   /^\s*$/
@@ -116,8 +116,10 @@ async function validate() {
     anomalies.forEach((a, i) => {
       console.log(`${i + 1}. [ID: ${a.id}] ${a.name}: ${a.issue}`);
     });
+    process.exit(1);
   } else {
     console.log('\nNo anomalies found. All records are valid!');
+    process.exit(0);
   }
 
   // Check for orphan markdown files in system-prompts/
@@ -136,3 +138,4 @@ async function validate() {
 }
 
 validate();
+
