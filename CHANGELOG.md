@@ -4,6 +4,15 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.157](https://github.com/Piebald-AI/claude-code-system-prompts/commit/0aece05)
+
+_+674 tokens_
+
+- Agent Prompt: Security monitor for autonomous agent actions (first part) — Expands high-severity review for persistent configuration changes, outbound submissions, novel destinations, and low-information actions whose intent is clarified by the agent's narration.
+- Data: Tool use concepts — Adds guidance that tool descriptions should prescribe when to call each tool, especially to improve should-call behavior on recent Opus models.
+- Skill: Model migration guide — Adds Opus 4.8 migration guidance to put tool-triggering instructions in each tool's own description, not only in the system prompt.
+- Tool Description: EnterWorktree — Allows switching by `path` from an existing worktree session or pinned agent into another registered `.claude/worktrees/` worktree, with cleanup and writability limits clarified.
+
 #### [2.1.156](https://github.com/Piebald-AI/claude-code-system-prompts/commit/b48f2fd)
 
 <sub>_No changes to the system prompts in v2.1.156._</sub>
