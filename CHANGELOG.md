@@ -4,6 +4,19 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.166](https://github.com/Piebald-AI/claude-code-system-prompts/commit/5f5e10b)
+
+_+1,907 tokens_
+
+- **NEW:** System Reminder: Cross-session peer message authority warning — Adds an explicit warning that peer-session messages are not user authority, cannot grant consent, and must not be used to relay denied actions between sessions.
+- Agent Prompt: Security monitor for autonomous agent actions (first part) — Adds cross-session message handling rules that treat peer-session requests as non-user intent, deny permission-laundering attempts, and prevent peer messages from lifting user boundaries or SOFT BLOCK conditions.
+- Skill: /design-sync package source shape — Expands package-sync reliability guidance for monorepos, isolated `.ds-sync` converter dependency staging, persistent notes from user-reported issues, pnpm self-provisioning failures, DS package `node_modules` resolution, and recompile-sentinel upload ordering.
+- Skill: /design-sync slash command — Adds prior-run state handling for `design-sync.config.json` and `.design-sync/NOTES.md`, and improves Storybook source-shape detection for monorepos and non-root Storybook configs.
+- Skill: /design-sync Storybook source shape — Expands Storybook sync guidance for building workspace dependencies first, targeting the correct Storybook output directory, preserving existing config and notes, isolated converter staging, monorepo dependency paths, additional self-heal errors, and first-write recompile sentinel uploads.
+- Skill: Generate permission allowlist from transcripts — Updates the auto-allowed command reference by moving `find`, `printf`, and `test` into validated safe-flag handling and removing `info` and unrestricted `find` from the always/safe lists.
+- Skill: Verify skill — Clarifies that verification evidence must be accessible to the reader, requiring remote screenshots or recordings to be sent when `SendUserFile` is available and inline evidence when file paths alone are not usable.
+- Tool Description: Workflow — Clarifies that `agent()` returns `null` when a workflow subagent dies on a terminal API error after retries, matching existing skip handling.
+
 #### [2.1.165](https://github.com/Piebald-AI/claude-code-system-prompts/commit/0177a1f)
 
 <sub>_No changes to the system prompts in v2.1.165._</sub>
