@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "annotations": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "notes": {
+            "description": "Free-text notes the user added to their selection.",
+            "type": "string"
+          },
+          "preview": {
+            "description": "The preview content of the selected option, if the question used previews.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "description": "Optional per-question annotations from the user (e.g., notes on preview selections). Keyed by question text.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "answers": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "User answers collected by the permission component",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "metadata": {
+      "additionalProperties": false,
+      "description": "Optional metadata for tracking and analytics purposes. Not displayed to user.",
+      "properties": {
+        "source": {
+          "description": "Optional identifier for the source of this question (e.g., \"remember\" for /remember command). Used for analytics tracking.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "questions": {
+      "description": "Questions to ask the user (1-4 questions)",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "header": {
+            "description": "Very short label displayed as a chip/tag (max 12 chars). Examples: \"Auth method\", \"Library\", \"Approach\".",
+            "type": "string"
+          },
+          "multiSelect": {
+            "default": false,
+            "description": "Set to true to allow the user to select multiple options instead of just one. Use when choices are not mutually exclusive.",
+            "type": "boolean"
+          },
+          "options": {
+            "description": "The available choices for this question. Must have 2-4 options. Each option should be a distinct, mutually exclusive choice (unless multiSelect is enabled). There should be no 'Other' option, that will be provided automatically.",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "description": {
+                  "description": "Explanation of what this option means or what will happen if chosen. Useful for providing context about trade-offs or implications.",
+                  "type": "string"
+                },
+                "label": {
+                  "description": "The display text for this option that the user will see and select. Should be concise (1-5 words) and clearly describe the choice.",
+                  "type": "string"
+                },
+                "preview": {
+                  "description": "Optional preview content rendered when this option is focused. Use for mockups, code snippets, or visual comparisons that help users compare options. See the tool description for the expected content format.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label",
+                "description"
+              ],
+              "type": "object"
+            },
+            "maxItems": 4,
+            "minItems": 2,
+            "type": "array"
+          },
+          "question": {
+            "description": "The complete question to ask the user. Should be clear, specific, and end with a question mark. Example: \"Which library should we use for date formatting?\" If multiSelect is true, phrase it accordingly, e.g. \"Which features do you want to enable?\"",
+            "type": "string"
+          }
+        },
+        "required": [
+          "question",
+          "header",
+          "options",
+          "multiSelect"
+        ],
+        "type": "object"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "questions"
+  ],
+  "type": "object"
+}
