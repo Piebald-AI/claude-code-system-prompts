@@ -51,6 +51,31 @@ Over the same seven versions, prose descriptions for `AskUserQuestion`,
 `LSP`, `NotebookEdit`, and `Workflow` were edited — confirming that schemas
 and descriptions vary on independent axes.
 
+## Agent invariance
+
+A tool's `input_schema` is identical whether the request comes from the
+main loop, the `Explore` subagent, a `Workflow`-spawned subagent, or any
+other context Claude Code uses. Comparing 188+ captures across those
+contexts, every shared tool name (`Bash`, `Read`, `LSP`, …) produces the
+same byte-for-byte schema. Subagents differ from the main loop only in
+*which* tools are present — typically by subsetting the full list (e.g.
+`Explore` drops `Edit`/`Write`/`NotebookEdit` for its read-only mode and
+drops `Agent`/`Workflow`/`ScheduleWakeup` to prevent recursive spawning).
+
+So one `tool-schemas/<tool>.json` per tool is sufficient — no need to
+partition by caller agent.
+
+## What this directory deliberately does not cover
+
+`StructuredOutput` is a sub-agent-only tool whose `input_schema` is
+**supplied at call time by the caller** (the workflow orchestration
+script that spawned the subagent), not defined by Claude Code itself.
+Across 188 captures, two unrelated `StructuredOutput` schemas appeared:
+one with `{module, purpose, key_files, notable}`, another with
+`{problem, design, rfc, priority, cloud_impact}`. Recording one fixed
+schema here would misrepresent it. Its prose `description`, however, is
+static and could fit naturally into `system-prompts/` if desired.
+
 ## Naming convention
 
 - File: `<kebab-case-tool-name>.json`, e.g. `bash.json`, `web-fetch.json`,
