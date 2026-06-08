@@ -4,95 +4,40 @@ JSON `input_schema` for Claude Code's builtin tools, captured verbatim from
 the API request body Claude Code sends to Anthropic.
 
 Seeded from issue
-[#22](https://github.com/Piebald-AI/system-prompts/issues/22). All 29 tools
-shipped in Claude Code v2.1.168 are covered.
+[#22](https://github.com/Piebald-AI/claude-code-system-prompts/issues/22).
+Covers the 29 tools shipped to the main agent loop.
 
-## What's in each file
+## File contents
 
 Each `<tool>.json` is a standalone JSON Schema document — the exact value of
-`tools[i].input_schema` from a real `POST /v1/messages` request. No wrapping,
-no transformation, no re-formatting beyond `JSON.stringify(value, null, 2)`
-so diffs across versions stay readable.
+`tools[i].input_schema` from a real `POST /v1/messages` request, written with
+`JSON.stringify(value, null, 2)` so diffs stay readable. No wrapping, no key
+reordering, no other transformation.
 
-The tool's prose description is **not** duplicated here — it lives in
-[`system-prompts/tool-description-<tool>.md`](../system-prompts/) and stays
-the single source of truth for that content.
+The tool's prose description is not duplicated here — it lives in
+[`system-prompts/tool-description-<tool>.md`](../system-prompts/).
 
 ## Source
 
 Captured at the wire level via a local reverse proxy
-([flare](https://github.com/YiRaaaan/flare)) that sits between Claude Code
-and `api.anthropic.com` and records each request body. Because the schema
-comes from the API payload — not from parsing the minified `cli.js` — it is
-not affected by bundler or minifier changes between Claude Code releases.
+([flare](https://github.com/YiRaaaan/flare)) sitting between Claude Code and
+`api.anthropic.com`. Because the schemas come from the API payload rather
+than from parsing `cli.js`, they are independent of bundler/minifier changes
+across Claude Code releases.
 
-## Version and stability
+## Naming
 
-Files in this directory were captured from **v2.1.168**
-(`x-anthropic-billing-header: cc_version=2.1.168.fc4`).
+`<kebab-case-tool-name>.json` — e.g. `bash.json`, `web-fetch.json`,
+`ask-user-question.json`. The tool name is in the filename only; the file
+body is the schema itself.
 
-As a small data point on the maintenance argument from issue #22: comparing
-captures from **v2.1.161 → v2.1.168** (seven patch releases), **28 of 29
-schemas are byte-identical**. The only change was `LSP`, which gained a new
-`query` property used by the `workspaceSymbol` operation:
+If a layout closer to `system-prompts/tool-description-<tool>.md` is
+preferred (co-located, single dir, `tool-schema-<tool>.json` prefix), the
+files rename cleanly — happy to follow whatever convention the maintainers
+want.
 
-```diff
-+ "query": {
-+   "description": "The symbol name or partial name to search for (workspaceSymbol only). ...",
-+   "type": "string"
-+ }
-```
+## Not covered
 
-That is exactly the kind of change a runtime-contract reader would want to
-know about — and exactly the kind of change that is invisible if only the
-prose description is tracked.
-
-Over the same seven versions, prose descriptions for `AskUserQuestion`,
-`LSP`, `NotebookEdit`, and `Workflow` were edited — confirming that schemas
-and descriptions vary on independent axes.
-
-## Agent invariance
-
-A tool's `input_schema` is identical whether the request comes from the
-main loop, the `Explore` subagent, a `Workflow`-spawned subagent, or any
-other context Claude Code uses. Comparing 188+ captures across those
-contexts, every shared tool name (`Bash`, `Read`, `LSP`, …) produces the
-same byte-for-byte schema. Subagents differ from the main loop only in
-*which* tools are present — typically by subsetting the full list (e.g.
-`Explore` drops `Edit`/`Write`/`NotebookEdit` for its read-only mode and
-drops `Agent`/`Workflow`/`ScheduleWakeup` to prevent recursive spawning).
-
-So one `tool-schemas/<tool>.json` per tool is sufficient — no need to
-partition by caller agent.
-
-## What this directory deliberately does not cover
-
-`StructuredOutput` is a sub-agent-only tool whose `input_schema` is
-**supplied at call time by the caller** (the workflow orchestration
-script that spawned the subagent), not defined by Claude Code itself.
-Across 188 captures, two unrelated `StructuredOutput` schemas appeared:
-one with `{module, purpose, key_files, notable}`, another with
-`{problem, design, rfc, priority, cloud_impact}`. Recording one fixed
-schema here would misrepresent it. Its prose `description`, however, is
-static and could fit naturally into `system-prompts/` if desired.
-
-## Naming convention
-
-- File: `<kebab-case-tool-name>.json`, e.g. `bash.json`, `web-fetch.json`,
-  `ask-user-question.json`, mirroring the `tool-description-<kebab>.md`
-  convention already used in `system-prompts/`.
-- The tool name appears in the filename only; the file body is the schema
-  itself.
-
-## Relationship to the existing extractor
-
-This directory is intentionally decoupled from
-[`tools/updatePrompts.js`](../tools/updatePrompts.js) and the upstream
-[`tweakcc` extractor](https://github.com/Piebald-AI/tweakcc/blob/main/tools/promptExtractor.js).
-Those tools walk the Claude Code AST looking for `StringLiteral` /
-`TemplateLiteral` nodes that pass a "looks like a prompt" heuristic — that
-heuristic cannot match an `ObjectExpression` JSON schema and would need a
-separate identifier+correlation step to associate each schema with its
-tool. The proxy-capture path avoids that entirely; nothing in this
-directory needs the existing extractor to keep working, and nothing in the
-existing extractor needs to know about this directory.
+`StructuredOutput`, a sub-agent tool whose `input_schema` is supplied at
+spawn time by the caller rather than defined by Claude Code, has no fixed
+shape to record.
