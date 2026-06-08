@@ -5,11 +5,19 @@ the API request body Claude Code sends to Anthropic.
 
 Seeded from issue
 [#22](https://github.com/Piebald-AI/claude-code-system-prompts/issues/22).
-Covers the 29 tools shipped to the main agent loop in a standard Claude
-Code session. Tools that only appear under specific feature flags (Agent
-Teams / Cowork, computer-use, claude.ai/design, PowerShell on Windows,
-etc.) are out of scope for this initial PR — they need a capture from
-that context.
+
+- **29 default tools** shipped to the main agent loop in a standard
+  Claude Code session (`bash.json`, `read.json`, `edit.json`, …).
+- **3 Agent Teams tools** (`send-message.json`, `team-create.json`,
+  `team-delete.json`) captured under
+  `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` / `--agent-teams`. These
+  appear in the `tools[]` payload only when that gate is enabled
+  (`utils/agentSwarmsEnabled.ts`).
+
+Other build-time-gated tools (`SendUserFile`, `Snip`, `WebBrowser`, …
+behind `feature('KAIROS')` etc.) are not in the public npm bundle and so
+cannot be captured from a standard install; PowerShell needs a Windows
+host. Those remain out of scope for this PR.
 
 ## File contents
 
