@@ -6,18 +6,20 @@ the API request body Claude Code sends to Anthropic.
 Seeded from issue
 [#22](https://github.com/Piebald-AI/claude-code-system-prompts/issues/22).
 
-- **29 default tools** shipped to the main agent loop in a standard
-  Claude Code session (`bash.json`, `read.json`, `edit.json`, …).
-- **3 Agent Teams tools** (`send-message.json`, `team-create.json`,
-  `team-delete.json`) captured under
-  `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` / `--agent-teams`. These
-  appear in the `tools[]` payload only when that gate is enabled
-  (`utils/agentSwarmsEnabled.ts`).
+35 schemas total, grouped by how they surface in the `tools[]` payload:
 
-Other build-time-gated tools (`SendUserFile`, `Snip`, `WebBrowser`, …
-behind `feature('KAIROS')` etc.) are not in the public npm bundle and so
-cannot be captured from a standard install; PowerShell needs a Windows
-host. Those remain out of scope for this PR.
+| Group | Tools | How to surface |
+|---|---|---|
+| **Default main loop** (29) | `agent`, `ask-user-question`, `bash`, `cron-*`, `edit`, `enter-/exit-plan-mode`, `enter-/exit-worktree`, `lsp`, `monitor`, `notebook-edit`, `push-notification`, `read`, `remote-trigger`, `schedule-wakeup`, `skill`, `task-*`, `web-fetch`, `web-search`, `workflow`, `write` | Standard Claude Code session, no flags |
+| **Agent Teams** (3) | `send-message`, `team-create`, `team-delete` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` or `--agent-teams` (`utils/agentSwarmsEnabled.ts`) |
+| **`local-agent` entrypoint** (2) | `glob`, `grep` | `CLAUDE_CODE_ENTRYPOINT=local-agent` (sub-agent context that exposes the dedicated search tools instead of having the model shell out via `Bash`) |
+| **Brief / assistant mode** (1) | `send-user-message` | `CLAUDE_CODE_BRIEF=1` (KAIROS-style assistant entrypoint) |
+
+Build-time-gated tools (`SendUserFile`, `Snip`, `WebBrowser`, …) live
+behind `bun:bundle` `feature('KAIROS')` / `feature('WEB_BROWSER_TOOL')`
+macros. Their code is present in the public native binary but they
+require additional runtime gates not exposed by the env flags above;
+left for a follow-up PR. `PowerShell` is Windows-only.
 
 ## File contents
 
