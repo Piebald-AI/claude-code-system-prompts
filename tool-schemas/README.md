@@ -33,11 +33,10 @@ The tool's prose description is not duplicated here — it lives in
 
 ## Source
 
-Captured at the wire level via a local reverse proxy
-([flare](https://github.com/YiRaaaan/flare)) sitting between Claude Code and
-`api.anthropic.com`. Because the schemas come from the API payload rather
-than from parsing `cli.js`, they are independent of bundler/minifier changes
-across Claude Code releases.
+Captured at the wire level via a local reverse proxy sitting between
+Claude Code and `api.anthropic.com`. Because the schemas come from the API
+payload rather than from parsing `cli.js`, they are independent of
+bundler/minifier changes across Claude Code releases.
 
 ## Naming
 
