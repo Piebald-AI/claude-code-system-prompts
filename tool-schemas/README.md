@@ -28,8 +28,9 @@ Each `<tool>.json` is a standalone JSON Schema document — the exact value of
 `JSON.stringify(value, null, 2)` so diffs stay readable. No wrapping, no key
 reordering, no other transformation.
 
-The tool's prose description is not duplicated here — it lives in
-[`system-prompts/tool-description-<tool>.md`](../system-prompts/).
+The tool's prose description is not duplicated here — it lives in the
+[`system-prompts/`](../system-prompts/) directory (files matching
+`tool-description-<tool>*.md`).
 
 ## Source
 
