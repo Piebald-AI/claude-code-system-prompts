@@ -5,7 +5,11 @@ the API request body Claude Code sends to Anthropic.
 
 Seeded from issue
 [#22](https://github.com/Piebald-AI/claude-code-system-prompts/issues/22).
-Covers the 29 tools shipped to the main agent loop.
+Covers the 29 tools shipped to the main agent loop in a standard Claude
+Code session. Tools that only appear under specific feature flags (Agent
+Teams / Cowork, computer-use, claude.ai/design, PowerShell on Windows,
+etc.) are out of scope for this initial PR — they need a capture from
+that context.
 
 ## File contents
 
