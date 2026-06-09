@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Claude model catalog'
 description: Catalog of current and legacy Claude models with exact model IDs, aliases, context windows, and pricing
-ccVersion: 2.1.154
+ccVersion: 2.1.170
 -->
 # Claude Model Catalog
 
@@ -62,6 +62,7 @@ curl https://api.anthropic.com/v1/models/claude-opus-4-8 \
 
 | Friendly Name     | Alias (use this)    | Full ID                       | Context        | Max Output | Status |
 |-------------------|---------------------|-------------------------------|----------------|------------|--------|
+| Claude Fable 5    | `{{FABLE_ID}}`      | —                             | 1M             | 128K       | Active |
 | Claude Opus 4.8   | `claude-opus-4-8`   | —                             | 1M             | 128K       | Active |
 | Claude Opus 4.7   | `claude-opus-4-7`   | —                             | 1M             | 128K       | Active |
 | Claude Opus 4.6   | `claude-opus-4-6`   | —                             | 1M             | 128K       | Active |
@@ -69,7 +70,8 @@ curl https://api.anthropic.com/v1/models/claude-opus-4-8 \
 | Claude Haiku 4.5  | `claude-haiku-4-5`  | `claude-haiku-4-5-20251001`   | 200K           | 64K        | Active |
 
 ### Model Descriptions
-- **Claude Opus 4.8** — The most capable Claude model to date — highly autonomous, state-of-the-art on long-horizon agentic work, knowledge work, and memory; clearer, warmer writing. Same API surface as Opus 4.7 (adaptive thinking only; sampling parameters and `budget_tokens` removed). 1M context window at standard API pricing (no long-context premium). See `shared/model-migration.md` → Migrating to Opus 4.8 — a 4.7 → 4.8 move is a model-ID swap plus prompt re-tuning, no new breaking changes.
+- **Claude Fable 5** — Our most powerful, most intelligent model. New tier above Opus. Same API surface as Opus 4.7/4.8 (see `shared/model-migration.md`) with one new breaking change: an explicit `thinking: {type: "disabled"}` returns a 400 (omit the `thinking` param instead); $10/$50 per MTok.
+- **Claude Opus 4.8** — The most capable Opus-tier model — highly autonomous, state-of-the-art on long-horizon agentic work, knowledge work, and memory; clearer, warmer writing. Same API surface as Opus 4.7 (adaptive thinking only; sampling parameters and `budget_tokens` removed). 1M context window at standard API pricing (no long-context premium). See `shared/model-migration.md` → Migrating to Opus 4.8 — a 4.7 → 4.8 move is a model-ID swap plus prompt re-tuning, no new breaking changes.
 - **Claude Opus 4.7** — Previous-generation Opus. Highly autonomous; strong on long-horizon agentic work, knowledge work, vision, and memory. Adaptive thinking only; sampling parameters and `budget_tokens` removed. 1M context window. See `shared/model-migration.md` → Migrating to Opus 4.7.
 - **Claude Opus 4.6** — Older Opus. Supports adaptive thinking (recommended), 128K max output tokens (requires streaming for large outputs). 1M context window.
 - **Claude Sonnet 4.6** — Our best combination of speed and intelligence. Supports adaptive thinking (recommended). 1M context window. 64K max output tokens.
@@ -110,7 +112,9 @@ When a user asks for a model by name, use this table to find the correct model I
 
 | User says...                              | Use this model ID              |
 |-------------------------------------------|--------------------------------|
-| "opus", "most powerful"                   | `claude-opus-4-8`              |
+| "fable"                                   | `{{FABLE_ID}}`                 |
+| "most powerful"                           | `{{FABLE_ID}}`                 |
+| "opus"                                    | `claude-opus-4-8`              |
 | "opus 4.8"                                | `claude-opus-4-8`              |
 | "opus 4.7"                                | `claude-opus-4-7`              |
 | "opus 4.6"                                | `claude-opus-4-6`              |
