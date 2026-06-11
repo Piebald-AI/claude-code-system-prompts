@@ -53,12 +53,22 @@ const NAME_TO_KEBAB_OVERRIDES = {
   LSP: 'lsp',
 };
 
+// Strictly kebab — letters / digits / single hyphens only. Used to guard
+// against unsafe filenames even though tool names come from Claude Code
+// itself; if Claude Code ever emits an unexpected character we want to
+// fail loud rather than silently write to a path we didn't mean to.
+const SAFE_KEBAB = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+
 function toKebab(name) {
-  if (NAME_TO_KEBAB_OVERRIDES[name]) return NAME_TO_KEBAB_OVERRIDES[name];
-  return name
-    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
-    .toLowerCase();
+  const out = NAME_TO_KEBAB_OVERRIDES[name]
+    ?? name
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+      .toLowerCase();
+  if (!SAFE_KEBAB.test(out)) {
+    throw new Error(`Refusing unsafe filename slug "${out}" derived from tool name "${name}"`);
+  }
+  return out;
 }
 
 // Sort all object keys lexically so two runs (or two captures) produce
