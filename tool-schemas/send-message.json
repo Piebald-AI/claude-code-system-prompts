@@ -36,6 +36,7 @@
                   "type": "string"
                 },
                 "request_id": {
+                  "pattern": "^[^\\n\\r]{1,200}$",
                   "type": "string"
                 },
                 "type": {
@@ -60,6 +61,7 @@
                   "type": "string"
                 },
                 "request_id": {
+                  "pattern": "^[^\\n\\r]{1,200}$",
                   "type": "string"
                 },
                 "type": {
@@ -80,6 +82,7 @@
     },
     "summary": {
       "description": "A 5-10 word summary shown as a preview in the UI (required when message is a string)",
+      "maxLength": 200,
       "type": "string"
     },
     "to": {

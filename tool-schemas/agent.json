@@ -18,7 +18,8 @@
       "enum": [
         "sonnet",
         "opus",
-        "haiku"
+        "haiku",
+        "fable"
       ],
       "type": "string"
     },
