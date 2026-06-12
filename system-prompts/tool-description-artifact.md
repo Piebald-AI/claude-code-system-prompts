@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: Artifact'
 description: Describes the Artifact tool for deploying self-contained HTML or Markdown pages, including file-first usage, update behavior, CSP constraints, responsive design, and favicon requirements
-ccVersion: 2.1.172
+ccVersion: 2.1.176
 -->
 Render an HTML or Markdown file to an Artifact — a default-private web page hosted on claude.ai that the user can later choose to share with their teammates. Use this when communicating visually with an image, diagram, or rich HTML/Markdown would be clearer than terminal text.
 
@@ -16,6 +16,8 @@ Write the content to a file first (via Write/Edit), then call Artifact with its 
 **To update**: Edit the file, then call Artifact again with the same file path — it redeploys to the same URL. A different file path claims a new URL so only use a different path if you intend to create a separate new Artifact.
 
 **To update an artifact the user gives you a URL for** (an artifact link not published in this session): pass the URL as `url`. Without it, a fresh session always mints a new URL — there is no other way to target an existing one.
+
+**To read an existing artifact's content**: call WebFetch with its URL.
 
 **Self-contained only**: A strict CSP blocks requests to any external host — CDN scripts, external stylesheets, fonts, remote images, fetch/XHR/WebSockets. Blocked resources don't error the page; it just renders without them. Relative paths won't resolve (nothing else is deployed alongside the page). Inline all CSS/JS and embed assets as data: URIs.
 

@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Claude API reference — PHP'
 description: PHP SDK reference
-ccVersion: 2.1.174
+ccVersion: 2.1.176
 -->
 # Claude API — PHP
 
@@ -391,6 +391,8 @@ if ($message->stopReason === 'refusal' && $message->stopDetails !== null) {
     echo "Explanation: " . $message->stopDetails->explanation . "\n";
 }
 ```
+
+**Refusal fallbacks ({{FABLE_NAME}}) — opt in by default.** Fallbacks are opt-in: without them a refused request simply stops. New `{{FABLE_ID}}` code should include the server-side `fallbacks` parameter (beta header `server-side-fallback-2026-06-01`, fallback model `{{OPUS_ID}}`, on the beta messages call) by default. The exact PHP binding (and the client-side middleware for providers without server-side support) is not documented here — WebFetch the PHP SDK repo's `examples/` from `shared/live-sources.md`; full semantics in `shared/model-migration.md` → Migrating to {{FABLE_NAME}} → `refusal` stop reason.
 
 ---
 

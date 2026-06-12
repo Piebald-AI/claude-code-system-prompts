@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: Model migration guide'
 description: Step-by-step instructions for migrating existing code to newer Claude models, covering breaking changes, deprecated parameters, per-SDK syntax, prompt-behavior shifts, and migration checklists
-ccVersion: 2.1.174
+ccVersion: 2.1.176
 -->
 # Model Migration Guide
 
@@ -957,6 +957,8 @@ else:
     print(response.content[0].text)
 ```
 
+**Default to opting in.** Fallbacks are not automatic on the API — a request without them simply stops on a refusal. Migrated and new {{FABLE_NAME}} code should ship with pattern 1 below (pattern 2 on providers without server-side support) from day one, not as a later hardening step: emit the opt-in in the code, tell the user it's there, and remove it only if they decline.
+
 Three ways to retry a refused request on another model, in order of preference:
 
 **1. Server-side `fallbacks` parameter (beta: Claude API and Claude Platform on AWS) — preferred.** One round trip, a plain client, no client-side logic. Name substitute models (the only supported fallback target at launch is `claude-opus-4-8`, expansion expected); on a policy decline the API runs the next model on the same request and returns its answer, with credit-style repricing applied automatically. A `stop_reason: "refusal"` on the final response means the whole chain refused.
@@ -1115,7 +1117,7 @@ For agents that only narrate routine progress, the model's default progress narr
 - [ ] **[BLOCKS]** Remove all other `thinking` configuration (`{type: "enabled", budget_tokens: N}` returns a 400, same as on Opus 4.7/4.8); control depth with `output_config.effort` instead
 - [ ] **[BLOCKS]** If thinking content is surfaced to users or stored in logs: add `thinking: {type: "adaptive", display: "summarized"}` (the default is `"omitted"` — otherwise the rendered text is empty)
 - [ ] **[TUNE]** Re-baseline cost and latency on your own workloads — token counts are roughly unchanged from Opus 4.7/4.8 and Mythos Preview (same tokenizer); per-token pricing differs. Coming from Opus 4.6, Sonnet, Haiku, or older, token counts differ — use `count_tokens` with each model to compare
-- [ ] **[TUNE]** Add `stop_reason == "refusal"` handling before reading `response.content` (pre-output: empty + unbilled; mid-stream: partial output billed — discard); pick a retry strategy — client-side (replay history as-is; other models ignore Fable's thinking blocks), fallback credit (`fallback-credit-2026-06-01`, exact body), or server-side `fallbacks` (`server-side-fallback-2026-06-01`, Claude API and Claude Platform on AWS)
+- [ ] **[TUNE]** Add `stop_reason == "refusal"` handling before reading `response.content` (pre-output: empty + unbilled; mid-stream: partial output billed — discard); opt into a fallback by default — server-side `fallbacks` (`server-side-fallback-2026-06-01`, Claude API and Claude Platform on AWS) where available, otherwise the SDK middleware or fallback credit (`fallback-credit-2026-06-01`, exact body); a bare client-side replay (history as-is; other models drop Fable's thinking blocks) is the floor, not the recommendation
 - [ ] **[TUNE]** If you surfaced thinking text to users, plan for the thinking output change — the raw chain of thought is never returned; render the `display: "summarized"` summary (per the [BLOCKS] item above); pass blocks back unchanged on the same model; other models drop them from the prompt (unbilled)
 - [ ] **[TUNE]** Plan for minutes-long turns: timeouts, streaming, async check-ins, progress UX (see Behavior changes above)
 - [ ] **[TUNE]** Run an effort sweep including low/medium for routine workloads; add the no-tidying instruction if higher effort produces unrequested refactors

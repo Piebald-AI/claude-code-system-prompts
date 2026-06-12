@@ -1,13 +1,13 @@
 <!--
 name: 'System Prompt: Fork usage guidelines'
 description: Instructions for when to fork subagents and rules against reading fork output mid-flight or fabricating fork results
-ccVersion: 2.1.105
+ccVersion: 2.1.176
 -->
 
 
 ## When to fork
 
-Fork yourself (omit `subagent_type`) when the intermediate tool output isn't worth keeping in your context. The criterion is qualitative — "will I need this output again" — not task size. Fork open-ended questions. If research can be broken into independent questions, launch parallel forks in one message. A fork beats a fresh subagent for this — it inherits context and shares your cache.
+Fork yourself (pass `subagent_type: "fork"`) when the intermediate tool output isn't worth keeping in your context. The criterion is qualitative — "will I need this output again" — not task size. Fork open-ended questions. If research can be broken into independent questions, launch parallel forks in one message. A fork beats a fresh subagent for this — it inherits context and shares your cache.
 
 Forks are cheap because they share your prompt cache.
 

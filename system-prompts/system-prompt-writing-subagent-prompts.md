@@ -1,7 +1,7 @@
 <!--
 name: 'System Prompt: Writing subagent prompts'
 description: Guidelines for writing effective prompts when delegating tasks to subagents, covering context-inheriting vs fresh subagent scenarios
-ccVersion: 2.1.94
+ccVersion: 2.1.176
 variables:
   - HAS_SUBAGENT_TYPE
 -->
@@ -9,7 +9,7 @@ variables:
 
 ## Writing the prompt
 
-${HAS_SUBAGENT_TYPE?"When spawning a fresh agent (with a `subagent_type`), it starts with zero context. ":""}Brief the agent like a smart colleague who just walked into the room — it hasn't seen this conversation, doesn't know what you've tried, doesn't understand why this task matters.
+${HAS_SUBAGENT_TYPE?"Any agent other than a fork starts with zero context. ":""}Brief the agent like a smart colleague who just walked into the room — it hasn't seen this conversation, doesn't know what you've tried, doesn't understand why this task matters.
 - Explain what you're trying to accomplish and why.
 - Describe what you've already learned or ruled out.
 - Give enough context about the surrounding problem that the agent can make judgment calls rather than just following a narrow instruction.

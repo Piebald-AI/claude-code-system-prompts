@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Claude API reference — Python'
 description: Python SDK reference including installation, client initialization, basic requests, thinking, and multi-turn conversation
-ccVersion: 2.1.174
+ccVersion: 2.1.176
 -->
 # Claude API — Python
 
@@ -442,6 +442,35 @@ if response.stop_reason == "refusal" and response.stop_details:
     print(f"Category: {response.stop_details.category}")   # e.g. "cyber", "bio", "reasoning_extraction", "frontier_llm", or None — see docs for the full set
     print(f"Explanation: {response.stop_details.explanation}")
 ```
+
+### Refusal Fallbacks ({{FABLE_NAME}}) — opt in by default
+
+Fallbacks are **opt-in**: without them a refused request simply stops. Include the server-side `fallbacks` parameter in `{{FABLE_ID}}` code by default — on a policy decline the API re-runs the same request on the fallback model inside the same call. A decline before any output isn't billed (a mid-stream decline bills the streamed partial); the rescue bills at the fallback model's own rates, with cache repricing applied automatically.
+
+```python
+response = client.beta.messages.create(
+    model="{{FABLE_ID}}",
+    max_tokens=16000,
+    betas=["server-side-fallback-2026-06-01"],
+    fallbacks=[{"model": "{{OPUS_ID}}"}],
+    messages=[{"role": "user", "content": "..."}],
+)
+
+# Switch points: one fallback block per model that ran and declined this turn
+for block in response.content:
+    if block.type == "fallback":
+        print(f"{block.from_.model} declined; {block.to.model} continued")
+
+# Served-by signal — covers sticky turns, which carry no fallback block.
+# Pair with stop_reason: the fallback model can itself refuse.
+fallback_ran = any(
+    entry.type == "fallback_message" for entry in response.usage.iterations or []
+)
+if fallback_ran and response.stop_reason != "refusal":
+    print(f"Served by {response.model}")
+```
+
+A `stop_reason: "refusal"` on the final response means the whole chain refused. The header must be exactly `server-side-fallback-2026-06-01`; the parameter is rejected on the Batches API and unavailable on Amazon Bedrock, Vertex AI, and Microsoft Foundry — register the client-side `BetaRefusalFallbackMiddleware` on the client there instead. Full semantics (sticky routing, billing, streaming, echoing fallback turns back): `shared/model-migration.md` → Migrating to {{FABLE_NAME}} → `refusal` stop reason.
 
 ---
 

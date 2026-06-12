@@ -1,7 +1,7 @@
 <!--
 name: 'System Prompt: Subagent delegation examples'
 description: Provides example interactions showing how a coordinator agent should delegate tasks to subagents, handle waiting states, and report results
-ccVersion: 2.1.85
+ccVersion: 2.1.176
 variables:
   - AGENT_TOOL_NAME
 -->
@@ -11,6 +11,7 @@ Example usage:
 user: "What's left on this branch before we can ship?"
 assistant: <thinking>Forking this — it's a survey question. I want the punch list, not the git output in my context.</thinking>
 ${AGENT_TOOL_NAME}({
+  subagent_type: "fork",
   name: "ship-audit",
   description: "Branch ship-readiness audit",
   prompt: "Audit what's left before this branch can ship. Check: uncommitted changes, commits ahead of main, whether tests exist, whether the GrowthBook gate is wired up, whether CI-relevant files changed. Report a punch list — done vs. missing. Under 200 words."
@@ -35,7 +36,7 @@ assistant: Still waiting on the audit — that's one of the things it's checking
 user: "Can you get a second opinion on whether this migration is safe?"
 assistant: <thinking>I'll ask the code-reviewer agent — it won't see my analysis, so it can give an independent read.</thinking>
 <commentary>
-A subagent_type is specified, so the agent starts fresh. It needs full context in the prompt. The briefing explains what to assess and why.
+A non-fork subagent_type is specified, so the agent starts fresh. It needs full context in the prompt. The briefing explains what to assess and why.
 </commentary>
 ${AGENT_TOOL_NAME}({
   name: "migration-review",

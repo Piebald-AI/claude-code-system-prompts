@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Claude API reference — TypeScript'
 description: TypeScript SDK reference including installation, client initialization, basic requests, thinking, and multi-turn conversation
-ccVersion: 2.1.174
+ccVersion: 2.1.176
 -->
 # Claude API — TypeScript
 
@@ -342,6 +342,38 @@ if (response.stop_reason === "refusal" && response.stop_details) {
   console.log(`Explanation: ${response.stop_details.explanation}`);
 }
 ```
+
+### Refusal Fallbacks ({{FABLE_NAME}}) — opt in by default
+
+Fallbacks are **opt-in**: without them a refused request simply stops. Include the server-side `fallbacks` parameter in `{{FABLE_ID}}` code by default — on a policy decline the API re-runs the same request on the fallback model inside the same call. A decline before any output isn't billed (a mid-stream decline bills the streamed partial); the rescue bills at the fallback model's own rates, with cache repricing applied automatically.
+
+```typescript
+const response = await client.beta.messages.create({
+  model: "{{FABLE_ID}}",
+  max_tokens: 16000,
+  betas: ["server-side-fallback-2026-06-01"],
+  fallbacks: [{ model: "{{OPUS_ID}}" }],
+  messages: [{ role: "user", content: "..." }],
+});
+
+// Switch points: one fallback block per model that ran and declined this turn
+for (const block of response.content) {
+  if (block.type === "fallback") {
+    console.log(`${block.from.model} declined; ${block.to.model} continued`);
+  }
+}
+
+// Served-by signal — covers sticky turns, which carry no fallback block.
+// Pair with stop_reason: the fallback model can itself refuse.
+const fallbackRan = (response.usage.iterations ?? []).some(
+  (entry) => entry.type === "fallback_message",
+);
+if (fallbackRan && response.stop_reason !== "refusal") {
+  console.log(`Served by ${response.model}`);
+}
+```
+
+A `stop_reason: "refusal"` on the final response means the whole chain refused. The header must be exactly `server-side-fallback-2026-06-01`; the parameter is rejected on the Batches API and unavailable on Amazon Bedrock, Vertex AI, and Microsoft Foundry — register the client-side `betaRefusalFallbackMiddleware` on the client there instead. Full semantics (sticky routing, billing, streaming, echoing fallback turns back): `shared/model-migration.md` → Migrating to {{FABLE_NAME}} → `refusal` stop reason.
 
 ---
 
