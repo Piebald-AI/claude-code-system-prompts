@@ -6,11 +6,51 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT_DIR = join(__dirname, '..');
 const SYSTEM_PROMPTS_DIR = join(ROOT_DIR, 'system-prompts');
+const TOOL_SCHEMAS_DIR = join(ROOT_DIR, 'tool-schemas');
 const README_PATH = join(ROOT_DIR, 'README.md');
 
 // Ensure system-prompts directory exists
 if (!existsSync(SYSTEM_PROMPTS_DIR)) {
   mkdirSync(SYSTEM_PROMPTS_DIR, { recursive: true });
+}
+
+// Tools whose canonical display name is NOT just kebab→PascalCase.
+// Add overrides here when the wire-level tool name doesn't follow that rule.
+const SCHEMA_DISPLAY_NAME_OVERRIDES = {
+  'lsp': 'LSP',
+};
+
+/**
+ * Convert a tool-schemas filename to its display name.
+ * Examples:
+ *   bash.json              → "Bash"
+ *   ask-user-question.json → "AskUserQuestion"
+ *   web-fetch.json         → "WebFetch"
+ *   lsp.json               → "LSP" (via override)
+ */
+function schemaFileToDisplayName(filename) {
+  const stem = filename.replace(/\.json$/, '');
+  if (SCHEMA_DISPLAY_NAME_OVERRIDES[stem]) return SCHEMA_DISPLAY_NAME_OVERRIDES[stem];
+  return stem
+    .split('-')
+    .map(s => s.charAt(0).toUpperCase() + s.slice(1))
+    .join('');
+}
+
+/**
+ * Scan tool-schemas/ and return a sorted list of entries.
+ * Returns [] when the directory doesn't exist, so this is safe to call
+ * before the directory is added to a working copy.
+ */
+function getToolSchemas() {
+  if (!existsSync(TOOL_SCHEMAS_DIR)) return [];
+  return readdirSync(TOOL_SCHEMAS_DIR)
+    .filter(f => f.endsWith('.json'))
+    .sort()
+    .map(filename => ({
+      filename,
+      displayName: schemaFileToDisplayName(filename),
+    }));
 }
 
 // Get API key from environment
@@ -550,6 +590,21 @@ function updateReadme(promptsByFilename, version, releaseDate, versionCount) {
   newLines.push('');
   newLines.push(...categories['Builtin Tool Descriptions']['Additional notes for some Tool Descriptions']);
   newLines.push('');
+
+  // Tool Schemas section — only emitted when `tool-schemas/` exists in the
+  // working tree, so the script remains a no-op for that section on repos
+  // that haven't added the directory yet.
+  const schemas = getToolSchemas();
+  if (schemas.length > 0) {
+    newLines.push('### Tool Schemas');
+    newLines.push('');
+    newLines.push('JSON `input_schema` for each builtin tool, captured verbatim from the Anthropic API payload. See [`tool-schemas/README.md`](./tool-schemas/README.md) for grouping by surface condition.');
+    newLines.push('');
+    for (const s of schemas) {
+      newLines.push(`- [Tool Schema: ${s.displayName}](./tool-schemas/${s.filename})`);
+    }
+    newLines.push('');
+  }
 
   // Write updated README
   writeFileSync(README_PATH, newLines.join('\n'));
