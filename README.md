@@ -207,6 +207,7 @@ The content of various template files embedded in Claude Code.
 
 Parts of the main system prompt.
 
+- [System Prompt: MiCode](./system-prompts/system-prompt-micode.md) (**150** tks) - System prompt for MiCode agent by Xiaomi MiMo Team.
 - [System Prompt: /loop tick (loop.md absent, dynamic pacing)](./system-prompts/system-prompt-loop-tick-loopmd-absent-dynamic-pacing.md) (**177** tks) - Loop tick injection for dynamic self-paced autonomous checks when loop.md is absent.
 - [System Prompt: /loop tick (loop.md tasks)](./system-prompts/system-prompt-loop-tick-loopmd-tasks.md) (**94** tks) - Loop tick injection for recurring cron-based runs of tasks from loop.md.
 - [System Prompt: /loop tick (loop.md tasks, dynamic pacing)](./system-prompts/system-prompt-loop-tick-loopmd-tasks-dynamic-pacing.md) (**174** tks) - Loop tick injection for dynamic self-paced runs of tasks from loop.md.
