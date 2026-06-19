@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/piebald-ai-claude-code-system-prompts-badge.png)](https://mseep.ai/app/piebald-ai-claude-code-system-prompts)
+
 <div>
 <div align="right">
 <a href="https://piebald.ai"><img width="200" top="20" align="right" src="https://github.com/Piebald-AI/.github/raw/main/Wordmark.svg"></a>
