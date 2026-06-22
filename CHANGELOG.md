@@ -4,6 +4,19 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.186](https://github.com/Piebald-AI/claude-code-system-prompts/commit/67e026b)
+
+_+4,485 tokens_
+
+- Agent Prompt: /review slash command — Replaces the older `/review-pr` flow with a PR-diff-only GitHub review prompt that gathers context through `gh pr view` and `gh pr diff`, applies optional user instructions, uses the medium-effort code-review prompt, and presents verified findings instead of raw JSON.
+- **NEW:** Agent Prompt: Security monitor edit-removal guidance — Adds reusable guidance for judging Edit/NotebookEdit removals, including truncated or invisible deleted content, failed edit outcomes, `ignored_source`, and `replaceAll` edits.
+- **NEW:** Data: Claude Code agent proxy troubleshooting guide — Adds troubleshooting guidance for Claude Code's policy-enforcing HTTPS agent proxy, covering CA-bundle trust setup, status checks, git/JVM/Docker fixes, unsupported traffic, and reporting policy denials instead of bypassing proxy or TLS controls.
+- **NEW:** Tool Description: ReadMcpResourceDirTool prompt — Adds the MCP directory resource listing tool prompt, documenting required `server`/`uri` parameters, non-recursive direct-child listings, subdirectory descent via returned URIs, and server support requirements.
+- Agent Prompt: Security monitor for autonomous agent actions — Narrows the classifier to destructive, hard-to-undo, or security-relevant actions, limits user-boundary blocks to BLOCK-rule territory, drops false/misleading-content as a security block, broadens workload deletion/cancellation coverage, adds a transient-retry allow exception, and requires blocked reasons to cite the exact matching rule.
+- Data: Tool use concepts; Data: Tool use reference — TypeScript; Skill: Building LLM-powered applications with Claude; and Skill: Model migration guide — Updates Agent Skills/code-execution examples and migration guidance from `code_execution_20250825` to `code_execution_20260521`.
+- System Prompt: Coordinator mode orchestration — Adds a worker-approval pattern that spawns a fresh worker for user-approved shell commands, API calls, file mutations, posts, and deploys instead of relaying consent back to the preparing worker, with prompts limited to the exact approved action and continuation examples updated to include `summary`.
+- Tool Description: SendMessageTool — Makes the legacy shutdown/plan-approval JSON protocol-response section conditional, so it can be omitted while preserving core teammate messaging guidance.
+
 # [2.1.185](https://github.com/Piebald-AI/claude-code-system-prompts/commit/98e4fe2)
 
 _-660 tokens_
