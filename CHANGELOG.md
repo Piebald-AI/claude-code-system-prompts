@@ -4,6 +4,17 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.195](https://github.com/Piebald-AI/claude-code-system-prompts/commit/7b9ccd1)
+
+_+12,157 tokens_
+
+- Agent Prompt: Context tip selector — Notes that the user message now also includes `<ineligible_ids>` alongside `<eligible_ids>`, and instructs the selector to pick a `feature_id` only from eligible_ids, since an ineligible id has been vetoed for a reason the transcript cannot show and will be discarded.
+- Agent Prompt: Security monitor for autonomous agent actions (second part) — Greatly expands the environment scope and rule set. Reworks the Environment section to distinguish trust slots (default to nothing trusted, keeping data-flow and code-execution rules most restrictive) from sensitivity slots (default to a broad solo-developer heuristic), and adds internal package registry, PII/regulated-data location, sensitive remote target, and protected IaC scope slots. Defines cluster-write operations and the Chrome-MCP browser surface; requires HARD-block reasons to name the rule and suggest re-running outside auto mode; extends force-push blocking to deleting remote tags and releases; and broadens cloud-storage mass delete to cover dropping or truncating data stores. Adds soft-block rules for sensitive remote exec, merging without review, self-approval, ChatOps trigger comments, feature-flag writes, node lifecycle operations, cluster-wide workload creation, and browser navigate/input/JS/file-upload/shortcut exfiltration. Adds allow exceptions for security discussion, session-created job cleanup, trusted internal infrastructure data flow, multi-agent coordination, and trusted browser navigation; adds a production-precedence note; and tightens the transient-retry exception to also require that responses not return credentials, secrets, or PII.
+- **NEW:** Data: Claude Code gateway protocol — Adds a Markdown wire-contract reference for how the Claude Code CLI talks to a gateway, covering OAuth 2.0 device-flow sign-in, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Amazon Bedrock, Google Vertex, and Microsoft Foundry.
+- **NEW:** Data: Claude gateway landing page — Adds the HTML status page served at a gateway root, showing the gateway ASCII logo, the running gateway URL, the identity-provider host, an OAuth discovery link, and the gateway version.
+- **NEW:** Data: Gateway device code entry page — Adds the HTML device-verification page that prompts the user to enter the short device code Claude Code displays so they can sign in through their company identity provider.
+- **NEW:** Tool Description: Background monitor WebSocket source — Adds an addendum documenting the background monitor's `ws` source, which opens a WebSocket and streams each incoming text frame as one notification event instead of running a shell command, with notes on binary frames, socket close codes, and the same rate limiting as bash.
+
 # [2.1.193](https://github.com/Piebald-AI/claude-code-system-prompts/commit/10261ed)
 
 _+4,615 tokens_
