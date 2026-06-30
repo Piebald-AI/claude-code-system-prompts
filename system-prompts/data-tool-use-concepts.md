@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Tool use concepts'
 description: Conceptual foundations of tool use with the Claude API including tool definitions, tool choice, and best practices
-ccVersion: 2.1.186
+ccVersion: 2.1.197
 -->
 # Tool Use Concepts
 
@@ -320,7 +320,7 @@ The advisor tool pairs a faster, lower-cost **executor** model (the top-level `m
 
 | Executor (request `model`) | Valid advisor (tool `model`) |
 |---|---|
-| `claude-haiku-4-5` / `claude-sonnet-4-6` / `claude-opus-4-6` / `claude-opus-4-7` | `claude-opus-4-8` or `claude-opus-4-7` |
+| `claude-haiku-4-5` / `claude-sonnet-4-6` / `claude-sonnet-5` / `claude-opus-4-6` / `claude-opus-4-7` | `claude-opus-4-8` or `claude-opus-4-7` |
 | `claude-opus-4-8` | `claude-opus-4-8` only |
 
 Call via `client.beta.messages.create(...)` with `betas=["advisor-tool-2026-03-01"]` (or the `anthropic-beta: advisor-tool-2026-03-01` header). In multi-turn conversations, append the full `response.content` — including any `advisor_tool_result` blocks — back to `messages` on the next turn. If you remove the advisor tool from `tools` on a later turn while the history still contains `advisor_tool_result` blocks, the API returns a 400.

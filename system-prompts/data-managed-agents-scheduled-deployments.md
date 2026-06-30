@@ -1,7 +1,7 @@
 <!--
-name: 'Data: Managed Agents scheduled deployments'
-description: Reference documentation for Managed Agents scheduled deployments, including cron schedule creation, deployment runs, lifecycle operations, failure behavior, and manual runs
-ccVersion: 2.1.172
+name: 'Data: Managed Agents Scheduled Deployments'
+description: Managed Agents scheduled deployment API guidance, including cron schedules, deployment runs, pausing, resuming, and operational limits.
+ccVersion: 2.1.197
 -->
 # Managed Agents — Scheduled Deployments
 
@@ -109,7 +109,7 @@ for await (const run of client.beta.deploymentRuns.list({
 }
 ```
 
-Raw HTTP: `GET /v1/deployment_runs?deployment_id=...&has_error=true`.
+Raw HTTP: `GET /v1/deployment_runs?deployment_id=...&has_error=true`. To retrieve a single run by ID, `GET /v1/deployment_runs/{deployment_run_id}` (SDK: `client.beta.deployment_runs.retrieve(run_id)`) — a `deployment_run.*` webhook event carries the run ID as its `data.id`.
 
 A failed run looks like:
 
@@ -127,6 +127,8 @@ A failed run looks like:
 ```
 
 Error types include `environment_archived`, `agent_archived`, `vault_not_found`, `session_rate_limited`, and `service_unavailable`.
+
+The outcome of each **scheduled** run (started/succeeded/failed) and each deployment lifecycle change (created/updated/paused/unpaused/archived/deleted) is also delivered as a webhook event — see `shared/managed-agents-webhooks.md` for the `deployment.*` and `deployment_run.*` event types — so you can react without polling. Manual runs do **not** emit `deployment_run.*` webhook events.
 
 ## Lifecycle: pause / unpause / archive
 

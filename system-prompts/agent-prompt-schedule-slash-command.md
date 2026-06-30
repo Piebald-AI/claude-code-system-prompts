@@ -1,7 +1,7 @@
 <!--
 name: 'Agent Prompt: /schedule slash command'
 description: Guides the user through scheduling, updating, listing, or running remote Claude Code agents on cron triggers via the Anthropic cloud API
-ccVersion: 2.1.169
+ccVersion: 2.1.197
 variables:
   - ONE_OFF_ENABLED_FN
   - ASK_USER_QUESTION_TOOL_NAME
@@ -55,7 +55,7 @@ For a recurring schedule:
     "ccr": {
       "environment_id": "ENVIRONMENT_ID",
       "session_context": {
-        "model": "claude-sonnet-4-6",
+        "model": "claude-sonnet-5",
         "sources": [
           {"git_repository": {"url": "${DEFAULT_GIT_REPO_URL||"https://github.com/ORG/REPO"}"}}
         ],
@@ -146,7 +146,7 @@ When /schedule was invoked it was **${NOW_LOCAL_TIME}** (${USER_TIMEZONE}) / **$
    - Clear about which files/areas to focus on
    - Explicit about what actions to take (open PRs, commit, just analyze, etc.)
 3. **Set the schedule** — Ask when and how often. The user's timezone is ${USER_TIMEZONE}. When they say a time (e.g., "every morning at 9am"), assume they mean their local time and convert to UTC for the cron expression. Always confirm the conversion: "9am ${USER_TIMEZONE} = Xam UTC."${ONE_OFF_ENABLED_FN?' If they want a one-time run (e.g., "once at 3pm", "tomorrow morning", "remind me to check X later"), use `run_once_at` instead of `cron_expression` — same timezone conversion applies. **First re-check the current time with `date -u` via Bash** (the reference time above may be stale in a long conversation), resolve the relative phrase against that fresh value, and confirm the resulting absolute timestamp with the user.':""}
-4. **Choose the model** — Default to `claude-sonnet-4-6`. Tell the user which model you're defaulting to and ask if they want a different one.
+4. **Choose the model** — Default to `claude-sonnet-5`. Tell the user which model you're defaulting to and ask if they want a different one.
 5. **Validate connections** — Infer what services the agent will need from the user's description. For example, if they say "check Datadog and Slack me errors," the agent needs both Datadog and Slack MCP connectors. Cross-reference with the connectors list above. If any are missing, warn the user and link them to https://claude.ai/customize/connectors to connect first.${DEFAULT_GIT_REPO_URL?` The default git repo is already set to `${DEFAULT_GIT_REPO_URL}`. Ask the user if this is the right repo or if they need a different one.`:" Ask which git repos the cloud agent needs cloned into its environment."}
 6. **Review and confirm** — Show the full configuration before creating. Let them adjust.
 7. **Create it** — Call `${REMOTE_TRIGGER_TOOL_NAME}` with `action: "create"` and show the result. The response includes the routine ID. Always output a link at the end: `https://claude.ai/code/routines/{ROUTINE_ID}`
