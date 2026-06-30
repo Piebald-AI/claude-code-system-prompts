@@ -4,6 +4,20 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.197](https://github.com/Piebald-AI/claude-code-system-prompts/commit/1d75b7d)
+
+_+21,695 tokens_
+
+- Updated Claude model guidance for Sonnet 5: added Sonnet 5 to the model catalog, made generic Sonnet/balanced aliases resolve to Sonnet 5, raised Sonnet 4.6 guidance to 128K max output, and updated scheduled agent creation to default to `claude-sonnet-5`.
+- Expanded Sonnet 5 migration guidance across the Claude app-building and model-migration docs, covering adaptive thinking by default, removed `budget_tokens` and non-default sampling parameters, `xhigh` effort, the new tokenizer, high-resolution vision, computer use, tool-use behavior, progress updates, literal instruction following, review-harness tuning, frontend/design prompt tuning, and security refusal handling.
+- Removed the standalone “Current Claude models” system prompt now that current model guidance is carried by the shared model catalog and migration/app-building docs.
+- Documented `agent_with_overrides` for managed-agent session creation, including session-local overrides for `model`, `system`, `tools`, `mcp_servers`, and `skills`, tri-state inheritance/clearing/replacement semantics, version behavior, response shape, audit metadata, related error cases, and multiagent behavior where overrides apply only to the coordinator and `self` copies.
+- Expanded managed-agent endpoint guidance with deployment-run retrieve/list endpoints, pagination cursor semantics, the three accepted session `agent` forms, and live-preview SSE query parameters.
+- Added managed-agent live-preview event guidance for `event_start`/`event_delta`, including opt-in query syntax, accumulation and reconciliation with buffered events, ordering, reconnect behavior, shedding limitations, text-only scope, and non-persistence.
+- Added managed-agent credential `injection_location` guidance for scoping secret substitution to request headers and/or bodies, including create/update merge semantics, runtime effect, placeholder behavior, and immutable credential keys.
+- Added managed-agent webhook coverage for agent, deployment, and scheduled deployment-run lifecycle events, including auto-pause behavior and how to follow a scheduled run from its webhook event to the created session.
+- Updated advisor/tool-use model pairing guidance to allow Sonnet 5 executors to use Opus 4.8 or Opus 4.7 advisors.
+
 # [2.1.196](https://github.com/Piebald-AI/claude-code-system-prompts/commit/611dcff)
 
 _+1,869 tokens_
