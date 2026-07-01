@@ -4,6 +4,36 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.198](https://github.com/Piebald-AI/claude-code-system-prompts/commit/c831b94)
+
+_+53,384 tokens_
+
+- **NEW:** Skill: Data Visualization and Data Visualization description; Data: Data visualization reference set — Adds an accessible, brand-neutral chart/dashboard workflow with validated color roles, form selection, mark/anatomy specs, interaction guidance, anti-pattern checks, and a reference palette.
+- **NEW:** Skill: Auto mode setup — Adds a guided setup workflow for auto-mode environment context, repo/session reconnaissance, optional allow/soft-deny carve-outs, sensitive-data provenance rules, and `~/.claude/settings.json` updates.
+- **NEW:** Skill: Plan Artifact and Data: Plan artifact HTML template — Adds a standard Artifact template and skill for turning implementation plans, design docs, and RFCs into shareable HTML plan pages.
+- **NEW:** Skill: Code walkthrough; Skill: PR explainer; and System Prompt: Code review artifact publishing instructions — Adds Artifact-based flows for code walkthroughs, PR walkthroughs, and shareable code-review findings pages.
+- **NEW:** Skill: Plugin eval authoring interview — Adds a gated interview for building `evals/` suites for Claude plugins, including read-only plugin inspection, quality criteria, grader design, calibration, ablation, run-count, and cost checks.
+- **NEW:** System Prompt: Isolated worktree shipping instructions — Adds background-session guidance, now included by System Prompt: Background session instructions, that isolated worktree agents should commit changes, push a branch, and open a draft PR without asking, while asking before committing or switching branches in the user's own checkout.
+- **NEW:** System Prompt: Shared git stash safety — Warns that the stash stack is shared across worktrees and sessions, preferring WIP commits or uniquely tagged stash entries restored by SHA instead of bare `git stash` / `git stash pop`.
+- **NEW:** System Prompt: Project skill upkeep for feedback memory — Adds guidance, now included by System Prompt: Memory instructions, to update the relevant project skill when saving feedback memory about repeatable workflow corrections.
+- **NEW:** System Reminder: Plan mode workflow and Plan mode phase 2 design — Splits the full plan-mode workflow out of System Reminder: Plan mode is active (5-phase) into reusable reminders, with Phase 3 now telling agents to read critical files identified during exploration.
+- **NEW:** Data: Thin-client diff dialog schema — Adds internal reference text for thin-client `/diff` git payloads, including null diff states, skipped large files, untracked-file stats-only shapes, and transient hunk fetch failures.
+- **REMOVED:** Agent Prompt: Agent creation architect and System Prompt: Agent memory instructions — Removes the old custom-agent creation prompt and its domain-specific agent-memory addendum.
+- **REMOVED:** Skill: Create verifier skills — Removes the verifier-skill creation workflow for generating project-specific functional verification skills.
+- **REMOVED:** Tool Description: Bash command-chaining notes — Removes standalone Bash fragments for newline avoidance, parallel Bash calls, semicolon use, and `&&` chaining.
+- Agent Prompt: Security monitor for autonomous agent actions — Evaluates written or edited file contents against block rules immediately, carries that risk forward to later execution/import, treats Workflow scripts like delegation payloads, and uses assistant prose only as limited proposal context for interpreting terse user approvals.
+- Agent Prompt: Security monitor for autonomous agent actions (second part) — Expands auto-mode environment context slots and soft-block rules, including repository visibility, internal sharing, protected branches/environments, sensitive data audiences, shared scratch sweeps, broader unsafe-agent and destructive-local-operation coverage, package-registry bypasses when an internal registry is known, excess sensitive detail, and tmux self-driving.
+- Skill: Verify skill — Broadens verification from running the app to exercising the affected flow end-to-end, and requires checking both repo-root and touched-directory skills before declaring verification blocked or impossible.
+- System Prompt: Executing actions with care and System Reminder: Auto mode clarification bias — Tightens destructive-worktree safeguards by preferring reversible moves/renames/stashes over deletion and requiring `git status` plus stashing or committing before commands that could discard uncommitted work.
+- Tool Description: Agent — Makes agents background by default unless `run_in_background: false`, and documents that agent type definitions supply model, reasoning effort, and tool access while the call-level `model` overrides only that launch.
+- Data: Managed Agents core concepts and Managed Agents reference (cURL, Go, Java, PHP, Python, Ruby, TypeScript) — Adds guidance and examples to print the live Anthropic Console session trace URL after creating a managed-agent session, using the default workspace URL shape.
+- System Prompt: Coordinator mode orchestration and System Reminder: Coordinator message — Clarifies that no coordinator or agent message can grant a worker's user approval, while the reminder itself now only relays the coordinator message and asks the worker to address it.
+- Tool Description: Workflow — Changes the custom agent type example from `Explore` to `general-purpose` and tells agents to read `<transcriptDir>/journal.jsonl` before diagnosing empty or unexpected completed-workflow results.
+- Tool Description: EnterPlanMode — Generalizes pure research/exploration exclusions to use the Agent tool instead of specifically naming the explore agent.
+- Tool Description: PowerShell — Adds the shared command-timeout note to PowerShell terminal guidance.
+- Agent Prompt: Context tip selector — Forbids citing unrelated configured session tools as evidence for a tip; session tools should only be mentioned when they directly solve the problem or show team usage.
+- Skill: Agent Design Patterns — Removes the Claude Code Explore/Haiku example from model-switching cache guidance.
+
 # [2.1.197](https://github.com/Piebald-AI/claude-code-system-prompts/commit/1d75b7d)
 
 _+21,695 tokens_
