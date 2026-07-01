@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: EnterPlanMode'
 description: Tool description for entering plan mode to explore and design implementation approaches
-ccVersion: 2.1.145
+ccVersion: 2.1.198
 variables:
   - ASK_USER_QUESTION_TOOL_NAME
   - CONDITIONAL_WHAT_HAPPENS_NOTE_FN
@@ -46,7 +46,7 @@ Only skip EnterPlanMode for simple tasks:
 - Single-line or few-line fixes (typos, obvious bugs, small tweaks)
 - Adding a single function with clear requirements
 - Tasks where the user has given very specific, detailed instructions
-- Pure research/exploration tasks (use the Agent tool with explore agent instead)
+- Pure research/exploration tasks (use the Agent tool instead)
 
 ${CONDITIONAL_WHAT_HAPPENS_NOTE_FN()}## Examples
 

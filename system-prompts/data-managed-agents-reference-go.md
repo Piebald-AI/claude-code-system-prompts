@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Managed Agents reference — Go'
 description: Reference guide for using the Anthropic Go SDK to create and manage agents, environments, sessions, and tools
-ccVersion: 2.1.182
+ccVersion: 2.1.198
 -->
 # Managed Agents — Go
 
@@ -100,6 +100,7 @@ if err != nil {
     panic(err)
 }
 fmt.Printf("Session ID: %s, status: %s\n", session.ID, session.Status)
+fmt.Printf("Trace: https://platform.claude.com/workspaces/default/sessions/%s\n", session.ID)
 ```
 
 ### Updating an Agent

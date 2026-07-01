@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Managed Agents reference — Ruby'
 description: Reference guide for using the Anthropic Ruby SDK to create and manage agents, environments, and sessions
-ccVersion: 2.1.182
+ccVersion: 2.1.198
 -->
 # Managed Agents — Ruby
 
@@ -68,6 +68,7 @@ session = client.beta.sessions.create(
   title: "Quickstart session"
 )
 puts "Session ID: #{session.id}"
+puts "Trace: https://platform.claude.com/workspaces/default/sessions/#{session.id}"
 ```
 
 ### Updating an Agent

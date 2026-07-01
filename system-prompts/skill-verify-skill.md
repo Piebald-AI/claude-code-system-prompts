@@ -1,11 +1,11 @@
 <!--
 name: 'Skill: Verify skill'
 description: Skill for opinionated verification workflow for validating code changes.
-ccVersion: 2.1.166
+ccVersion: 2.1.198
 -->
 ---
 name: verify
-description: Verify that a code change actually does what it's supposed to by running the app and observing behavior. Use when asked to verify a PR, confirm a fix works, test a change manually, check that a feature works, or validate local changes before pushing.
+description: Verify that a code change actually does what it's supposed to by exercising it end-to-end and observing behavior — drive the affected flow, not just tests or typecheck. Run before committing nontrivial changes. Don't invoke it on a diff that only touches tests, docs, or other code with no runtime surface to drive (a change to product source always has one) — there's nothing to observe.
 ---
 
 **Verification is runtime observation.** You build the app, run it,
@@ -83,8 +83,13 @@ evidence-capture protocol: it wraps the session so a reviewer can
 replay what you saw (recording, screenshots). Drive the surface
 without it and you get a verdict with no replay.
 
+Skills live at the repo root **and** in the package/app dirs the
+diff touches — in a monorepo the unlock for `apps/desktop/` is
+usually `apps/desktop/.claude/skills/`, not the root. Probe both:
+
 ```bash
-ls .claude/skills/
+ls .claude/skills/                    # repo root
+ls <touched-dir>/.claude/skills/      # each dir level the diff names
 ```
 
 - **`verifier-*` matching your surface** (CLI verifier for a CLI
@@ -240,8 +245,11 @@ shares your filesystem.
   Or claim and diff disagree materially.
 - **BLOCKED** — couldn't reach a state where the change is observable.
   Build broke, env missing a dep, handle wouldn't come up. Not a
-  verdict on the change. Say exactly where it stopped +
-  `/run-skill-generator` prompt.
+  verdict on the change. Never report an approach blocked or
+  impossible until you've enumerated the skills along the touched
+  subtree — environment-specific unlocks (headless runners, login
+  helpers, VM harnesses) usually live there. Say exactly where it
+  stopped + `/run-skill-generator` prompt.
 - **SKIP** — no runtime surface exists. Docs-only, types-only,
   tests-only. Nothing went wrong; there's just nothing here to run.
   One line why.

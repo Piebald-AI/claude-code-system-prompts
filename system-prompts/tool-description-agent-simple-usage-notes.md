@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: Agent (simple usage notes)'
 description: Simplified usage notes for the Agent tool, including when to delegate, fork behavior, resumption, worktree isolation, background execution, parallel launches, and context restrictions
-ccVersion: 2.1.176
+ccVersion: 2.1.198
 variables:
   - TOOL_BASE_DESCRIPTION
   - HAS_PRO_RESTRICTION_NOTE
@@ -22,4 +22,5 @@ A fork runs in the background and keeps its tool output out of your context. If 
 
 - The agent's final message is returned to you as the tool result; it is not shown to the user — relay what matters.
 - Use ${SEND_MESSAGE_TOOL_NAME} with the agent's ID or name to continue a previously spawned agent with its context intact; a new ${AGENT_TOOL_NAME} call starts fresh${CAN_FORK_CONTEXT?' (except subagent_type: "fork", which inherits your context)':""}.
+- Each agent type's model, reasoning effort, and tools come from its definition (`.claude/agents/*.md` frontmatter or SDK `agents`).
 - `isolation: "worktree"` gives the agent its own git worktree (auto-cleaned if unchanged).${RUN_IN_BACKGROUND_NOTE}${PARALLEL_AGENTS_NOTE}${CONTEXT_RESTRICTION_NOTE}

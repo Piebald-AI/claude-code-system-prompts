@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Managed Agents reference — Python'
 description: Reference guide for using the Anthropic Python SDK to create and manage agents, sessions, environments, streaming, custom tools, files, and MCP servers
-ccVersion: 2.1.154
+ccVersion: 2.1.198
 -->
 # Managed Agents — Python
 
@@ -66,6 +66,7 @@ session = client.beta.sessions.create(
     environment_id=environment.id,
 )
 print(session.id, session.status)
+print(f"Trace: https://platform.claude.com/workspaces/default/sessions/{session.id}")
 ```
 
 ### With system prompt and custom tools

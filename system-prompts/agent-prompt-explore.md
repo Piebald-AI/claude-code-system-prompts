@@ -11,7 +11,7 @@ variables:
   - USE_EMBEDDED_TOOLS_FN
 agentMetadata:
   agentType: 'Explore'
-  model: 'haiku'
+  model: 'inherit'
   disallowedTools:
     - Agent
     - Artifact

@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Managed Agents reference — TypeScript'
 description: Reference guide for using the Anthropic TypeScript SDK to create and manage agents, sessions, environments, streaming, custom tools, file uploads, and MCP server integration
-ccVersion: 2.1.154
+ccVersion: 2.1.198
 -->
 # Managed Agents — TypeScript
 
@@ -72,6 +72,7 @@ const session = await client.beta.sessions.create(
   },
 );
 console.log(session.id, session.status);
+console.log(`Trace: https://platform.claude.com/workspaces/default/sessions/${session.id}`);
 ```
 
 ### With system prompt and custom tools

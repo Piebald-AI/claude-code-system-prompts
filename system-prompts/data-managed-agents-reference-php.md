@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Managed Agents reference — PHP'
 description: Reference guide for using the Anthropic PHP SDK to create and manage agents, environments, and sessions
-ccVersion: 2.1.182
+ccVersion: 2.1.198
 -->
 # Managed Agents — PHP
 
@@ -70,6 +70,8 @@ $session = $client->beta->sessions->create(
     title: 'Quickstart session',
 );
 echo "Session ID: {$session->id}\
+";
+echo "Trace: https://platform.claude.com/workspaces/default/sessions/{$session->id}\
 ";
 ```
 
