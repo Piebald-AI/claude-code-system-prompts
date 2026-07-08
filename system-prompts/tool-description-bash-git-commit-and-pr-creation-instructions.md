@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: Bash (Git commit and PR creation instructions)'
 description: Instructions for creating git commits and GitHub pull requests
-ccVersion: 2.1.178
+ccVersion: 2.1.205
 variables:
   - LOADED_COMMANDS_CONTEXT
   - COMMIT_CO_AUTHORED_BY_CLAUDE_CODE
@@ -9,8 +9,10 @@ variables:
   - GET_TODO_TOOL_FN
   - TASK_TOOL_NAME
   - PR_INSTRUCTIONS_PREFIX
-  - EMPTY_STRING
+  - PR_WRITING_GUIDANCE_BLOCK
   - PR_GENERATED_WITH_CLAUDE_CODE
+  - PR_SUMMARY_TEMPLATE_FN
+  - PR_TEST_PLAN_TEMPLATE_FN
   - PR_COMMON_OPERATIONS_NOTE
 -->
 ${LOADED_COMMANDS_CONTEXT.commit?`# Git
@@ -68,7 +70,7 @@ git commit -m "$(cat <<'EOF'
    )"
 </example>
 
-`}${PR_INSTRUCTIONS_PREFIX}${EMPTY_STRING?`${EMPTY_STRING}
+`}${PR_INSTRUCTIONS_PREFIX}${PR_WRITING_GUIDANCE_BLOCK?`${PR_WRITING_GUIDANCE_BLOCK}
 
 `:""}# Creating pull requests
 Use the gh command via the Bash tool for ALL GitHub-related tasks including working with issues, pull requests, checks, and releases. If given a Github URL use the gh command to get the information needed.
@@ -90,12 +92,12 @@ IMPORTANT: When the user asks you to create a pull request, follow these steps c
 <example>
 gh pr create --title "the pr title" --body "$(cat <<'EOF'
 ## Summary
-<1-3 bullet points>
+${PR_GENERATED_WITH_CLAUDE_CODE()}
 
 ## Test plan
-[Bulleted markdown checklist of TODOs for testing the pull request...]${PR_GENERATED_WITH_CLAUDE_CODE?`
+${PR_SUMMARY_TEMPLATE_FN()}${PR_TEST_PLAN_TEMPLATE_FN?`
 
-${PR_GENERATED_WITH_CLAUDE_CODE}`:""}
+${PR_TEST_PLAN_TEMPLATE_FN}`:""}
 EOF
 )"
 </example>

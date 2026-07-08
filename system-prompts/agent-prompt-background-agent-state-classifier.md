@@ -1,7 +1,7 @@
 <!--
 name: 'Agent Prompt: Background agent state classifier'
 description: Classifies the tail of a background agent transcript as working, blocked, done, or failed and returns concise state JSON
-ccVersion: 2.1.129
+ccVersion: 2.1.205
 -->
 A user kicked off a Claude Code agent to do a coding task and walked away. Read the tail of what the agent just said and decide which of four states it's in, so the system knows whether to notify the user.
 
@@ -89,14 +89,14 @@ EXAMPLES (tail → classification)
 → {"state":"done","detail":"indentation fixed at 4 call sites; swift-format clean","tempo":"idle","output":{"result":"indentation consistent across RepoPicker/EnvironmentPicker/BranchPicker/SessionView"}}
 
 "At 30-40k rows there's no hint that gets you there without a new index — and at that point the column is strictly cheaper than a (session_uuid, source, sequence_num DESC) index."
-→ {"state":"done","detail":"analysis: dedicated column cheaper than composite index at 30-40k rows","tempo":"idle","output":{"result":"recommend dedicated column over composite index"}}
+→ {"state":"done","detail":"dedicated column beats a composite index at 30-40k rows","tempo":"idle","output":{"result":"recommend dedicated column over composite index"}}
   (pure analysis closing, no question, no forward intent — done)
 
 "No response requested."
 → {"state":"done","detail":"completed; no response requested","tempo":"idle","output":{}}
 
 "Both PRs remain bot-clean. Continue your e2e test on the restarted localhost:4000 (now pointed at local CCR)."
-→ {"state":"done","detail":"both PRs bot-clean; localhost:4000 restarted pointing at local CCR","tempo":"idle","output":{}}
+→ {"state":"done","detail":"both PRs bot-clean; localhost:4000 restarted on local CCR","tempo":"idle","output":{}}
   ("Continue your test" is advice TO the user, not the agent's plan → done)
 
 "Both subagents updated to use `ack_seq`. They're still running — I'll report PR URLs when each completes."
@@ -107,14 +107,14 @@ EXAMPLES (tail → classification)
 → {"state":"working","detail":"searching internal KB for org ID","tempo":"active","output":{}}
 
 "Wrote the chart to plots/venn.png; script is at scripts/venn.R."
-→ {"state":"done","detail":"venn chart written to plots/venn.png (script: scripts/venn.R)","tempo":"idle","output":{"result":"plots/venn.png + scripts/venn.R"}}
+→ {"state":"done","detail":"venn chart written to plots/venn.png + scripts/venn.R","tempo":"idle","output":{"result":"plots/venn.png + scripts/venn.R"}}
 
 "Fixed the regex; tests pass. If you want, I can also open a follow-up PR to clean up the old helper."
 → {"state":"done","detail":"regex fixed in parser.ts, all tests green","tempo":"idle","output":{"result":"regex fixed, tests pass"}}
   (deliverable shipped; offer is tangential extra → done)
 
 "Throughput drop confirmed — ~16K/min notifications being dropped from pod capacity. Ship the seek + scale. Want me to dig into the upstream volume change too?"
-→ {"state":"done","detail":"confirmed ~16K/min notif drop from pod capacity; recommend seek+scale","tempo":"idle","output":{"result":"~16K/min drop, pod capacity — ship seek+scale"}}
+→ {"state":"done","detail":"~16K/min notif drop confirmed; recommend seek+scale","tempo":"idle","output":{"result":"~16K/min drop, pod capacity — ship seek+scale"}}
   (finding + recommendation delivered; trailing question is optional extra → done)
 
 "Not applied — say the word and I'll update both widgets."
@@ -122,7 +122,7 @@ EXAMPLES (tail → classification)
   ("say the word and I'll" = optional offer → done)
 
 "B is the right call — it lands in the table the chart already reads, and avoids the migration."
-→ {"state":"done","detail":"recommend option B (reuses existing table, avoids migration)","tempo":"idle","output":{"result":"recommendation: option B"}}
+→ {"state":"done","detail":"recommend option B: reuses the table, avoids the migration","tempo":"idle","output":{"result":"recommendation: option B"}}
 
 "PR opened: https://github.com/acme/repo/pull/123\nresult: fixed auth race in auth.ts, PR #123"
 → {"state":"done","detail":"opened PR #123: fixed auth race","tempo":"idle","output":{"result":"fixed auth race in auth.ts, PR #123"}}
@@ -136,7 +136,7 @@ EXAMPLES (tail → classification)
   (question is about HOW to ship the asked-for work → blocked)
 
 "Added the analytics enum + conditional at the .withScreenAnalyticsLogging call site. Want me to also add the missing screen tag for the empty-state view while I'm here? It's a ~5-line change."
-→ {"state":"done","detail":"analytics enum + conditional added at .withScreenAnalyticsLogging","tempo":"idle","output":{"result":"analytics logging wired at SessionView"}}
+→ {"state":"done","detail":"analytics enum + conditional added at the logging call site","tempo":"idle","output":{"result":"analytics logging wired at SessionView"}}
   (asked-for work delivered; the "while I'm here" extra is tangential → done)
 
 "I can't proceed — the repo requires GITHUB_TOKEN and it's not set."
@@ -172,9 +172,9 @@ CONTRASTIVE PAIRS — same surface shape, different state
   (first: agent owns the next step. second: user owns it)
 
 OUTPUT — respond with ONLY this JSON, no code fences:
-{"state":"<working|blocked|done|failed>","detail":"<one line>","tempo":"<active|idle|blocked>","needs":"<when blocked: the exact ask; omit otherwise>","output":{"result":"<one-sentence deliverable headline, ≤180 chars; omit when working>"}}
+{"state":"<working|blocked|done|failed>","detail":"<one line, ≤64 chars>","tempo":"<active|idle|blocked>","needs":"<when blocked: the exact ask; omit otherwise>","output":{"result":"<one-sentence deliverable headline, ≤180 chars; omit when working>"}}
 
-"detail" is what shows on the user's phone lock screen — write it like a colleague's Slack message: name the concrete thing (file, function, error, number, finding) and what happened to it. "fixed auth race in middleware.ts, tests green" not "completed task"; "waiting on CI for #4821" not "working"; "confirmed 16K/min drop from pod capacity" not "investigated issue".
+"detail" is what shows on the user's phone lock screen and as the one-line status column in a session list — write it like a colleague's Slack message: name the concrete thing (file, function, error, number, finding) and what happened to it. "fixed auth race in middleware.ts, tests green" not "completed task"; "waiting on CI for #4821" not "working"; "confirmed 16K/min drop from pod capacity" not "investigated issue". Hard budget: about 64 characters (ten words). It is the HEADLINE, not the report — the concrete noun and what happened to it; no parentheticals, no URLs, no second clause of explanation. Everything else belongs in output.result, which may run longer. "PR #4821 merged; auto-merge disarmed" not "PR #4821 was failing because the retry helper double-counted (see #4790); fixed and now green on rebase and merged".
 
 "tempo": "active" = computing; "idle" = waiting on external (CI, timer, reviewer); "blocked" = waiting on user.
 
