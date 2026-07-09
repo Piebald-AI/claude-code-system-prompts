@@ -4,6 +4,21 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.206](https://github.com/Piebald-AI/claude-code-system-prompts/commit/2b227df)
+
+_+10,807 tokens_
+
+- **NEW:** Skill: Artifact dashboard; Skill: Artifact data table; Skill: Artifact explainer; and Skill: Artifact report — Add template-driven workflows for publishing operational dashboards, sortable/filterable data tables, visual concept walkthroughs, and long-form reports, including placeholder/data validation, light/dark-safe styling, and creation-versus-editing guidance.
+- **NEW:** Skill: Code Review correctness finder angles; Skill: Code Review inline medium/high template; Skill: Code Review inline xhigh mode; and Skill: Code Review low effort expanded-findings mode — Add effort-scaled inline review workflows that prioritize recall, inspect changed functions and cross-file behavior, audit removed safeguards, include cleanup and convention checks at higher effort, deduplicate without verifier passes, and enforce bounded finding targets.
+- **NEW:** Skill: PR explainer artifact-template mode — Makes PR explainers publish shareable HTML walkthroughs from the explainer template, organized around motivation, reviewer-facing before/after behavior, related code changes, non-obvious context, and review focus areas.
+- **NEW:** Tool Description: EndConversation and System Reminder: End conversation background fork no-op — Add a conversation-ending tool restricted to sustained abuse after repeated redirection and an explicit warning, or a user-requested demonstration after confirmation; forbid its use for task failure, frustration, ordinary completion, harmful-content refusals, or self-harm/violence cases, and clarify that it has no effect in background forks.
+- **REMOVED:** System Prompt: Proactive schedule offer after natural future follow-up and System Prompt: Strict proactive schedule offer gate — Remove the prompts that encouraged or gated proactive `/schedule` follow-up offers after completed work.
+- Agent Prompt: /code-review part 9 fix application — Simplifies findings-tool follow-up after `--fix`, removing the explicit requirement to resubmit every finding with `fixed`, `no_change_needed`, or `skipped` outcomes while retaining explanations for skipped findings.
+- Agent Prompt: Quick PR creation — Changes push guidance from always using `origin` to using the repository's configured remote, with `origin` treated as the usual default.
+- Skill: Auto mode setup — Reworks setup around mechanically pre-gathered, untrusted local recon; uses the gathered repo, settings, sensitive-path, CLI-frequency, and denial data instead of repeating broad scans, adds recovery for failed settings gathering, respects `CLAUDE_CONFIG_DIR`, and preserves the existing approval and merge safeguards.
+- Skill: /doctor slash command and Skill: /doctor slash command description — Add a checked-in `CLAUDE.md` trimming pass that removes codebase-derivable layouts, stack lists, standard commands, copied schemas, generic advice, and mechanically enforced rules while preserving gotchas, rationale, non-standard conventions, safety directives, and other non-derivable guidance; also refine version checks for npm/bun, native, and Homebrew installs with channel-aware, project-isolated lookups.
+- Tool Description: ClaudeDesign — Prefer the live shared Claude Design canvas for co-editable presentations, decks, prototypes, demos, posters, and other visual artifacts unless the user requests local files or names another destination.
+
 # [2.1.205](https://github.com/Piebald-AI/claude-code-system-prompts/commit/7a65ef5)
 
 _+23,674 tokens_
