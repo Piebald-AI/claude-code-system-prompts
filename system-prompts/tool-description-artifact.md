@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: Artifact'
 description: Describes the Artifact tool for deploying self-contained HTML or Markdown pages, including file-first usage, update behavior, CSP constraints, responsive design, and favicon requirements
-ccVersion: 2.1.207
+ccVersion: 2.1.208
 variables:
   - ARTIFACT_DESIGN_SKILL_NAME
 -->
@@ -21,7 +21,7 @@ Render an HTML or Markdown file to an Artifact — a default-private web page ho
 
 **Files you did not write**: Read the complete file before publishing it, even when asked not to ("it's personal", "no need to open it") — publishing distributes the content, and you must never distribute what you haven't seen. A request for privacy is a reason to read before publishing, not an exemption. If you cannot read it, do not publish it.
 
-**Self-contained only**: A strict CSP blocks requests to any external host — CDN scripts, external stylesheets, fonts, remote images, fetch/XHR/WebSockets. Inline all CSS/JS and embed assets as data: URIs.
+**Self-contained only**: A strict CSP blocks requests to any external host — CDN scripts, external stylesheets, fonts, remote images, fetch/XHR/WebSockets. Inline all CSS/JS and embed assets as data: URIs. Artifacts render mermaid diagrams natively — markdown via ```mermaid fences, HTML via `<pre class="mermaid">` blocks — no external libraries involved.
 
 **Responsive**: Use relative units, flexbox/grid, `max-width:100%` on images. Wide content (tables, diagrams, code blocks) must scroll inside its own `overflow-x: auto` container — the page body must never scroll horizontally.
 

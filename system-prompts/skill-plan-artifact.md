@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: Plan Artifact'
 description: Skill instructions for creating or customizing shareable plan artifacts from implementation plans, design docs, or RFCs
-ccVersion: 2.1.199
+ccVersion: 2.1.208
 -->
 ---
 name: plan-artifact
@@ -22,6 +22,6 @@ Always start from the template. Never write the HTML shell from scratch — the 
    - Delete the leading HTML comment header.
    - Fill `{{TITLE}}` and `{{TAB_TITLE}}` with the plan's title, `{{EYEBROW}}` with a short context label such as `Plan · <project name>`, and `{{SUMMARY}}` with a one-sentence lede.
    - Replace each `<!-- SLOT: … -->` comment with that section's content as HTML. Convert the plan's markdown; the `<h2>` headings are already provided. Add or remove whole `<section>` blocks so the document matches the plan's actual structure — the four starter sections are a suggestion, not a requirement.
-   - Keep the `<style>` block intact, including the dark-mode token set — every plan artifact carries both themes. Extend or restyle only when the user explicitly asks for a different look, and keep their changes additive where possible.
+   - Keep the `<style>` block intact, including the dark-mode token set — every plan artifact carries both themes. Keep the `<script>` theme shim intact too: it mirrors the viewer toggle's `data-theme` stamp onto `data-mode` for the token block, and removing it silently kills the toggle axis for the page while diagrams still follow it. Extend or restyle only when the user explicitly asks for a different look, and keep their changes additive where possible.
 
 3. **Publish** the file with the Artifact tool.

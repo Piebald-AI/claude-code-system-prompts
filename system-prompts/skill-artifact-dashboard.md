@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: Artifact dashboard'
 description: Instructions for creating dashboard artifacts with KPI tiles, chart specifications, and breakdown tables from the built-in template
-ccVersion: 2.1.206
+ccVersion: 2.1.208
 -->
 ---
 name: artifact-dashboard
@@ -41,4 +41,4 @@ The template also has a few minor inline slots (subtitle, chart title, breakdown
 - **Format numbers for scanning.** KPI values get a unit and 2–3 significant figures with thousands separators (think $1.2M, 98.7%, 412ms); percentages get at most one decimal. Keep the breakdown table to roughly the top ten rows and roll a long tail into an "Other" row.
 - **Color deltas by meaning, not direction.** The `up`/`down` classes pick the arrow and default to green-up/red-down. When a decrease is the improvement — latency, cost, error rate — add the `good` (or `bad`) class so the color says whether the news is good.
 - **Narrow ranges far from zero** (say, uptime hovering between 97% and 99%) flatten against the default zero-floored axis. Set `y.min`/`y.max` in the chart spec to zoom the domain, and mention the truncated axis in the chart title or footer so the zoom doesn't mislead.
-- **The default styling is a starting point, not a house style.** The `:root` palette ships CDS token values with a built-in dark mode; a follow-up styling/theming pass is encouraged — tune `--accent` toward the subject (prefer another CDS color token so the page stays on-system), adjust surfaces, or restyle entirely. When restyling or hand-drawing SVG charts, route colors through the CSS custom properties via `style` attributes (`var()` fails silently in bare SVG presentation attributes), and keep every custom color legible in both light and dark — hardcoded near-black strokes vanish on the dark background.
+- **The default styling is a starting point, not a house style.** The palette ships with a built-in dark mode; a follow-up styling/theming pass is encouraged — tune `--accent` toward the subject (prefer another token from the shipped palette so the page stays on-system; change it in every scope that declares it — the light `:root` block and both dark scopes — or it snaps back in dark mode), adjust surfaces, or restyle entirely. When restyling or hand-drawing SVG charts, route colors through the CSS custom properties via `style` attributes (`var()` fails silently in bare SVG presentation attributes), and keep every custom color legible in both light and dark — hardcoded near-black strokes vanish on the dark background.

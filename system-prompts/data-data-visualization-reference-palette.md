@@ -1,7 +1,7 @@
 <!--
 name: 'Data: Data visualization reference palette'
 description: Reference palette instance for the data visualization method, including ramps, categorical order, status colors, surfaces, and typography
-ccVersion: 2.1.198
+ccVersion: 2.1.208
 -->
 # Reference palette
 
@@ -19,6 +19,7 @@ and the chart body is written against roles rather than raw hex:
 
 ```css
 .viz-root {
+  color-scheme: light;
   --surface-1:      #fcfcfb;   /* chart surface */
   --text-primary:   #0b0b0b;
   --text-secondary: #52514e;
@@ -26,14 +27,27 @@ and the chart body is written against roles rather than raw hex:
   /* …only the roles this chart uses */
 }
 @media (prefers-color-scheme: dark) {
-  .viz-root {
+  :root:where(:not([data-theme="light"])) .viz-root {
+    color-scheme: dark;
     --surface-1:      #1a1a19;
     --text-primary:   #ffffff;
     --text-secondary: #c3c2b7;
     --series-1:       #3987e5;
   }
 }
+:root[data-theme="dark"] .viz-root {
+  color-scheme: dark;
+  --surface-1:      #1a1a19;
+  --text-primary:   #ffffff;
+  --text-secondary: #c3c2b7;
+  --series-1:       #3987e5;
+}
 ```
+
+Declare the dark values under both scopes as above — the media query covers
+the OS setting; the `data-theme` scope covers the viewer's theme toggle,
+which must win both ways (the `:not(…)` guard lets a light stamp beat
+OS-dark; `:where()` keeps the media block below the toggle scope).
 
 ## Categorical palette
 

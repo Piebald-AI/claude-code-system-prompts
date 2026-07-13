@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: Artifact data table'
-description: Instructions for creating sortable and filterable data-table artifacts from the built-in template
-ccVersion: 2.1.206
+description: Skill instructions for creating interactive data-table artifacts with sortable, filterable tabular data, safe JSON embedding, theming, and template-preservation requirements
+ccVersion: 2.1.208
 -->
 ---
 name: artifact-data-table
@@ -42,14 +42,14 @@ The template also has a minor inline slot for header scope text — labelled in 
 
 ## Restyle on top
 
-The template's value is its working mechanics — layout, sorting, filtering. The shipped styling is a clean default (Claude Design System light-palette values), not a final look: when the user's request or the subject matter suggests a different feel, restyle on top of it.
+The template's value is its working mechanics — layout, sorting, filtering. The shipped styling is a clean default (every paint token has a dark counterpart), not a final look: when the user's request or the subject matter suggests a different feel, restyle on top of it.
 
-- Safe to restyle: the entire `<style>` block — colors, the `:root` palette variables, typography, spacing, striping, radii.
-- Keep intact: the table markup structure, the `<script>` blocks, and the ids and classes the script reads — `dt`, `dt-filter`, `dt-count`, `arrow`, `sorted`, `num`, `empty`. Renaming or removing these breaks sorting and filtering.
+- Safe to restyle: the entire `<style>` block — colors, typography, spacing, striping, radii. When changing a palette token, change it in all four scopes it is declared in — the light `:root` block, the `@media (prefers-color-scheme: dark)` block, the `:root[data-theme="dark"]` block, and the `@media print` block (print is always light; a token missed there reverts to the shipped palette on paper) — so the restyled table follows the OS dark setting, the viewer's theme toggle, and printing. A value changed only in `:root` snaps back to the shipped palette in dark mode and print.
+- Keep intact: the theming structure itself (all four scopes, including the `:where()` guard on the media block, the `color-scheme` pins, and the `@media print` re-pin block), the table markup structure, the `<script>` blocks, and the ids and classes the script reads — `dt`, `dt-filter`, `dt-count`, `arrow`, `sorted`, `num`, `empty`. Renaming or removing these breaks sorting, filtering, or theming.
 
 ## Notes
 
 - The template is a **body fragment** — no `<!DOCTYPE>`/`<html>`/`<head>`/`<body>` wrapper. The Artifact tool adds its own skeleton at publish time.
 - Data goes in the two JSON `<script>` blocks, not as literal `<tr>` markup — the renderer owns row emission so sort and filter work.
 - The filter input matches substrings across all text columns; numeric columns are excluded from text filtering. A filter that matches nothing shows a built-in "No rows match" message — don't add your own.
-- Tune `--accent` in the `:root` block toward the subject matter if a different hue reads better.
+- Tune `--accent` toward the subject matter if a different hue reads better — in every scope that declares it (see Restyle on top).

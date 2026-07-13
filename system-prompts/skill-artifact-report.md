@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: Artifact report'
 description: Instructions for creating long-form report artifacts with a masthead, table of contents, structured sections, and optional appendix from the built-in template
-ccVersion: 2.1.206
+ccVersion: 2.1.208
 -->
 ---
 name: artifact-report
@@ -15,7 +15,7 @@ Long-form document layout: serif body type on a warm paper background, with a ma
 1. Read `template.html` from this skill's base directory (listed above).
 2. Copy it as your starting point. Replace each `<!-- SLOT: ... -->` marker with real content — the comment inside each slot describes what goes there. Each slot also carries placeholder text after the comment (a sample title, headings, sentences, a takeaway bullet, a table-of-contents entry); replace that text too — removing the comment markers alone leaves the placeholders in the published page.
 3. Self-check the filled HTML: no `SLOT` markers left, no placeholder text left, and every table-of-contents (TOC) entry points at a section id that exists.
-4. Take a follow-up pass on styling and content before publishing. The template provides a default structure and style, not a required one: tighten the prose, and adjust the styling to what this document needs — retune the `--cds-*` token values in `:root`, restyle components, or restructure where the content calls for it (keep text contrast accessible, and keep the TOC for any report with three or more sections).
+4. Take a follow-up pass on styling and content before publishing. The template provides a default structure and style, not a required one: tighten the prose, and adjust the styling to what this document needs — retune the `--cds-*` token values (in every scope that declares them — the light `:root` block, both dark scopes, and the `@media print` block — or the value snaps back in dark mode or print), restyle components, or restructure where the content calls for it (keep text contrast accessible, and keep the TOC for any report with three or more sections).
 5. Publish the filled HTML with the `Artifact` tool.
 
 **Creation only.** When editing an existing report artifact, work with its current HTML directly — don't re-read or re-apply this template.
@@ -46,4 +46,4 @@ Respect the reader's attention — it is the scarcest resource a report consumes
 
 - The template is a **body fragment** — no `<!DOCTYPE>`/`<html>`/`<head>`/`<body>` wrapper. The Artifact tool adds its own skeleton at publish time.
 - Write real prose in full sentences. The layout is tuned to a ~65-character measure.
-- Styling defaults come from Claude Design System (CDS) token values inlined in `:root` as `--cds-*` custom properties (self-contained — artifacts render with no network access). They are defaults, not enforcement: retune them, or restyle entirely, in the follow-up pass.
+- Styling defaults are inlined `--cds-*` custom properties (self-contained — artifacts render with no network access), declared in the light `:root` block and re-declared in both dark scopes and the `@media print` block. They are defaults, not enforcement: retune them in every scope that declares them, or restyle entirely, in the follow-up pass.

@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: Artifact explainer'
 description: Instructions for creating explainer artifacts with numbered-step or section walkthrough structures from the built-in template
-ccVersion: 2.1.206
+ccVersion: 2.1.208
 -->
 ---
 name: artifact-explainer
@@ -50,4 +50,4 @@ The template's body offers two structures — keep one, delete the other (and it
 - The template is a **body fragment** — no `<!DOCTYPE>`/`<html>`/`<head>`/`<body>` wrapper. The Artifact tool adds its own skeleton at publish time.
 - Each step's `.visual` block is a free-form container: put whatever best illustrates that step (SVG, code, a small table). There is no bundled renderer — author the visual directly.
 - Steps flavor: aim for 3–6 steps. Fewer and it's either a report or the sections flavor; more and it should be split.
-- Tune `--accent` in the `:root` block toward the subject if a different hue reads better.
+- Tune `--accent` toward the subject if a different hue reads better — change it in every scope that declares it (the light `:root` block and both dark scopes), or the accent snaps back to the shipped value in dark mode.
