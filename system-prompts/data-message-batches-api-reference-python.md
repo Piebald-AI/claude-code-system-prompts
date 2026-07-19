@@ -5,7 +5,7 @@ ccVersion: "2.1.118"
 -->
 # Message Batches API — Python
 
-The Batches API (`POST /v1/messages/batches`) processes Messages API requests asynchronously at 50% of standard prices.
+The Batches API (\`POST /v1/messages/batches\`) processes Messages API requests asynchronously at 50% of standard prices.
 
 ## Key Facts
 
@@ -19,7 +19,7 @@ The Batches API (`POST /v1/messages/batches`) processes Messages API requests as
 
 ## Create a Batch
 
-```python
+\`\`\`python
 import anthropic
 from anthropic.types.message_create_params import MessageCreateParamsNonStreaming
 from anthropic.types.messages.batch_create_params import Request
@@ -49,13 +49,13 @@ message_batch = client.messages.batches.create(
 
 print(f"Batch ID: {message_batch.id}")
 print(f"Status: {message_batch.processing_status}")
-```
+\`\`\`
 
 ---
 
 ## Poll for Completion
 
-```python
+\`\`\`python
 import time
 
 while True:
@@ -68,15 +68,15 @@ while True:
 print("Batch complete!")
 print(f"Succeeded: {batch.request_counts.succeeded}")
 print(f"Errored: {batch.request_counts.errored}")
-```
+\`\`\`
 
 ---
 
 ## Retrieve Results
 
-> **Note:** Examples below use `match/case` syntax, requiring Python 3.10+. For earlier versions, use `if/elif` chains instead.
+> **Note:** Examples below use \`match/case\` syntax, requiring Python 3.10+. For earlier versions, use \`if/elif\` chains instead.
 
-```python
+\`\`\`python
 for result in client.messages.batches.results(message_batch.id):
     match result.result.type:
         case "succeeded":
@@ -92,35 +92,35 @@ for result in client.messages.batches.results(message_batch.id):
             print(f"[{result.custom_id}] Canceled")
         case "expired":
             print(f"[{result.custom_id}] Expired - resubmit")
-```
+\`\`\`
 
 ---
 
 ## Cancel a Batch
 
-```python
+\`\`\`python
 cancelled = client.messages.batches.cancel(message_batch.id)
 print(f"Status: {cancelled.processing_status}")  # "canceling"
-```
+\`\`\`
 
 ---
 
 ## List Batches (auto-pagination)
 
-Iterating the return value of any `list()` call auto-paginates across all pages — do not index into `.data` if you want the full set:
+Iterating the return value of any \`list()\` call auto-paginates across all pages — do not index into \`.data\` if you want the full set:
 
-```python
+\`\`\`python
 for batch in client.messages.batches.list(limit=20):
     print(batch.id, batch.processing_status)
-```
+\`\`\`
 
-For manual control, use `first_page.has_next_page()` / `first_page.get_next_page()` / `first_page.next_page_info()`; `first_page.data` holds the current page's items and `first_page.last_id` is the cursor.
+For manual control, use \`first_page.has_next_page()\` / \`first_page.get_next_page()\` / \`first_page.next_page_info()\`; \`first_page.data\` holds the current page's items and \`first_page.last_id\` is the cursor.
 
 ---
 
 ## Batch with Prompt Caching
 
-```python
+\`\`\`python
 shared_system = [
     {"type": "text", "text": "You are a literary analyst."},
     {
@@ -144,13 +144,13 @@ message_batch = client.messages.batches.create(
         for i, question in enumerate(questions)
     ]
 )
-```
+\`\`\`
 
 ---
 
 ## Full End-to-End Example
 
-```python
+\`\`\`python
 import anthropic
 import time
 from anthropic.types.message_create_params import MessageCreateParamsNonStreaming
@@ -200,4 +200,4 @@ for result in client.messages.batches.results(batch.id):
 
 for custom_id, classification in sorted(results.items()):
     print(f"{custom_id}: {classification}")
-```
+\`\`\`

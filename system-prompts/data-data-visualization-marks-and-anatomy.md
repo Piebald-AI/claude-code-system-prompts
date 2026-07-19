@@ -26,7 +26,7 @@ The data is the only thing allowed to be loud.
   the gap, not a stroke drawn around them.
 - **Surface ring.** Dots and end-markers carry a **2px ring in the surface color**,
   so they stay legible where they cross a line or overlap each other. The ring is part
-  of the mark's hover/hit target, not just spacing — see `interaction.md` (small dots
+  of the mark's hover/hit target, not just spacing — see \`interaction.md\` (small dots
   are easy to under-size for hover).
 
 Never draw a border around a mark to separate it. The gap and the ring are the
@@ -51,7 +51,7 @@ one swatch restates the title and costs space.
   outside the bar end (or to the tooltip if there's no room outside either); for an
   *interior* stacked segment (which has no free end),
   skip the inline label and let the legend + tooltip carry it. Either way the value
-  stays in the table view, so nothing is gated. Never use `overflow: hidden` on the
+  stays in the table view, so nothing is gated. Never use \`overflow: hidden\` on the
   segment to "solve" it — that crops the first/last characters and is worse than no
   label. Text never overflows or is clipped by its own mark.
 - Bars → value at the tip. Columns → value on the cap. Lines → value at the end.
@@ -72,9 +72,9 @@ one swatch restates the title and costs space.
 
 ## Figures — when the form is a number
 
-- **Stat tile** contract: `label` (sentence case, no trailing colon) · `value` (Sans
-  semibold, auto-compact: 1,284 / 12.9K / $4.2M) · `delta` (optional; signed,
-  vs a named period; color = direction × whether up is good) · `trend` (optional;
+- **Stat tile** contract: \`label\` (sentence case, no trailing colon) · \`value\` (Sans
+  semibold, auto-compact: 1,284 / 12.9K / $4.2M) · \`delta\` (optional; signed,
+  vs a named period; color = direction × whether up is good) · \`trend\` (optional;
   12-point sparkline in the de-emphasis hue, current period in the accent).
 - **Meter:** the fill carries severity (accent → warning → danger); the unfilled
   track is a **lighter step of the same ramp** (blue-on-blue, etc.) so state reads
@@ -84,17 +84,17 @@ one swatch restates the title and costs space.
   decoration). Exactly one per view.
 - **Proportional figures for big numbers; tabular only in columns.** A large
   standalone value (hero figure, stat-tile value) uses the font's default
-  proportional figures — `tabular-nums` gives every digit the width of a `0`, so a
-  number like `121` looks loose at display sizes. Reserve
-  `font-variant-numeric: tabular-nums` for columns of numbers that must align
+  proportional figures — \`tabular-nums\` gives every digit the width of a \`0\`, so a
+  number like \`121\` looks loose at display sizes. Reserve
+  \`font-variant-numeric: tabular-nums\` for columns of numbers that must align
   vertically (table rows, axis ticks).
 
 ## Texture — the backup channel (opt-in)
 
-Where hue fails — full-severity CVD, grayscale print, `forced-colors` — texture
+Where hue fails — full-severity CVD, grayscale print, \`forced-colors\` — texture
 carries identity. One directional hand-drawn fill, used at **45° and its 135° mirror
 only** (never horizontal/vertical — those read as gridlines/bars). Inked tone-on-tone
 (a step from the fill's own ramp), equal loudness across slots. On value scales the
 texture is *ordered* (rotation steps with magnitude; arm angle carries the diverging
 sign) so it never misstates the value. Triggered by an accessibility setting, print,
-or `forced-colors` — never on by default. (See `palette.md`.)
+or \`forced-colors\` — never on by default. (See \`palette.md\`.)

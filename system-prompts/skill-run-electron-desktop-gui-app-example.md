@@ -7,28 +7,28 @@ ccVersion: "2.1.145"
 
 Electron apps have a window. A future agent in a headless container
 can't see a window. So your deliverable here is not a markdown file
-that says "`npm start` opens a window" — it's a **driver script** that
+that says "\`npm start\` opens a window" — it's a **driver script** that
 launches the app under xvfb, exposes a REPL of commands (click, type,
 screenshot), and lets an agent poke the UI by sending lines of text.
 
-The skill's `SKILL.md` then becomes a short manual for that driver.
+The skill's \`SKILL.md\` then becomes a short manual for that driver.
 
 ## What you're building
 
-```
+\`\`\`
 apps/desktop/
   .claude/skills/run-desktop/
     SKILL.md               ← short. "run the driver, here are the commands"
     driver.mjs             ← REPL: stdin commands → Playwright actions
-```
+\`\`\`
 
 The driver IS the product. Without it, the skill describes a GUI an
 agent can never touch.
 
 **Graduation path:** if the driver grows launch helpers the project's
-real e2e suite wants to share, move it to `e2e-playwright/driver.mjs`
-(or `scripts/drive.mjs`) and update the skill's paths. The skill stays
-at `.claude/skills/run-desktop/`; the driver finds a better home.
+real e2e suite wants to share, move it to \`e2e-playwright/driver.mjs\`
+(or \`scripts/drive.mjs\`) and update the skill's paths. The skill stays
+at \`.claude/skills/run-desktop/\`; the driver finds a better home.
 
 ## Step 1 — get the app to launch AT ALL under xvfb
 
@@ -36,8 +36,8 @@ This is usually the hardest part and produces most of the Gotchas. The
 README will say "macOS/Windows only." Ignore that. Install xvfb + the
 Chromium shared libs, find the Electron binary, and launch it:
 
-```bash
-apt-get install -y xvfb libnss3 libgbm1 libasound2t64 libgtk-3-0 \
+\`\`\`bash
+apt-get install -y xvfb libnss3 libgbm1 libasound2t64 libgtk-3-0 \\
   libxss1 libxkbcommon0 libatk-bridge2.0-0 libcups2 libdrm2
 
 # Build the app first. Often the "dev" script is electron-forge which
@@ -58,13 +58,13 @@ xvfb-run -a node -e "
     return app.close();
   });
 "
-```
+\`\`\`
 
-Iterate until it launches. Each missing `.so` → one more `apt-get`
+Iterate until it launches. Each missing \`.so\` → one more \`apt-get\`
 package → one more line in Prerequisites. Each launch timeout → check
-the `nodeCliInspect` fuse isn't disabled, check the build output exists.
+the \`nodeCliInspect\` fuse isn't disabled, check the build output exists.
 
-**`--no-sandbox` is almost always needed in containers.** Electron's
+**\`--no-sandbox\` is almost always needed in containers.** Electron's
 sandbox needs CAP_SYS_ADMIN or user namespaces. Neither by default.
 
 ## Step 2 — build the REPL driver
@@ -74,7 +74,7 @@ minimal — you will add commands as you need them. **The REPL is the
 right shape** because an agent can run it inside tmux and iterate
 without relaunching the (slow) app on every interaction.
 
-```javascript
+\`\`\`javascript
 // .claude/skills/run-<unit>/driver.mjs
 // REPL driver for <app>. Run under xvfb on headless Linux.
 // Designed for agents: wrap in tmux, send-keys commands, capture-pane output.
@@ -117,7 +117,7 @@ const COMMANDS = {
 
   async ss(name) {
     if (!page) return console.log('ERROR: launch first');
-    const f = path.join(SHOT_DIR, (name || `ss-${Date.now()}`) + '.png');
+    const f = path.join(SHOT_DIR, (name || \`ss-\${Date.now()}\`) + '.png');
     await page.screenshot({ path: f });
     console.log('screenshot:', f);
   },
@@ -177,7 +177,7 @@ const COMMANDS = {
     const wcs = await app.evaluate(({ webContents }) =>
       webContents.getAllWebContents().map(w => ({ id: w.id, type: w.getType(), url: w.getURL() })));
     console.log('webContents:');
-    for (const w of wcs) console.log(` [${w.id}] ${w.type}: ${w.url}`);
+    for (const w of wcs) console.log(\` [\${w.id}] \${w.type}: \${w.url}\`);
   },
 
   async quit() { if (app) await app.close().catch(()=>{}); app = null; page = null; },
@@ -189,7 +189,7 @@ const stdin = fs.createReadStream(null, { fd: fs.openSync('/dev/stdin', 'r') });
 const rl = readline.createInterface({ input: stdin, output: process.stdout, prompt: 'driver> ' });
 
 rl.on('line', async line => {
-  const [cmd, ...rest] = line.trim().split(/\s+/);
+  const [cmd, ...rest] = line.trim().split(/\\s+/);
   if (!cmd) return rl.prompt();
   const fn = COMMANDS[cmd];
   if (!fn) { console.log('unknown:', cmd, '— try: help'); return rl.prompt(); }
@@ -201,7 +201,7 @@ rl.on('close', async () => { await COMMANDS.quit(); process.exit(0); });
 
 console.log('<app> driver — "help" for commands, "launch" to start');
 rl.prompt();
-```
+\`\`\`
 
 **This is a starting skeleton.** As you try to reach interesting parts
 of the app you'll add app-specific commands: navigate to a particular
@@ -212,7 +212,7 @@ commands encode hard-won knowledge — keep them.
 
 Run the driver the same way the next agent will:
 
-```bash
+\`\`\`bash
 tmux new-session -d -s app -x 200 -y 50
 tmux send-keys -t app 'cd /workspace/apps/desktop && xvfb-run -a node .claude/skills/run-desktop/driver.mjs' Enter
 timeout 20 bash -c 'until tmux capture-pane -t app -p | grep -q "driver>"; do sleep 0.2; done'
@@ -222,19 +222,19 @@ tmux send-keys -t app 'ss 01-landing' Enter
 timeout 10 bash -c 'until tmux capture-pane -t app -p | grep -q "screenshot:"; do sleep 0.2; done'
 tmux send-keys -t app 'windows' Enter    # which page has the real UI?
 tmux capture-pane -t app -p
-```
+\`\`\`
 
-Then actually open `/tmp/shots/01-landing.png`. Is it the app? Is it
+Then actually open \`/tmp/shots/01-landing.png\`. Is it the app? Is it
 blank? Is it a login screen? Each of these tells you what to do next.
 
 Keep going — click into the main feature, fill a form, see the result
 show up, screenshot it. The driver grows whatever commands you need
-(`focus-input`, `goto-settings`, `login-as-test-user`…). When one real
+(\`focus-input\`, \`goto-settings\`, \`login-as-test-user\`…). When one real
 flow works end-to-end, you're done building and ready to write.
 
 ## Step 4 — write SKILL.md
 
-Keep it short. The driver is the meat; `SKILL.md` is the manual.
+Keep it short. The driver is the meat; \`SKILL.md\` is the manual.
 Structure that works:
 
 > ---
@@ -243,37 +243,37 @@ Structure that works:
 > ---
 >
 > <App> is an Electron desktop app. For agent/automated use, drive it
-> via the Playwright REPL at `.claude/skills/run-desktop/driver.mjs`
+> via the Playwright REPL at \`.claude/skills/run-desktop/driver.mjs\`
 > under xvfb. Launch is slow (~10s) and the interesting UI lives in a
 > BrowserView, not the main window — the driver handles both.
 >
-> All paths are relative to `apps/desktop/`.
+> All paths are relative to \`apps/desktop/\`.
 >
 > ## Prerequisites
 >
-> ```bash
-> apt-get install -y xvfb libnss3 libgbm1 libasound2t64 libgtk-3-0 \
+> \`\`\`bash
+> apt-get install -y xvfb libnss3 libgbm1 libasound2t64 libgtk-3-0 \\
 >   libxss1 libxkbcommon0 libatk-bridge2.0-0 libcups2 libdrm2
-> ```
+> \`\`\`
 >
 > ## Build
 >
-> ```bash
+> \`\`\`bash
 > npm install
 > npx electron-forge start   # builds .vite/build/ — Ctrl-C once built
 > # <any patch you had to apply: sed a feature gate, etc.>
-> ```
+> \`\`\`
 >
 > ## Run (agent path)
 >
-> ```bash
+> \`\`\`bash
 > cd apps/desktop
 > xvfb-run -a node .claude/skills/run-desktop/driver.mjs
-> ```
+> \`\`\`
 >
 > Wrap in tmux for interactive use:
 >
-> ```bash
+> \`\`\`bash
 > tmux new-session -d -s app -x 200 -y 50
 > tmux send-keys -t app 'cd apps/desktop && xvfb-run -a node .claude/skills/run-desktop/driver.mjs' Enter
 > timeout 20 bash -c 'until tmux capture-pane -t app -p | grep -q "driver>"; do sleep 0.2; done'
@@ -281,32 +281,32 @@ Structure that works:
 > timeout 60 bash -c 'until tmux capture-pane -t app -p | grep -q "launched"; do sleep 0.2; done'
 > tmux send-keys -t app 'ss landing' Enter
 > tmux capture-pane -t app -p
-> ```
+> \`\`\`
 >
-> Screenshots land in `/tmp/shots/` (override: `SCREENSHOT_DIR`).
+> Screenshots land in \`/tmp/shots/\` (override: \`SCREENSHOT_DIR\`).
 >
 > ### Commands
 >
 > | command | what it does |
 > |---|---|
-> | `launch` | launch the app, wait for windows |
-> | `ss [name]` | screenshot → `/tmp/shots/<name>.png` |
-> | `click <css-sel>` | click element (via DOM, not coords — see Gotchas) |
-> | `click-text <text>` | click button/link containing text |
-> | `type <text>` / `press <key>` | keyboard input |
-> | `wait <css-sel>` | wait for element, 10s timeout |
-> | `eval <js>` | evaluate in the page, print JSON |
-> | `text [css-sel]` | print innerText |
-> | `windows` | list all windows + webContents (find the real UI) |
-> | `quit` | close app, exit |
+> | \`launch\` | launch the app, wait for windows |
+> | \`ss [name]\` | screenshot → \`/tmp/shots/<name>.png\` |
+> | \`click <css-sel>\` | click element (via DOM, not coords — see Gotchas) |
+> | \`click-text <text>\` | click button/link containing text |
+> | \`type <text>\` / \`press <key>\` | keyboard input |
+> | \`wait <css-sel>\` | wait for element, 10s timeout |
+> | \`eval <js>\` | evaluate in the page, print JSON |
+> | \`text [css-sel]\` | print innerText |
+> | \`windows\` | list all windows + webContents (find the real UI) |
+> | \`quit\` | close app, exit |
 >
-> Plus any app-specific commands you built: `<your-command>` — <what it does>.
+> Plus any app-specific commands you built: \`<your-command>\` — <what it does>.
 >
 > ## Run (human path)
 >
-> ```bash
+> \`\`\`bash
 > npm start   # opens a window; useless headless. Ctrl-C to quit.
-> ```
+> \`\`\`
 >
 > ## Gotchas
 >
@@ -316,46 +316,46 @@ Structure that works:
 > ## Troubleshooting
 >
 > - **Launch timeout (30s):** build output missing? → re-run the build
->   step. `nodeCliInspect` fuse disabled? → Playwright can't attach;
+>   step. \`nodeCliInspect\` fuse disabled? → Playwright can't attach;
 >   don't disable that fuse in dev builds.
-> - **"Missing X server":** forgot `xvfb-run`. Headless Linux needs it.
-> - **Stale Xvfb locks:** `rm -f /tmp/.X*-lock; pkill Xvfb`
+> - **"Missing X server":** forgot \`xvfb-run\`. Headless Linux needs it.
+> - **Stale Xvfb locks:** \`rm -f /tmp/.X*-lock; pkill Xvfb\`
 > - <anything else you actually hit>
 
 ## Obstacles you will hit (and they go in Gotchas)
 
 These are real patterns from real Electron apps. You'll hit some subset:
 
-- **`firstWindow()` gives you a splash/loading screen,** not the app.
+- **\`firstWindow()\` gives you a splash/loading screen,** not the app.
   Wait longer, or find the right page by URL, or wait for a specific
   selector that only appears when the app is actually ready.
 
 - **The real UI is in a BrowserView, not a BrowserWindow.** Playwright
-  sees it as a separate "window" with a different URL. The `windows`
-  command exists exactly for figuring this out. `getBrowserViews()`
+  sees it as a separate "window" with a different URL. The \`windows\`
+  command exists exactly for figuring this out. \`getBrowserViews()\`
   may also return empty on newer Electron — use
-  `webContents.getAllWebContents()` instead.
+  \`webContents.getAllWebContents()\` instead.
 
-- **`locator.click()` clicks the wrong thing.** Playwright computes
+- **\`locator.click()\` clicks the wrong thing.** Playwright computes
   click coordinates relative to the main window. If your content is in
   a BrowserView overlay, those coordinates hit the window behind it.
-  The driver skeleton uses `page.evaluate(el => el.click())` for this
+  The driver skeleton uses \`page.evaluate(el => el.click())\` for this
   reason — DOM click bypasses coordinates entirely.
 
 - **Feature gates block the thing you need to test.** The app checks a
   plan tier, or an env flag, or a feature flag baked into SSR HTML.
   Find where the check happens (grep the built output for the gate
-  name) and patch it for your local run — a `sed` on the build output,
+  name) and patch it for your local run — a \`sed\` on the build output,
   an env var override, or (for SSR-embedded flags) intercept the
-  response via CDP `Fetch.enable` and rewrite it in-flight. Document
+  response via CDP \`Fetch.enable\` and rewrite it in-flight. Document
   exactly what you patched and why.
 
 - **contentEditable inputs** (ProseMirror, Tiptap, Slate) aren't
-  `<textarea>`. `fill()` won't work. Focus the element, then use
-  `keyboard.type()`. Add a `focus <sel>` command if the app has these.
+  \`<textarea>\`. \`fill()\` won't work. Focus the element, then use
+  \`keyboard.type()\`. Add a \`focus <sel>\` command if the app has these.
 
-- **Electron steals stdin.** The `fs.openSync('/dev/stdin', 'r')` +
-  `createReadStream` trick in the skeleton protects your REPL's input.
+- **Electron steals stdin.** The \`fs.openSync('/dev/stdin', 'r')\` +
+  \`createReadStream\` trick in the skeleton protects your REPL's input.
 
 - **Native modules fail to load** (keychain, notifications, etc.).
   Usually non-fatal — the core app runs, those features no-op. Note it

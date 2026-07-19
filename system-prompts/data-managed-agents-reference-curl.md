@@ -9,7 +9,7 @@ Use these examples when the user needs raw HTTP requests or is working without a
 
 ## Setup
 
-```bash
+\`\`\`bash
 export ANTHROPIC_API_KEY="your-api-key"
 
 # Common headers
@@ -19,15 +19,15 @@ HEADERS=(
   -H "anthropic-version: 2023-06-01"
   -H "anthropic-beta: managed-agents-2026-04-01"
 )
-```
+\`\`\`
 
 ---
 
 ## Create an Environment
 
-```bash
-curl -X POST https://api.anthropic.com/v1/environments \
-  "${HEADERS[@]}" \
+\`\`\`bash
+curl -X POST https://api.anthropic.com/v1/environments \\
+  "\${HEADERS[@]}" \\
   -d '{
     "name": "my-dev-env",
     "config": {
@@ -35,13 +35,13 @@ curl -X POST https://api.anthropic.com/v1/environments \
       "networking": { "type": "unrestricted" }
     }
   }'
-```
+\`\`\`
 
 ### With restricted networking
 
-```bash
-curl -X POST https://api.anthropic.com/v1/environments \
-  "${HEADERS[@]}" \
+\`\`\`bash
+curl -X POST https://api.anthropic.com/v1/environments \\
+  "\${HEADERS[@]}" \\
   -d '{
     "name": "restricted-env",
     "config": {
@@ -54,20 +54,20 @@ curl -X POST https://api.anthropic.com/v1/environments \
       }
     }
   }'
-```
+\`\`\`
 
 ---
 
 ## Create an Agent (required first step)
 
-> ⚠️ **There is no inline agent config.** Under `managed-agents-2026-04-01`, `model`/`system`/`tools` are top-level fields on `POST /v1/agents`, not on the session. Always create the agent first — the session only takes `"agent": {"type": "agent", "id": "..."}`.
+> ⚠️ **There is no inline agent config.** Under \`managed-agents-2026-04-01\`, \`model\`/\`system\`/\`tools\` are top-level fields on \`POST /v1/agents\`, not on the session. Always create the agent first — the session only takes \`"agent": {"type": "agent", "id": "..."}\`.
 
 ### Minimal
 
-```bash
+\`\`\`bash
 # 1. Create the agent
-curl -X POST https://api.anthropic.com/v1/agents \
-  "${HEADERS[@]}" \
+curl -X POST https://api.anthropic.com/v1/agents \\
+  "\${HEADERS[@]}" \\
   -d '{
     "name": "Coding Assistant",
     "model": "{{OPUS_ID}}",
@@ -76,22 +76,22 @@ curl -X POST https://api.anthropic.com/v1/agents \
 # → { "id": "agent_abc123", ... }
 
 # 2. Start a session
-curl -X POST https://api.anthropic.com/v1/sessions \
-  "${HEADERS[@]}" \
+curl -X POST https://api.anthropic.com/v1/sessions \\
+  "\${HEADERS[@]}" \\
   -d '{
     "agent": { "type": "agent", "id": "agent_abc123", "version": "1772585501101368014" },
     "environment_id": "env_abc123"
   }'
 # → { "id": "sesn_abc123", ... }
 # Trace: https://platform.claude.com/workspaces/default/sessions/sesn_abc123  (swap 'default' for your workspace ID if the API key is not in the Default workspace)
-```
+\`\`\`
 
 ### With system prompt, custom tools, and GitHub repo
 
-```bash
+\`\`\`bash
 # 1. Create the agent
-curl -X POST https://api.anthropic.com/v1/agents \
-  "${HEADERS[@]}" \
+curl -X POST https://api.anthropic.com/v1/agents \\
+  "\${HEADERS[@]}" \\
   -d '{
     "name": "Code Reviewer",
     "model": "{{OPUS_ID}}",
@@ -114,8 +114,8 @@ curl -X POST https://api.anthropic.com/v1/agents \
   }'
 
 # 2. Start a session with the repo mounted
-curl -X POST https://api.anthropic.com/v1/sessions \
-  "${HEADERS[@]}" \
+curl -X POST https://api.anthropic.com/v1/sessions \\
+  "\${HEADERS[@]}" \\
   -d '{
     "agent": { "type": "agent", "id": "agent_abc123", "version": "1772585501101368014" },
     "environment_id": "env_abc123",
@@ -130,15 +130,15 @@ curl -X POST https://api.anthropic.com/v1/sessions \
       }
     ]
   }'
-```
+\`\`\`
 
 ---
 
 ## Send a User Message
 
-```bash
-curl -X POST https://api.anthropic.com/v1/sessions/$SESSION_ID/events \
-  "${HEADERS[@]}" \
+\`\`\`bash
+curl -X POST https://api.anthropic.com/v1/sessions/$SESSION_ID/events \\
+  "\${HEADERS[@]}" \\
   -d '{
     "events": [
       {
@@ -147,20 +147,20 @@ curl -X POST https://api.anthropic.com/v1/sessions/$SESSION_ID/events \
       }
     ]
   }'
-```
+\`\`\`
 
 ---
 
 ## Stream Events (SSE)
 
-```bash
-curl -N https://api.anthropic.com/v1/sessions/$SESSION_ID/events/stream \
-  "${HEADERS[@]}"
-```
+\`\`\`bash
+curl -N https://api.anthropic.com/v1/sessions/$SESSION_ID/events/stream \\
+  "\${HEADERS[@]}"
+\`\`\`
 
 Response format:
 
-```
+\`\`\`
 event: session.status_running
 data: {"type":"session.status_running","id":"sevt_...","processed_at":"..."}
 
@@ -169,21 +169,21 @@ data: {"type":"agent.message","id":"sevt_...","content":[{"type":"text","text":"
 
 event: session.status_idle
 data: {"type":"session.status_idle","id":"sevt_...","processed_at":"..."}
-```
+\`\`\`
 
 ---
 
 ## Poll Events
 
-```bash
+\`\`\`bash
 # Get all events
-curl https://api.anthropic.com/v1/sessions/$SESSION_ID/events \
-  "${HEADERS[@]}"
+curl https://api.anthropic.com/v1/sessions/$SESSION_ID/events \\
+  "\${HEADERS[@]}"
 
 # Paginated — get next page of events
-curl "https://api.anthropic.com/v1/sessions/$SESSION_ID/events?page=page_abc123" \
-  "${HEADERS[@]}"
-```
+curl "https://api.anthropic.com/v1/sessions/$SESSION_ID/events?page=page_abc123" \\
+  "\${HEADERS[@]}"
+\`\`\`
 
 ---
 
@@ -191,9 +191,9 @@ curl "https://api.anthropic.com/v1/sessions/$SESSION_ID/events?page=page_abc123"
 
 When the agent calls a custom tool, send the result back:
 
-```bash
-curl -X POST https://api.anthropic.com/v1/sessions/$SESSION_ID/events \
-  "${HEADERS[@]}" \
+\`\`\`bash
+curl -X POST https://api.anthropic.com/v1/sessions/$SESSION_ID/events \\
+  "\${HEADERS[@]}" \\
   -d '{
     "events": [
       {
@@ -203,15 +203,15 @@ curl -X POST https://api.anthropic.com/v1/sessions/$SESSION_ID/events \
       }
     ]
   }'
-```
+\`\`\`
 
 ---
 
 ## Interrupt a Running Session
 
-```bash
-curl -X POST https://api.anthropic.com/v1/sessions/$SESSION_ID/events \
-  "${HEADERS[@]}" \
+\`\`\`bash
+curl -X POST https://api.anthropic.com/v1/sessions/$SESSION_ID/events \\
+  "\${HEADERS[@]}" \\
   -d '{
     "events": [
       {
@@ -219,86 +219,86 @@ curl -X POST https://api.anthropic.com/v1/sessions/$SESSION_ID/events \
       }
     ]
   }'
-```
+\`\`\`
 
 ---
 
 ## Get Session Details
 
-```bash
-curl https://api.anthropic.com/v1/sessions/$SESSION_ID \
-  "${HEADERS[@]}"
-```
+\`\`\`bash
+curl https://api.anthropic.com/v1/sessions/$SESSION_ID \\
+  "\${HEADERS[@]}"
+\`\`\`
 
 ---
 
 ## List Sessions
 
-```bash
-curl https://api.anthropic.com/v1/sessions \
-  "${HEADERS[@]}"
-```
+\`\`\`bash
+curl https://api.anthropic.com/v1/sessions \\
+  "\${HEADERS[@]}"
+\`\`\`
 
 ---
 
 ## Delete a Session
 
-```bash
-curl -X DELETE https://api.anthropic.com/v1/sessions/$SESSION_ID \
-  "${HEADERS[@]}"
-```
+\`\`\`bash
+curl -X DELETE https://api.anthropic.com/v1/sessions/$SESSION_ID \\
+  "\${HEADERS[@]}"
+\`\`\`
 
 ---
 
 ## Upload a File
 
-```bash
-curl -X POST https://api.anthropic.com/v1/files \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-version: 2023-06-01" \
-  -H "anthropic-beta: files-api-2025-04-14" \
-  -F "file=@path/to/file.txt" \
+\`\`\`bash
+curl -X POST https://api.anthropic.com/v1/files \\
+  -H "x-api-key: $ANTHROPIC_API_KEY" \\
+  -H "anthropic-version: 2023-06-01" \\
+  -H "anthropic-beta: files-api-2025-04-14" \\
+  -F "file=@path/to/file.txt" \\
   -F "purpose=agent"
-```
+\`\`\`
 
 ---
 
 ## List and Download Session Files
 
-List files the agent wrote to `/mnt/session/outputs/` during a session, then download them.
+List files the agent wrote to \`/mnt/session/outputs/\` during a session, then download them.
 
-```bash
+\`\`\`bash
 # List files associated with a session
-curl "https://api.anthropic.com/v1/files?scope_id=$SESSION_ID" \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-version: 2023-06-01" \
+curl "https://api.anthropic.com/v1/files?scope_id=$SESSION_ID" \\
+  -H "x-api-key: $ANTHROPIC_API_KEY" \\
+  -H "anthropic-version: 2023-06-01" \\
   -H "anthropic-beta: files-api-2025-04-14,managed-agents-2026-04-01"
 
 # Download a specific file
-curl "https://api.anthropic.com/v1/files/$FILE_ID/content" \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-version: 2023-06-01" \
-  -H "anthropic-beta: files-api-2025-04-14,managed-agents-2026-04-01" \
+curl "https://api.anthropic.com/v1/files/$FILE_ID/content" \\
+  -H "x-api-key: $ANTHROPIC_API_KEY" \\
+  -H "anthropic-version: 2023-06-01" \\
+  -H "anthropic-beta: files-api-2025-04-14,managed-agents-2026-04-01" \\
   -o downloaded_file.txt
-```
+\`\`\`
 
 ---
 
 ## List Agents
 
-```bash
-curl https://api.anthropic.com/v1/agents \
-  "${HEADERS[@]}"
-```
+\`\`\`bash
+curl https://api.anthropic.com/v1/agents \\
+  "\${HEADERS[@]}"
+\`\`\`
 
 ---
 
 ## MCP Server Integration
 
-```bash
+\`\`\`bash
 # 1. Agent declares MCP server (no auth here — auth goes in a vault)
-curl -X POST https://api.anthropic.com/v1/agents \
-  "${HEADERS[@]}" \
+curl -X POST https://api.anthropic.com/v1/agents \\
+  "\${HEADERS[@]}" \\
   -d '{
     "name": "MCP Agent",
     "model": "{{OPUS_ID}}",
@@ -312,24 +312,24 @@ curl -X POST https://api.anthropic.com/v1/agents \
   }'
 
 # 2. Session attaches vault containing credentials for that MCP server URL
-curl -X POST https://api.anthropic.com/v1/sessions \
-  "${HEADERS[@]}" \
+curl -X POST https://api.anthropic.com/v1/sessions \\
+  "\${HEADERS[@]}" \\
   -d '{
     "agent": "agent_abc123",
     "environment_id": "env_abc123",
     "vault_ids": ["vlt_abc123"]
   }'
-```
+\`\`\`
 
-See `shared/managed-agents-tools.md` §Vaults for creating vaults and adding credentials.
+See \`shared/managed-agents-tools.md\` §Vaults for creating vaults and adding credentials.
 
 ---
 
 ## Tool Configuration
 
-```bash
-curl -X POST https://api.anthropic.com/v1/agents \
-  "${HEADERS[@]}" \
+\`\`\`bash
+curl -X POST https://api.anthropic.com/v1/agents \\
+  "\${HEADERS[@]}" \\
   -d '{
     "name": "Restricted Agent",
     "model": "{{OPUS_ID}}",
@@ -343,4 +343,4 @@ curl -X POST https://api.anthropic.com/v1/agents \
       }
     ]
   }'
-```
+\`\`\`

@@ -5,17 +5,17 @@ ccVersion: "2.1.182"
 -->
 # Claude API — Ruby
 
-> **Note:** The Ruby SDK supports the Claude API. A tool runner is available in beta via `client.beta.messages.tool_runner()`. Agent SDK is not yet available for Ruby.
+> **Note:** The Ruby SDK supports the Claude API. A tool runner is available in beta via \`client.beta.messages.tool_runner()\`. Agent SDK is not yet available for Ruby.
 
 ## Installation
 
-```bash
+\`\`\`bash
 gem install anthropic
-```
+\`\`\`
 
 ## Client Initialization
 
-```ruby
+\`\`\`ruby
 require "anthropic"
 
 # Default (uses ANTHROPIC_API_KEY env var)
@@ -23,13 +23,13 @@ client = Anthropic::Client.new
 
 # Explicit API key
 client = Anthropic::Client.new(api_key: "your-api-key")
-```
+\`\`\`
 
 ---
 
 ## Basic Message Request
 
-```ruby
+\`\`\`ruby
 message = client.messages.create(
   model: :"{{OPUS_ID}}",
   max_tokens: 16000,
@@ -43,16 +43,16 @@ message = client.messages.create(
 message.content.each do |block|
   puts block.text if block.type == :text
 end
-```
+\`\`\`
 
 ---
 
 ## Extended Thinking
 
-> **Fable 5, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. `budget_tokens` is removed on Fable 5, Opus 4.8, and 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
-> **Older models:** Use `thinking: { type: "enabled", budget_tokens: N }` (must be < `max_tokens`, min 1024).
+> **Fable 5, Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. \`budget_tokens\` is removed on Fable 5, Opus 4.8, and 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
+> **Older models:** Use \`thinking: { type: "enabled", budget_tokens: N }\` (must be < \`max_tokens\`, min 1024).
 
-```ruby
+\`\`\`ruby
 message = client.messages.create(
   model: :"{{OPUS_ID}}",
   max_tokens: 16000,
@@ -66,15 +66,15 @@ message.content.each do |block|
   when :text then puts "Response: #{block.text}"
   end
 end
-```
+\`\`\`
 
 ---
 
 ## Prompt Caching
 
-`system_:` (trailing underscore — avoids shadowing `Kernel#system`) takes an array of text blocks; set `cache_control` on the last block. Plain hashes work via the `OrHash` type alias. For placement patterns and the silent-invalidator audit checklist, see `shared/prompt-caching.md`.
+\`system_:\` (trailing underscore — avoids shadowing \`Kernel#system\`) takes an array of text blocks; set \`cache_control\` on the last block. Plain hashes work via the \`OrHash\` type alias. For placement patterns and the silent-invalidator audit checklist, see \`shared/prompt-caching.md\`.
 
-```ruby
+\`\`\`ruby
 message = client.messages.create(
   model: :"{{OPUS_ID}}",
   max_tokens: 16000,
@@ -83,36 +83,36 @@ message = client.messages.create(
   ],
   messages: [{ role: "user", content: "Summarize the key points" }]
 )
-```
+\`\`\`
 
-For 1-hour TTL: `cache_control: { type: "ephemeral", ttl: "1h" }`. There's also a top-level `cache_control:` on `messages.create` that auto-places on the last cacheable block.
+For 1-hour TTL: \`cache_control: { type: "ephemeral", ttl: "1h" }\`. There's also a top-level \`cache_control:\` on \`messages.create\` that auto-places on the last cacheable block.
 
-Verify hits via `message.usage.cache_creation_input_tokens` / `message.usage.cache_read_input_tokens`.
+Verify hits via \`message.usage.cache_creation_input_tokens\` / \`message.usage.cache_read_input_tokens\`.
 
 ---
 
 ## Stop Details
 
-When `stop_reason` is `:refusal`, the response includes structured `stop_details`:
+When \`stop_reason\` is \`:refusal\`, the response includes structured \`stop_details\`:
 
-```ruby
+\`\`\`ruby
 if message.stop_reason == :refusal && message.stop_details
   puts "Category: #{message.stop_details.category}"     # e.g. :cyber, :bio, :reasoning_extraction, :frontier_llm, or nil — see docs for the full set
   puts "Explanation: #{message.stop_details.explanation}"
 end
-```
+\`\`\`
 
-**Refusal fallbacks ({{FABLE_NAME}}) — opt in by default.** Fallbacks are opt-in: without them a refused request simply stops. New `{{FABLE_ID}}` code should include the server-side `fallbacks` parameter (beta header `server-side-fallback-2026-06-01`, `fallbacks: [{model: "{{OPUS_ID}}"}]` on the beta messages call) by default. The exact Ruby binding (and the client-side middleware for providers without server-side support) is not documented here — WebFetch the Ruby SDK repo's `examples/` from `shared/live-sources.md`; full semantics in `shared/model-migration.md` → Migrating to {{FABLE_NAME}} → `refusal` stop reason.
+**Refusal fallbacks ({{FABLE_NAME}}) — opt in by default.** Fallbacks are opt-in: without them a refused request simply stops. New \`{{FABLE_ID}}\` code should include the server-side \`fallbacks\` parameter (beta header \`server-side-fallback-2026-06-01\`, \`fallbacks: [{model: "{{OPUS_ID}}"}]\` on the beta messages call) by default. The exact Ruby binding (and the client-side middleware for providers without server-side support) is not documented here — WebFetch the Ruby SDK repo's \`examples/\` from \`shared/live-sources.md\`; full semantics in \`shared/model-migration.md\` → Migrating to {{FABLE_NAME}} → \`refusal\` stop reason.
 
 ---
 
 ## Beta Features
 
-`betas:` is only valid on `client.beta.messages.create`, not the non-beta path.
+\`betas:\` is only valid on \`client.beta.messages.create\`, not the non-beta path.
 
 ### Task budgets
 
-```ruby
+\`\`\`ruby
 response = client.beta.messages.create(
   model: :"{{OPUS_ID}}",
   max_tokens: 16000,
@@ -121,18 +121,18 @@ response = client.beta.messages.create(
   messages: [...],
   betas: ["task-budgets-2026-03-13"]
 )
-```
+\`\`\`
 
 ---
 
 ## Error Type
 
-`APIStatusError` exposes a `.type` field for programmatic error classification:
+\`APIStatusError\` exposes a \`.type\` field for programmatic error classification:
 
-```ruby
+\`\`\`ruby
 begin
   client.messages.create(...)
 rescue Anthropic::Errors::APIStatusError => e
   puts e.type  # :rate_limit_error, :overloaded_error, etc.
 end
-```
+\`\`\`

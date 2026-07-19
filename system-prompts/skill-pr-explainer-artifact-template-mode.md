@@ -27,7 +27,7 @@ ${PR_EXPLAINER_REQUIRED_QUESTIONS_BLOCK}
 
 ## Build it from the explainer template
 
-Load the `artifact-explainer` skill and build the page from its template,
+Load the \`artifact-explainer\` skill and build the page from its template,
 publishing with the ${ARTIFACT_TOOL_NAME} tool as that skill directs. Use the
 template's **sections flavor** — keep the sections structure, delete the
 numbered steps. Fill the slots as follows:

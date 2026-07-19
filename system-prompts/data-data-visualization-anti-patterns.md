@@ -28,7 +28,7 @@ Why: indistinguishable from an existing slot under CVD; breaks the order check.
 ✅ Fold the tail into "Other," facet into small multiples, or use composite encoding.
 
 **❌ Eyeballing colorblind-safety.** "These look different enough."
-✅ Run `scripts/validate_palette.js`. Adjacent ΔE ≥ 8 (OKLab ×100), or 6–8 WITH secondary encoding.
+✅ Run \`scripts/validate_palette.js\`. Adjacent ΔE ≥ 8 (OKLab ×100), or 6–8 WITH secondary encoding.
 
 **❌ A value-ramp on nominal categories.** Coloring each bar darker-where-bigger
 when the categories have no natural order (products, teams, endpoints).
@@ -36,7 +36,7 @@ Why: it double-encodes bar length as hue, burns the only free channel on
 information the chart already shows, and fails the categorical checks by design
 (a ramp spans the lightness band and drops below the chroma floor).
 ✅ One series → one color (slot 1) for every bar. Ordered categories (funnel,
-tiers, age bands) → the ordinal ramp, validated with `--ordinal`.
+tiers, age bands) → the ordinal ramp, validated with \`--ordinal\`.
 
 **❌ Rainbow / non-neighbor sequential.** A multi-hue ramp for magnitude.
 ✅ One hue, light→dark. (Analogous neighbors or semantic heat are the only multi-hue
@@ -83,7 +83,7 @@ for small marks and accents, never large blocks.
 ✅ A 2px surface gap between fills (stacked segments and adjacent bars alike) and a 2px surface ring (on overlapping markers).
 
 **❌ A label clipped by, or overflowing, a too-small bar or stacked segment** —
-including `overflow: hidden` cropping the first/last characters of an in-segment label.
+including \`overflow: hidden\` cropping the first/last characters of an in-segment label.
 ✅ Only render a label inside a mark when it fits with padding; otherwise move it
 outside the bar end, or drop it to the tooltip/legend (the value stays in the table view).
 
@@ -95,9 +95,9 @@ or let the container grow with its content instead of fixing a height.
 **❌ A display or serif face on the hero figure.** It reads as off-brand decoration.
 ✅ The hero figure uses the same sans as everything else.
 
-**❌ `tabular-nums` on a large standalone number.** Equal-width digits make `121`
+**❌ \`tabular-nums\` on a large standalone number.** Equal-width digits make \`121\`
 look loose at display sizes.
-✅ Proportional figures on hero and stat-tile values; `tabular-nums` only where
+✅ Proportional figures on hero and stat-tile values; \`tabular-nums\` only where
 numbers align vertically (table rows, axis ticks).
 
 **❌ Texture on by default, or as decoration.** Dense angled fields are a vestibular

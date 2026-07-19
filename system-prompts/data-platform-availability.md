@@ -25,9 +25,9 @@ Columns: **1P** = first-party Claude API, **P-AWS** = Claude Platform on AWS (An
 | Compaction | β | β | β | β | β | |
 | Context editing | β | β | β | β | β | |
 | Context windows (1M) | ✅ | ✅ | ✅ | ✅ | β | |
-| `inference_geo` (data residency) | ✅ | ✅ | ❌ | ❌ | ❌ | |
+| \`inference_geo\` (data residency) | ✅ | ✅ | ❌ | ❌ | ❌ | |
 | **Server-side tools** | | | | | | |
-| &nbsp;&nbsp;Web search | ✅ | ✅ | ❌ | ✅ | β | Vertex: basic `web_search_20250305` only (no `_20260209` dynamic filtering) |
+| &nbsp;&nbsp;Web search | ✅ | ✅ | ❌ | ✅ | β | Vertex: basic \`web_search_20250305\` only (no \`_20260209\` dynamic filtering) |
 | &nbsp;&nbsp;Web fetch | ✅ | ✅ | ❌ | ❌ | β | |
 | &nbsp;&nbsp;Code execution | ✅ | ✅ | ❌ | ❌ | β | |
 | &nbsp;&nbsp;Tool search | ✅ | ✅ | ✅ | ✅ | β | Bedrock: InvokeModel API only, not Converse |
@@ -40,16 +40,16 @@ Columns: **1P** = first-party Claude API, **P-AWS** = Claude Platform on AWS (An
 | &nbsp;&nbsp;Programmatic tool calling | ✅ | ✅ | ❌ | ❌ | β | |
 | &nbsp;&nbsp;MCP connector | β | β | ❌ | ❌ | β | |
 | &nbsp;&nbsp;Managed Agents | β | β | ❌ | ❌ | ❌ | Foundry ❌ inferred (not in Foundry docs either way) |
-| &nbsp;&nbsp;Self-hosted sandboxes | β | β | ❌ | ❌ | ❌ | P-AWS: `GET /v1/environments/{id}/work` list endpoint not supported; other work endpoints OK |
+| &nbsp;&nbsp;Self-hosted sandboxes | β | β | ❌ | ❌ | ❌ | P-AWS: \`GET /v1/environments/{id}/work\` list endpoint not supported; other work endpoints OK |
 | **API endpoints** | | | | | | |
 | &nbsp;&nbsp;Message Batches | ✅ | ✅ | ❌ | ❌ | ❌ | |
 | &nbsp;&nbsp;Files API | β | β | ❌ | ❌ | β | |
 | &nbsp;&nbsp;Models API | ✅ | ✅ | ❌ | ❌ | ❌ | |
 | **Other** | | | | | | |
 | &nbsp;&nbsp;Mid-conversation system messages | ✅ | ✅ | ❌ | ❌ | ❌ | {{OPUS_NAME}} only |
-| &nbsp;&nbsp;Fast mode | β | ❌ | ❌ | ❌ | ❌ | Research preview, beta `fast-mode-2026-02-01`, first-party API only |
+| &nbsp;&nbsp;Fast mode | β | ❌ | ❌ | ❌ | ❌ | Research preview, beta \`fast-mode-2026-02-01\`, first-party API only |
 | &nbsp;&nbsp;Cache diagnostics | β | ❌ | ❌ | ❌ | ❌ | First-party API only |
-| &nbsp;&nbsp;Task budgets | β | β | ❌ | ❌ | ❌ | Beta header `task-budgets-2026-03-13`; 3P availability not documented — assume unsupported |
+| &nbsp;&nbsp;Task budgets | β | β | ❌ | ❌ | ❌ | Beta header \`task-budgets-2026-03-13\`; 3P availability not documented — assume unsupported |
 
 <!--
 GROUNDING (reviewer-only; stripped at runtime by processSkillMarkdown).

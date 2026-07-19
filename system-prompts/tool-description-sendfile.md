@@ -13,7 +13,7 @@ Send files to another Claude Code session — a peer session on this machine, or
 
 Use this when a file is the thing to hand over — a doc with figures, a screenshot, a report, a build artifact. For plain text, use ${SEND_MESSAGE_TOOL_NAME} instead. For agents inside this session (subagents, teammates), also use ${SEND_MESSAGE_TOOL_NAME} — they share your filesystem and can read the file at its path directly.
 
-`to` accepts a peer session name from ${LIST_AGENTS_TOOL_NAME}, or an explicit `uds:<socket>` / `bridge:<session id>` address.
+\`to\` accepts a peer session name from ${LIST_AGENTS_TOOL_NAME}, or an explicit \`uds:<socket>\` / \`bridge:<session id>\` address.
 
 Each file is capped at ${MAX_FILE_SIZE_MIB} MiB, at most ${MAX_FILES_PER_SEND} files per send. Files must exist on the local filesystem — write content to a file first if needed. The receiver verifies each file against a sha256 digest of what was sent (where the transport carries it) and refuses a mismatch with a visible note.
 

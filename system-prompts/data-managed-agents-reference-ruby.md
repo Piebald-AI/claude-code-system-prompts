@@ -18,13 +18,13 @@ gem install anthropic
 ## Client Initialization
 
 ```ruby
-require "anthropic"
+require \"anthropic\"
 
 # Default (uses ANTHROPIC_API_KEY env var)
 client = Anthropic::Client.new
 
 # Explicit API key
-client = Anthropic::Client.new(api_key: "your-api-key")
+client = Anthropic::Client.new(api_key: \"your-api-key\")
 ```
 
 > ⚠️ **Trailing underscores:** The Ruby SDK uses `system_:` and `send_(` (trailing underscore) to avoid shadowing `Kernel#system` and `Kernel#send`. Use these forms throughout managed-agents code.
@@ -35,40 +35,40 @@ client = Anthropic::Client.new(api_key: "your-api-key")
 
 ```ruby
 environment = client.beta.environments.create(
-  name: "my-dev-env",
+  name: \"my-dev-env\",
   config: {
-    type: "cloud",
-    networking: {type: "unrestricted"}
+    type: \"cloud\",
+    networking: {type: \"unrestricted\"}
   }
 )
-puts "Environment ID: #{environment.id}" # env_...
+puts \"Environment ID: #{environment.id}\" # env_...
 ```
 
 ---
 
 ## Create an Agent (required first step)
 
-> ⚠️ **There is no inline agent config.** `model`/`system_`/`tools` live on the agent object, not the session. Always start with `client.beta.agents.create()` — the session takes either `agent: agent.id` or the typed hash form `agent: {type: "agent", id: agent.id, version: agent.version}`.
+> ⚠️ **There is no inline agent config.** `model`/`system_`/`tools` live on the agent object, not the session. Always start with `client.beta.agents.create()` — the session takes either `agent: agent.id` or the typed hash form `agent: {type: \"agent\", id: agent.id, version: agent.version}`.
 
 ### Minimal
 
 ```ruby
 # 1. Create the agent (reusable, versioned)
 agent = client.beta.agents.create(
-  name: "Coding Assistant",
-  model: :"{{OPUS_ID}}",
-  system_: "You are a helpful coding assistant.",
-  tools: [{type: "agent_toolset_20260401"}]
+  name: \"Coding Assistant\",
+  model: :\"{{OPUS_ID}}\",
+  system_: \"You are a helpful coding assistant.\",
+  tools: [{type: \"agent_toolset_20260401\"}]
 )
 
 # 2. Start a session
 session = client.beta.sessions.create(
-  agent: {type: "agent", id: agent.id, version: agent.version},
+  agent: {type: \"agent\", id: agent.id, version: agent.version},
   environment_id: environment.id,
-  title: "Quickstart session"
+  title: \"Quickstart session\"
 )
-puts "Session ID: #{session.id}"
-puts "Trace: https://platform.claude.com/workspaces/default/sessions/#{session.id}"  # swap 'default' for your workspace ID if the API key is not in the Default workspace
+puts \"Session ID: #{session.id}\"
+puts \"Trace: https://platform.claude.com/workspaces/default/sessions/#{session.id}\"  # swap 'default' for your workspace ID if the API key is not in the Default workspace
 ```
 
 ### Updating an Agent
@@ -79,18 +79,18 @@ Updates create new versions; the agent object is immutable per version.
 updated_agent = client.beta.agents.update(
   agent.id,
   version: agent.version,
-  system_: "You are a helpful coding agent. Always write tests."
+  system_: \"You are a helpful coding agent. Always write tests.\"
 )
-puts "New version: #{updated_agent.version}"
+puts \"New version: #{updated_agent.version}\"
 
 # List all versions
 client.beta.agents.versions.list(agent.id).auto_paging_each do |version|
-  puts "Version #{version.version}: #{version.updated_at.iso8601}"
+  puts \"Version #{version.version}: #{version.updated_at.iso8601}\"
 end
 
 # Archive the agent
 archived = client.beta.agents.archive(agent.id)
-puts "Archived at: #{archived.archived_at.iso8601}"
+puts \"Archived at: #{archived.archived_at.iso8601}\"
 ```
 
 ---
@@ -101,8 +101,8 @@ puts "Archived at: #{archived.archived_at.iso8601}"
 client.beta.sessions.events.send_(
   session.id,
   events: [{
-    type: "user.message",
-    content: [{type: "text", text: "Review the auth module"}]
+    type: \"user.message\",
+    content: [{type: \"text\", text: \"Review the auth module\"}]
   }]
 )
 ```
@@ -120,23 +120,23 @@ stream = client.beta.sessions.events.stream_events(session.id)
 client.beta.sessions.events.send_(
   session.id,
   events: [{
-    type: "user.message",
-    content: [{type: "text", text: "Summarize the repo README"}]
+    type: \"user.message\",
+    content: [{type: \"text\", text: \"Summarize the repo README\"}]
   }]
 )
 
 stream.each do |event|
   case event.type
-  in :"agent.message"
+  in :\"agent.message\"
     event.content.each { |block| print block.text }
-  in :"agent.tool_use"
-    puts "\
-[Using tool: #{event.name}]"
-  in :"session.status_idle"
+  in :\"agent.tool_use\"
+    puts \"\
+[Using tool: #{event.name}]\"
+  in :\"session.status_idle\"
     break
-  in :"session.error"
-    puts "\
-[Error: #{event.error&.message || "unknown"}]"
+  in :\"session.error\"
+    puts \"\
+[Error: #{event.error&.message || \"unknown\"}]\"
     break
   else
     # ignore other event types
@@ -144,14 +144,14 @@ stream.each do |event|
 end
 ```
 
-> ℹ️ Event `.type` is a Symbol (compare with `:"agent.message"`, not `"agent.message"`).
+> ℹ️ Event `.type` is a Symbol (compare with `:\"agent.message\"`, not `\"agent.message\"`).
 
 ### Reconnecting and Tailing
 
 When reconnecting mid-session, list past events first to dedupe, then tail live events:
 
 ```ruby
-require "set"
+require \"set\"
 
 stream = client.beta.sessions.events.stream_events(session.id)
 
@@ -164,9 +164,9 @@ stream.each do |event|
   next if seen_event_ids.include?(event.id)
   seen_event_ids << event.id
   case event.type
-  in :"agent.message"
+  in :\"agent.message\"
     event.content.each { |block| print block.text }
-  in :"session.status_idle"
+  in :\"session.status_idle\"
     break
   else
     # ignore other event types
@@ -186,7 +186,7 @@ end
 
 ```ruby
 client.beta.sessions.events.list(session.id).auto_paging_each do |event|
-  puts "#{event.type}: #{event.id}"
+  puts \"#{event.type}: #{event.id}\"
 end
 ```
 
@@ -195,10 +195,10 @@ end
 ## Upload a File
 
 ```ruby
-require "pathname"
+require \"pathname\"
 
-file = client.beta.files.upload(file: Pathname("data.csv"))
-puts "File ID: #{file.id}"
+file = client.beta.files.upload(file: Pathname(\"data.csv\"))
+puts \"File ID: #{file.id}\"
 
 # Mount in a session
 session = client.beta.sessions.create(
@@ -206,9 +206,9 @@ session = client.beta.sessions.create(
   environment_id: environment.id,
   resources: [
     {
-      type: "file",
+      type: \"file\",
       file_id: file.id,
-      mount_path: "/workspace/data.csv"
+      mount_path: \"/workspace/data.csv\"
     }
   ]
 )
@@ -220,14 +220,14 @@ session = client.beta.sessions.create(
 # Attach an additional file to an open session
 resource = client.beta.sessions.resources.add(
   session.id,
-  type: "file",
+  type: \"file\",
   file_id: file.id
 )
-puts resource.id # "sesrsc_01ABC..."
+puts resource.id # \"sesrsc_01ABC...\"
 
 # List resources on the session
 listed = client.beta.sessions.resources.list(session.id)
-listed.data.each { |entry| puts "#{entry.id} #{entry.type}" }
+listed.data.each { |entry| puts \"#{entry.id} #{entry.type}\" }
 
 # Detach a resource
 client.beta.sessions.resources.delete(resource.id, session_id: session.id)
@@ -238,9 +238,9 @@ client.beta.sessions.resources.delete(resource.id, session_id: session.id)
 ## List and Download Session Files
 
 ```ruby
-files = client.beta.files.list(scope_id: "sesn_abc123", betas: ["managed-agents-2026-04-01"])
+files = client.beta.files.list(scope_id: \"sesn_abc123\", betas: [\"managed-agents-2026-04-01\"])
 content = client.beta.files.download(files.data[0].id)
-File.binwrite("output.txt", content.read)
+File.binwrite(\"output.txt\", content.read)
 ```
 
 ---
@@ -271,24 +271,24 @@ client.beta.sessions.delete(session.id)
 ```ruby
 # Agent declares MCP server (no auth here — auth goes in a vault)
 agent = client.beta.agents.create(
-  name: "GitHub Assistant",
-  model: :"{{OPUS_ID}}",
+  name: \"GitHub Assistant\",
+  model: :\"{{OPUS_ID}}\",
   mcp_servers: [
     {
-      type: "url",
-      name: "github",
-      url: "https://api.githubcopilot.com/mcp/"
+      type: \"url\",
+      name: \"github\",
+      url: \"https://api.githubcopilot.com/mcp/\"
     }
   ],
   tools: [
-    {type: "agent_toolset_20260401"},
-    {type: "mcp_toolset", mcp_server_name: "github"}
+    {type: \"agent_toolset_20260401\"},
+    {type: \"mcp_toolset\", mcp_server_name: \"github\"}
   ]
 )
 
 # Session attaches vault(s) containing credentials for those MCP server URLs
 session = client.beta.sessions.create(
-  agent: {type: "agent", id: agent.id, version: agent.version},
+  agent: {type: \"agent\", id: agent.id, version: agent.version},
   environment_id: environment.id,
   vault_ids: [vault.id]
 )
@@ -303,28 +303,28 @@ See `shared/managed-agents-tools.md` §Vaults for creating vaults and adding cre
 ```ruby
 # Create a vault
 vault = client.beta.vaults.create(
-  display_name: "Alice",
-  metadata: {external_user_id: "usr_abc123"}
+  display_name: \"Alice\",
+  metadata: {external_user_id: \"usr_abc123\"}
 )
-puts vault.id # "vlt_01ABC..."
+puts vault.id # \"vlt_01ABC...\"
 
 # Add an OAuth credential
 credential = client.beta.vaults.credentials.create(
   vault.id,
-  display_name: "Alice's Slack",
+  display_name: \"Alice's Slack\",
   auth: {
-    type: "mcp_oauth",
-    mcp_server_url: "https://mcp.slack.com/mcp",
-    access_token: "xoxp-...",
-    expires_at: "2026-04-15T00:00:00Z",
+    type: \"mcp_oauth\",
+    mcp_server_url: \"https://mcp.slack.com/mcp\",
+    access_token: \"xoxp-...\",
+    expires_at: \"2026-04-15T00:00:00Z\",
     refresh: {
-      token_endpoint: "https://slack.com/api/oauth.v2.access",
-      client_id: "1234567890.0987654321",
-      scope: "channels:read chat:write",
-      refresh_token: "xoxe-1-...",
+      token_endpoint: \"https://slack.com/api/oauth.v2.access\",
+      client_id: \"1234567890.0987654321\",
+      scope: \"channels:read chat:write\",
+      refresh_token: \"xoxe-1-...\",
       token_endpoint_auth: {
-        type: "client_secret_post",
-        client_secret: "abc123..."
+        type: \"client_secret_post\",
+        client_secret: \"abc123...\"
       }
     }
   }
@@ -335,10 +335,10 @@ client.beta.vaults.credentials.update(
   credential.id,
   vault_id: vault.id,
   auth: {
-    type: "mcp_oauth",
-    access_token: "xoxp-new-...",
-    expires_at: "2026-05-15T00:00:00Z",
-    refresh: {refresh_token: "xoxe-1-new-..."}
+    type: \"mcp_oauth\",
+    access_token: \"xoxp-new-...\",
+    expires_at: \"2026-05-15T00:00:00Z\",
+    refresh: {refresh_token: \"xoxe-1-new-...\"}
   }
 )
 
@@ -359,10 +359,10 @@ session = client.beta.sessions.create(
   vault_ids: [vault.id],
   resources: [
     {
-      type: "github_repository",
-      url: "https://github.com/org/repo",
-      mount_path: "/workspace/repo",
-      authorization_token: "ghp_your_github_token"
+      type: \"github_repository\",
+      url: \"https://github.com/org/repo\",
+      mount_path: \"/workspace/repo\",
+      authorization_token: \"ghp_your_github_token\"
     }
   ]
 )
@@ -373,16 +373,16 @@ Multiple repositories on the same session:
 ```ruby
 resources = [
   {
-    type: "github_repository",
-    url: "https://github.com/org/frontend",
-    mount_path: "/workspace/frontend",
-    authorization_token: "ghp_your_github_token"
+    type: \"github_repository\",
+    url: \"https://github.com/org/frontend\",
+    mount_path: \"/workspace/frontend\",
+    authorization_token: \"ghp_your_github_token\"
   },
   {
-    type: "github_repository",
-    url: "https://github.com/org/backend",
-    mount_path: "/workspace/backend",
-    authorization_token: "ghp_your_github_token"
+    type: \"github_repository\",
+    url: \"https://github.com/org/backend\",
+    mount_path: \"/workspace/backend\",
+    authorization_token: \"ghp_your_github_token\"
   }
 ]
 ```
@@ -396,6 +396,6 @@ repo_resource_id = listed.data.first.id
 client.beta.sessions.resources.update(
   repo_resource_id,
   session_id: session.id,
-  authorization_token: "ghp_your_new_github_token"
+  authorization_token: \"ghp_your_new_github_token\"
 )
 ```

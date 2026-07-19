@@ -38,7 +38,7 @@ NOTE that you should not use this tool if there is only one trivial task to do. 
 - **description**: What needs to be done
 - **activeForm** (optional): Present continuous form shown in the spinner when the task is in_progress (e.g., "Fixing authentication bug"). If omitted, the spinner shows the subject instead.
 
-All tasks are created with status `pending`.
+All tasks are created with status \`pending\`.
 
 ## Tips
 

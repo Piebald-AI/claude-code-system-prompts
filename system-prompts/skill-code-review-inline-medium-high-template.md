@@ -17,7 +17,7 @@ variables:
   - "REVIEW_OUTPUT_FORMATTER_FN"
   - "MAX_FINDINGS"
 -->
-`${REVIEW_EFFORT_SUMMARY}`
+\`${REVIEW_EFFORT_SUMMARY}\`
 
 ${REVIEW_EFFORT_INTRO}
 
@@ -25,8 +25,8 @@ ${REVIEW_ANGLE_SHARED_INTRO}
 ## Phase 1 — Find candidates (3 correctness angles + 3 cleanup angles + 1 altitude angle + 1 conventions angle, up to 6 each)
 
 Run **8 independent finder angles** in sequence yourself, in THIS context — do NOT spawn subagents for them. Each
-surfaces **up to 6 candidate findings** with `file`, `line`, a one-line
-`summary`, and a concrete `failure_scenario`.
+surfaces **up to 6 candidate findings** with \`file\`, \`line\`, a one-line
+\`summary\`, and a concrete \`failure_scenario\`.
 
 ${REVIEW_CORRECTNESS_ANGLES}
 ${REVIEW_REUSE_ANGLE}

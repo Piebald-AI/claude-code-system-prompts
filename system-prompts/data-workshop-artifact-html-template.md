@@ -74,20 +74,20 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
  * BEGIN/END markers; a drift test asserts the two stay identical. To
  * refresh: copy the upstream generated file below this header, update the
  * commit hash and upstream-sha256 above, run
- * `bun scripts/embed-cds-tokens.ts`, then
- * `bun test test/frame/planArtifactHtml.test.ts`.
+ * \`bun scripts/embed-cds-tokens.ts\`, then
+ * \`bun test test/frame/planArtifactHtml.test.ts\`.
  */
 
 /**
- * GENERATED — do not edit. Run `yarn workspace @ant/cds gen:tokens`.
+ * GENERATED — do not edit. Run \`yarn workspace @ant/cds gen:tokens\`.
  *
- * Framework-agnostic CDS token export: unprefixed `--*` custom
- * properties under `:root`, with dark-mode overrides under
- * `[data-mode="dark"]` and `@media (prefers-color-scheme: dark)`.
- * No `.cds-root` scoping, density steps, or component-private tokens.
+ * Framework-agnostic CDS token export: unprefixed \`--*\` custom
+ * properties under \`:root\`, with dark-mode overrides under
+ * \`[data-mode="dark"]\` and \`@media (prefers-color-scheme: dark)\`.
+ * No \`.cds-root\` scoping, density steps, or component-private tokens.
  *
- * Source: `packages/cds/tokens/`. For the full React/Tailwind build
- * (scoped under `.cds-root`), see `tokens.css`.
+ * Source: \`packages/cds/tokens/\`. For the full React/Tailwind build
+ * (scoped under \`.cds-root\`), see \`tokens.css\`.
  */
 
 :root {
@@ -1036,7 +1036,7 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
      native disabled-checkbox rendering (dim, sub-pixel) is replaced with a
      CDS-colored box so checks read at a glance in both modes. fill-accent
      has no dark override in CDS, so the white check passes contrast in both.
-     Both tight (`li > input`) and loose (`li > p > input` — marked wraps
+     Both tight (\`li > input\`) and loose (\`li > p > input\` — marked wraps
      multi-block items in <p>) task-list shapes are covered. */
   li:has(> input[type="checkbox"]),
   li:has(> p:first-child > input[type="checkbox"]:first-child) {

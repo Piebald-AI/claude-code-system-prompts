@@ -11,9 +11,9 @@ For conceptual overview (tool definitions, tool choice, tips), see [shared/tool-
 
 ### Defining a tool
 
-`Tool` (NOT `ToolParam`) with an `InputSchema` record. `InputSchema.Type` is auto-set to `"object"` by the constructor — don't set it. `ToolUnion` has an implicit conversion from `Tool`, triggered by the collection expression `[...]`.
+\`Tool\` (NOT \`ToolParam\`) with an \`InputSchema\` record. \`InputSchema.Type\` is auto-set to \`"object"\` by the constructor — don't set it. \`ToolUnion\` has an implicit conversion from \`Tool\`, triggered by the collection expression \`[...]\`.
 
-```csharp
+\`\`\`csharp
 using System.Text.Json;
 using Anthropic.Models.Messages;
 
@@ -36,16 +36,16 @@ var parameters = new MessageCreateParams
     ],
     Messages = [new() { Role = Role.User, Content = "Weather in Paris?" }],
 };
-```
+\`\`\`
 
-Derived from `anthropic-sdk-csharp/src/Anthropic/Models/Messages/Tool.cs` and `ToolUnion.cs:799` (implicit conversion).
+Derived from \`anthropic-sdk-csharp/src/Anthropic/Models/Messages/Tool.cs\` and \`ToolUnion.cs:799\` (implicit conversion).
 
 See [shared tool use concepts](../../shared/tool-use-concepts.md) for the loop pattern.
 ### Converting response content to the follow-up assistant message
 
-When echoing Claude's response back in the assistant turn, **there is no `.ToParam()` helper** — manually reconstruct each `ContentBlock` variant as its `*Param` counterpart. Do NOT use `new ContentBlockParam(block.Json)`: it compiles and serializes, but `.Value` stays `null` so `TryPick*`/`Validate()` fail (degraded JSON pass-through, not the typed path).
+When echoing Claude's response back in the assistant turn, **there is no \`.ToParam()\` helper** — manually reconstruct each \`ContentBlock\` variant as its \`*Param\` counterpart. Do NOT use \`new ContentBlockParam(block.Json)\`: it compiles and serializes, but \`.Value\` stays \`null\` so \`TryPick*\`/\`Validate()\` fail (degraded JSON pass-through, not the typed path).
 
-```csharp
+\`\`\`csharp
 using Anthropic.Models.Messages;
 
 Message response = await client.Messages.Create(parameters);
@@ -100,15 +100,15 @@ List<MessageParam> followUpMessages =
     new() { Role = Role.Assistant, Content = assistantContent },
     new() { Role = Role.User, Content = toolResults },
 ];
-```
+\`\`\`
 
-`ToolResultBlockParam` has no tuple constructor — use the object initializer. `Content` is a string-or-list union; a plain `string` implicitly converts.
+\`ToolResultBlockParam\` has no tuple constructor — use the object initializer. \`Content\` is a string-or-list union; a plain \`string\` implicitly converts.
 
 ---
 
 ## Structured Output
 
-```csharp
+\`\`\`csharp
 OutputConfig = new OutputConfig {
     Format = new JsonOutputFormat {
         Schema = new Dictionary<string, JsonElement> {
@@ -119,34 +119,34 @@ OutputConfig = new OutputConfig {
         },
     },
 },
-```
+\`\`\`
 
-`JsonOutputFormat.Type` is auto-set to `"json_schema"` by the constructor. `Schema` is `required`.
+\`JsonOutputFormat.Type\` is auto-set to \`"json_schema"\` by the constructor. \`Schema\` is \`required\`.
 
 ---
 
 ## Anthropic-Defined Tools
 
-Web search, bash, text editor, and code execution are Anthropic-defined tools with built-in schemas. Web search and code execution are server-executed; bash and text editor are client-executed (you handle the `tool_use` locally — see `shared/tool-use-concepts.md`). Type names are version-suffixed; constructors auto-set `name`/`type`. **Wrap each in `new ToolUnion(...)` explicitly.**
+Web search, bash, text editor, and code execution are Anthropic-defined tools with built-in schemas. Web search and code execution are server-executed; bash and text editor are client-executed (you handle the \`tool_use\` locally — see \`shared/tool-use-concepts.md\`). Type names are version-suffixed; constructors auto-set \`name\`/\`type\`. **Wrap each in \`new ToolUnion(...)\` explicitly.**
 
-```csharp
+\`\`\`csharp
 Tools = [
     new ToolUnion(new WebSearchTool20260209()),
     new ToolUnion(new ToolBash20250124()),
     new ToolUnion(new ToolTextEditor20250728()),
     new ToolUnion(new CodeExecutionTool20260120()),
 ],
-```
+\`\`\`
 
-Also available: `new ToolUnion(new WebFetchTool20260209())`, `new ToolUnion(new MemoryTool20250818())`. `WebSearchTool20260209` optionals: `AllowedDomains`, `BlockedDomains`, `MaxUses`, `UserLocation`.
+Also available: \`new ToolUnion(new WebFetchTool20260209())\`, \`new ToolUnion(new MemoryTool20250818())\`. \`WebSearchTool20260209\` optionals: \`AllowedDomains\`, \`BlockedDomains\`, \`MaxUses\`, \`UserLocation\`.
 
 ---
 
 ## Tool Runner (Beta)
 
-The C# SDK provides a `BetaToolRunner` for automatic tool execution loops. Define tools with raw JSON schemas, and the runner handles the API call → tool execution → result feedback loop.
+The C# SDK provides a \`BetaToolRunner\` for automatic tool execution loops. Define tools with raw JSON schemas, and the runner handles the API call → tool execution → result feedback loop.
 
-```csharp
+\`\`\`csharp
 using Anthropic.Models.Beta.Messages;
 
 // Define tools and create params as shown in the Tool Use section above,
@@ -163,7 +163,7 @@ await foreach (BetaMessage message in runner)
         }
     }
 }
-```
+\`\`\`
 
 ---
 

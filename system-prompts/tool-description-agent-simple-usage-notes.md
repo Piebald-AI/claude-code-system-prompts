@@ -27,5 +27,5 @@ ${"For a single-fact lookup where you already know the file, symbol, or value, s
 
 - ${CAN_RUN_BACKGROUND_AGENTS?"The agent's final report is not shown to the user — relay what matters.":"The agent's final message is returned to you as the tool result; it is not shown to the user — relay what matters."}
 - Use ${SEND_MESSAGE_TOOL_NAME} with the agent's ID or name to continue a previously spawned agent with its context intact; a new ${AGENT_TOOL_NAME} call starts fresh${CAN_FORK_CONTEXT?' (except subagent_type: "fork", which inherits your context)':""}.
-- Each agent type's model, reasoning effort, and tools come from its definition (`.claude/agents/*.md` frontmatter or SDK `agents`).
-- `isolation: "worktree"` gives the agent its own git worktree (auto-cleaned if unchanged).${REMOTE_ISOLATION_NOTE}${RUN_IN_BACKGROUND_NOTE}${CONTEXT_RESTRICTION_NOTE}
+- Each agent type's model, reasoning effort, and tools come from its definition (\`.claude/agents/*.md\` frontmatter or SDK \`agents\`).
+- \`isolation: "worktree"\` gives the agent its own git worktree (auto-cleaned if unchanged).${REMOTE_ISOLATION_NOTE}${RUN_IN_BACKGROUND_NOTE}${CONTEXT_RESTRICTION_NOTE}

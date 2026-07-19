@@ -30,7 +30,7 @@ Write from this table instead of `javap`/jar inspection. Endpoint column tells y
 | Feature | Endpoint | Key Java types / builder calls |
 |---|---|---|
 | User profiles | beta | `client.beta().userProfiles().create(...)` / `.retrieve(id)` / `.list()`. Pass the returned profile id on the beta `MessageCreateParams`. Requires a beta header — check the SDK's beta-headers reference for the current flag. |
-| Agent Skills | beta | `BetaContainerParams`, `BetaSkillParams`, `BetaCodeExecutionTool20250825`. `.addBeta("code-execution-2025-08-25").addBeta("skills-2025-10-02")`. Download the output via `client.beta().files().download(fileId)`. |
+| Agent Skills | beta | `BetaContainerParams`, `BetaSkillParams`, `BetaCodeExecutionTool20250825`. `.addBeta(\"code-execution-2025-08-25\").addBeta(\"skills-2025-10-02\")`. Download the output via `client.beta().files().download(fileId)`. |
 | Cache diagnostics | beta | `BetaDiagnosticsParam`, `BetaCacheControlEphemeral` |
 | Context editing | beta | `.contextManagement(BetaContextManagementConfig.builder()…)`. The edit strategy is a `BetaClearToolUses20250919Edit` (or `BetaClearThinking20251015Edit`); its trigger is a `BetaInputTokensTrigger` built separately and passed to the edit's builder — there is no direct `.inputTokensTrigger(N)` shortcut on the edit builder. `javap` the edit and trigger classes for the exact setter names. |
 | Memory tool | non-beta | `.addTool(MemoryTool20250818.builder().build())` from `com.anthropic.models.messages` |
@@ -59,7 +59,7 @@ Maven:
 Gradle:
 
 ```groovy
-implementation("com.anthropic:anthropic-java:2.34.0")
+implementation(\"com.anthropic:anthropic-java:2.34.0\")
 ```
 
 ## Client Initialization
@@ -73,7 +73,7 @@ AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
 // Explicit API key
 AnthropicClient client = AnthropicOkHttpClient.builder()
-    .apiKey("your-api-key")
+    .apiKey(\"your-api-key\")
     .build();
 ```
 
@@ -89,7 +89,7 @@ import com.anthropic.models.messages.Model;
 MessageCreateParams params = MessageCreateParams.builder()
     .model(Model.CLAUDE_OPUS_4_8)
     .maxTokens(16000L)
-    .addUserMessage("What is the capital of France?")
+    .addUserMessage(\"What is the capital of France?\")
     .build();
 
 Message response = client.messages().create(params);
@@ -117,11 +117,11 @@ MessageCreateParams params = MessageCreateParams.builder()
     .model(Model.CLAUDE_SONNET_4_6)
     .maxTokens(16000L)
     .thinking(ThinkingConfigAdaptive.builder().build())
-    .addUserMessage("Solve this step by step: 27 * 453")
+    .addUserMessage(\"Solve this step by step: 27 * 453\")
     .build();
 
 for (ContentBlock block : client.messages().create(params).content()) {
-    block.thinking().ifPresent(t -> System.out.println("[thinking] " + t.thinking()));
+    block.thinking().ifPresent(t -> System.out.println(\"[thinking] \" + t.thinking()));
     block.text().ifPresent(t -> System.out.println(t.text()));
 }
 ```
@@ -177,7 +177,7 @@ import com.anthropic.models.messages.MessageCountTokensParams;
 long tokens = client.messages().countTokens(
     MessageCountTokensParams.builder()
         .model(Model.CLAUDE_SONNET_4_6)
-        .addUserMessage("Hello")
+        .addUserMessage(\"Hello\")
         .build()
 ).inputTokens();
 ```
@@ -195,8 +195,8 @@ import com.anthropic.models.messages.TextBlockParam;
 
 DocumentBlockParam doc = DocumentBlockParam.builder()
     .source(Base64PdfSource.builder().data(base64String).build())
-    // or .source(UrlPdfSource.builder().url("https://...").build())
-    .title("My Document")        // optional
+    // or .source(UrlPdfSource.builder().url(\"https://...\").build())
+    .title(\"My Document\")        // optional
     .build();
 ```
 
@@ -205,19 +205,19 @@ For **Files API** document references, use the beta path and beta types — see 
 ```java
 .addUserMessageOfBlockParams(List.of(
     ContentBlockParam.ofDocument(doc),
-    ContentBlockParam.ofText(TextBlockParam.builder().text("Summarize this").build())))
+    ContentBlockParam.ofText(TextBlockParam.builder().text(\"Summarize this\").build())))
 ```
 
 ---
 
 ## Stop Details
 
-When `stopReason()` is `"refusal"`, the response includes structured `stopDetails()`:
+When `stopReason()` is `\"refusal\"`, the response includes structured `stopDetails()`:
 
 ```java
 response.stopDetails().ifPresent(details -> {
-    System.out.println("Category: " + details.category());
-    System.out.println("Explanation: " + details.explanation());
+    System.out.println(\"Category: \" + details.category());
+    System.out.println(\"Explanation: \" + details.explanation());
 });
 ```
 
@@ -234,7 +234,7 @@ try {
     client.messages().create(params);
 } catch (AnthropicServiceException e) {
     e.errorType().ifPresent(type ->
-        System.out.println("Error type: " + type)  // RATE_LIMIT_ERROR, OVERLOADED_ERROR, etc.
+        System.out.println(\"Error type: \" + type)  // RATE_LIMIT_ERROR, OVERLOADED_ERROR, etc.
     );
 }
 ```

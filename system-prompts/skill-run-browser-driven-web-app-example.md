@@ -6,7 +6,7 @@ ccVersion: "2.1.213"
 # Example: Browser-driven web app
 
 You have a dev server that serves HTML to a browser. An agent in a
-headless container can't open a browser window — so "run the app" means
+headless container can't open a browser window — so \"run the app\" means
 launching the dev server, driving a headless Chromium against it, and
 producing a screenshot that proves the page rendered.
 
@@ -39,8 +39,8 @@ chromium-cli --session app <<'EOF'
 nav http://localhost:3000
 wait-for text=Dashboard
 screenshot
-click button:has-text("New item")
-fill input[name="title"] Smoke test
+click button:has-text(\"New item\")
+fill input[name=\"title\"] Smoke test
 press Enter
 wait-for text=Smoke test
 screenshot

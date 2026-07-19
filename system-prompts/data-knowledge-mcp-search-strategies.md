@@ -53,4 +53,4 @@ Query patterns for gathering organizational context during plugin customization.
 
 ## When Knowledge MCPs Are Unavailable
 
-If no knowledge MCPs are configured, skip automatic discovery and proceed directly to AskUserQuestion for all categories. Note: AskUserQuestion always includes a Skip button and a free-text input box for custom answers, so do not include `None` or `Other` as options.
+If no knowledge MCPs are configured, skip automatic discovery and proceed directly to AskUserQuestion for all categories. Note: AskUserQuestion always includes a Skip button and a free-text input box for custom answers, so do not include \`None\` or \`Other\` as options.

@@ -9,11 +9,11 @@ For conceptual overview (tool definitions, tool choice, tips), see [shared/tool-
 
 ## Tool Use (Beta)
 
-The Java SDK supports beta tool use with annotated classes. Tool classes implement `Supplier<String>` for automatic execution via `BetaToolRunner`.
+The Java SDK supports beta tool use with annotated classes. Tool classes implement \`Supplier<String>\` for automatic execution via \`BetaToolRunner\`.
 
 ### Tool Runner (automatic loop)
 
-```java
+\`\`\`java
 import com.anthropic.models.beta.messages.MessageCreateParams;
 import com.anthropic.models.beta.messages.BetaMessage;
 import com.anthropic.helpers.BetaToolRunner;
@@ -44,13 +44,13 @@ BetaToolRunner toolRunner = client.beta().messages().toolRunner(
 for (BetaMessage message : toolRunner) {
     System.out.println(message);
 }
-```
+\`\`\`
 
 ### Memory Tool
 
-The Java SDK provides `BetaMemoryToolHandler` for implementing the memory tool backend. You supply a handler that manages file storage, and the `BetaToolRunner` handles memory tool calls automatically.
+The Java SDK provides \`BetaMemoryToolHandler\` for implementing the memory tool backend. You supply a handler that manages file storage, and the \`BetaToolRunner\` handles memory tool calls automatically.
 
-```java
+\`\`\`java
 import com.anthropic.helpers.BetaMemoryToolHandler;
 import com.anthropic.helpers.BetaToolRunner;
 import com.anthropic.models.beta.messages.BetaMemoryTool20250818;
@@ -77,15 +77,15 @@ BetaToolRunner toolRunner = client.beta().messages().toolRunner(
 for (BetaMessage message : toolRunner) {
     System.out.println(message);
 }
-```
+\`\`\`
 
 See the [shared memory tool concepts](../../shared/tool-use-concepts.md) for more details on the memory tool.
 
 ### Non-Beta Tool Declaration (manual JSON schema)
 
-`Tool.InputSchema.Properties` is a freeform `Map<String, JsonValue>` wrapper — build property schemas via `putAdditionalProperty`. `type: "object"` is the default. The builder has a direct `.addTool(Tool)` overload that wraps in `ToolUnion` automatically.
+\`Tool.InputSchema.Properties\` is a freeform \`Map<String, JsonValue>\` wrapper — build property schemas via \`putAdditionalProperty\`. \`type: "object"\` is the default. The builder has a direct \`.addTool(Tool)\` overload that wraps in \`ToolUnion\` automatically.
 
-```java
+\`\`\`java
 import com.anthropic.core.JsonValue;
 import com.anthropic.models.messages.Tool;
 
@@ -106,15 +106,15 @@ MessageCreateParams params = MessageCreateParams.builder()
     .addTool(tool)
     .addUserMessage("Weather in Paris?")
     .build();
-```
+\`\`\`
 
-For manual tool loops, handle `tool_use` blocks in the response, send `tool_result` back, loop until `stop_reason` is `"end_turn"`. See [shared tool use concepts](../../shared/tool-use-concepts.md).
+For manual tool loops, handle \`tool_use\` blocks in the response, send \`tool_result\` back, loop until \`stop_reason\` is \`"end_turn"\`. See [shared tool use concepts](../../shared/tool-use-concepts.md).
 
-### Building `MessageParam` with Content Blocks (Tool Result Round-Trip)
+### Building \`MessageParam\` with Content Blocks (Tool Result Round-Trip)
 
-`MessageParam.Content` is an inner union class (string | list). Use the builder's `.contentOfBlockParams(List<ContentBlockParam>)` alias — there is NO separate `MessageParamContent` class with a static `ofBlockParams`:
+\`MessageParam.Content\` is an inner union class (string | list). Use the builder's \`.contentOfBlockParams(List<ContentBlockParam>)\` alias — there is NO separate \`MessageParamContent\` class with a static \`ofBlockParams\`:
 
-```java
+\`\`\`java
 import com.anthropic.models.messages.MessageParam;
 import com.anthropic.models.messages.ContentBlockParam;
 import com.anthropic.models.messages.ToolResultBlockParam;
@@ -130,15 +130,15 @@ MessageParam toolResultMsg = MessageParam.builder()
     .role(MessageParam.Role.USER)
     .contentOfBlockParams(results)   // builder alias for Content.ofBlockParams(...)
     .build();
-```
+\`\`\`
 
 ---
 
 ## Structured Output
 
-The class-based overload auto-derives the JSON schema from your POJO and gives you a typed `.text()` return — no manual schema, no manual parsing.
+The class-based overload auto-derives the JSON schema from your POJO and gives you a typed \`.text()\` return — no manual schema, no manual parsing.
 
-```java
+\`\`\`java
 import com.anthropic.models.messages.StructuredMessageCreateParams;
 
 record Book(String title, String author) {}
@@ -157,17 +157,17 @@ client.messages().create(params).content().stream()
         // typed.text() returns BookList, not String
         for (Book b : typed.text().books()) System.out.println(b.title());
     });
-```
+\`\`\`
 
-Supports Jackson annotations: `@JsonPropertyDescription`, `@JsonIgnore`, `@ArraySchema(minItems=...)`. Manual schema path: `OutputConfig.builder().format(JsonOutputFormat.builder().schema(...).build())`.
+Supports Jackson annotations: \`@JsonPropertyDescription\`, \`@JsonIgnore\`, \`@ArraySchema(minItems=...)\`. Manual schema path: \`OutputConfig.builder().format(JsonOutputFormat.builder().schema(...).build())\`.
 
 ---
 
 ## Anthropic-Defined Tools
 
-Version-suffixed types; `name`/`type` auto-set by builder. Direct `.addTool()` overloads exist for most tool types; where one is missing (newer or less-common tools — see the advisor note below), wrap via the union type's static factory: `.addTool(BetaToolUnion.of<ToolName>(builder…build()))`. Web search and code execution are server-executed; bash and text editor are client-executed (you handle the `tool_use` locally — see `shared/tool-use-concepts.md`).
+Version-suffixed types; \`name\`/\`type\` auto-set by builder. Direct \`.addTool()\` overloads exist for most tool types; where one is missing (newer or less-common tools — see the advisor note below), wrap via the union type's static factory: \`.addTool(BetaToolUnion.of<ToolName>(builder…build()))\`. Web search and code execution are server-executed; bash and text editor are client-executed (you handle the \`tool_use\` locally — see \`shared/tool-use-concepts.md\`).
 
-```java
+\`\`\`java
 import com.anthropic.models.messages.WebSearchTool20260209;
 import com.anthropic.models.messages.ToolBash20250124;
 import com.anthropic.models.messages.ToolTextEditor20250728;
@@ -180,15 +180,15 @@ import com.anthropic.models.messages.CodeExecutionTool20260120;
 .addTool(ToolBash20250124.builder().build())
 .addTool(ToolTextEditor20250728.builder().build())
 .addTool(CodeExecutionTool20260120.builder().build())
-```
+\`\`\`
 
-Also available: `WebFetchTool20260209`, `MemoryTool20250818`, `ToolSearchToolBm25_20251119`. For the advisor tool, use `BetaAdvisorTool20260301` in the beta namespace with `.addBeta("advisor-tool-2026-03-01")` (server-side; advisor model ≥ executor model). There is no direct `.addTool(BetaAdvisorTool20260301)` overload on the beta builder — wrap it via the `BetaToolUnion` static factory for the advisor type; if `javac` rejects the specific factory method name, `javap com.anthropic.models.beta.messages.BetaToolUnion | grep -i advisor` shows the exact one.
+Also available: \`WebFetchTool20260209\`, \`MemoryTool20250818\`, \`ToolSearchToolBm25_20251119\`. For the advisor tool, use \`BetaAdvisorTool20260301\` in the beta namespace with \`.addBeta("advisor-tool-2026-03-01")\` (server-side; advisor model ≥ executor model). There is no direct \`.addTool(BetaAdvisorTool20260301)\` overload on the beta builder — wrap it via the \`BetaToolUnion\` static factory for the advisor type; if \`javac\` rejects the specific factory method name, \`javap com.anthropic.models.beta.messages.BetaToolUnion | grep -i advisor\` shows the exact one.
 
 ### Beta namespace (MCP, compaction)
 
-For beta-only features use `com.anthropic.models.beta.messages.*` — class names have a `Beta` prefix AND live in the beta package. The beta `MessageCreateParams.Builder` has direct `.addTool(BetaToolBash20250124)` overloads AND `.addMcpServer()`:
+For beta-only features use \`com.anthropic.models.beta.messages.*\` — class names have a \`Beta\` prefix AND live in the beta package. The beta \`MessageCreateParams.Builder\` has direct \`.addTool(BetaToolBash20250124)\` overloads AND \`.addMcpServer()\`:
 
-```java
+\`\`\`java
 import com.anthropic.models.beta.messages.MessageCreateParams;
 import com.anthropic.models.beta.messages.BetaToolBash20250124;
 import com.anthropic.models.beta.messages.BetaCodeExecutionTool20260120;
@@ -208,13 +208,13 @@ MessageCreateParams params = MessageCreateParams.builder()
     .build();
 
 client.beta().messages().create(params);
-```
+\`\`\`
 
-`BetaTool*` types are NOT interchangeable with non-beta `Tool*` — pick one namespace per request.
+\`BetaTool*\` types are NOT interchangeable with non-beta \`Tool*\` — pick one namespace per request.
 
-**Reading server-tool blocks in the response:** `ServerToolUseBlock` has `.id()`, `.name()` (enum), and `._input()` returning raw `JsonValue` — there is NO typed `.input()`. For code execution results, unwrap two levels:
+**Reading server-tool blocks in the response:** \`ServerToolUseBlock\` has \`.id()\`, \`.name()\` (enum), and \`._input()\` returning raw \`JsonValue\` — there is NO typed \`.input()\`. For code execution results, unwrap two levels:
 
-```java
+\`\`\`java
 for (ContentBlock block : response.content()) {
     block.serverToolUse().ifPresent(stu -> {
         System.out.println("tool: " + stu.name() + " input: " + stu._input());
@@ -227,7 +227,7 @@ for (ContentBlock block : response.content()) {
         });
     });
 }
-```
+\`\`\`
 
 ---
 

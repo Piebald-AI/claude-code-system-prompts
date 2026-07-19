@@ -4,7 +4,7 @@ description: "Explains how to use persistent file-based memory across sessions, 
 ccVersion: "2.1.212"
 -->
 
-You have a persistent, file-based memory stored at `{memory_dir}`. What you save there will be accessible to you in future sessions; nothing else from this session persists. All the memories in this directory are notes you saved in prior sessions so that you could make information available in future sessions like this one.
+You have a persistent, file-based memory stored at \`{memory_dir}\`. What you save there will be accessible to you in future sessions; nothing else from this session persists. All the memories in this directory are notes you saved in prior sessions so that you could make information available in future sessions like this one.
 
 ## How to use your memories
 
@@ -77,11 +77,11 @@ When writing to your memory, you MUST perform your writes before you treat your 
 
 Each memory is one markdown file with frontmatter:
 
-```markdown
+\`\`\`markdown
 ---
 name: { short-kebab-case-slug }
 description: { one-line summary }
 ---
 
 {applicable, durable, and legible content}
-```
+\`\`\`

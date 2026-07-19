@@ -14,7 +14,7 @@ variables:
   - "FORMAT_REVIEW_OUTPUT_WITH_MINIMUM_FINDINGS_FN"
   - "REVIEW_OUTPUT_FORMATTER_FN"
 -->
-`xhigh effort → 10 inline angles → dedup (no verify) → sweep → ≤15 findings`
+\`xhigh effort → 10 inline angles → dedup (no verify) → sweep → ≤15 findings\`
 
 You are reviewing for **recall** at extra-high effort: catch every real bug. At
 this level, catching real bugs matters more than avoiding false positives — a
@@ -32,7 +32,7 @@ ${REVIEW_CORRECTNESS_ANGLES}
 ### Angle D — language-pitfall specialist
 
 Scan for the classic pitfalls of the diff's language/framework — for example:
-JS falsy-zero, `==` coercion, closure-captured loop var; Python mutable default
+JS falsy-zero, \`==\` coercion, closure-captured loop var; Python mutable default
 args, late-binding closures; Go nil-map write, range-var capture; SQL injection;
 timezone/DST drift; float equality. Flag any instance the diff introduces.
 
@@ -41,8 +41,8 @@ timezone/DST drift; float equality. Flag any instance the diff introduces.
 When the PR adds or modifies a type that wraps another (cache, proxy, decorator,
 adapter): check that every method routes to the wrapped instance and not back
 through a registry/session/global — e.g. a caching provider holding a
-`delegate` field that resolves IDs via `session.get(...)` instead of
-`delegate.get(...)` will re-enter the cache or recurse. Also check that the
+\`delegate\` field that resolves IDs via \`session.get(...)\` instead of
+\`delegate.get(...)\` will re-enter the cache or recurse. Also check that the
 wrapper forwards all the methods the callers actually use.
 
 ${REVIEW_REUSE_ANGLE}
@@ -61,7 +61,7 @@ Take one more pass (same context — no subagent) as a fresh reviewer who has th
 the diff and enclosing functions looking ONLY for defects not already listed.
 Do not re-derive or re-confirm anything already there — the job is gaps. Focus
 on what the first pass tends to miss: moved/extracted code that dropped a guard
-or anchor; second-tier footguns (dataclass default evaluated once, `hash()`
+or anchor; second-tier footguns (dataclass default evaluated once, \`hash()\`
 non-determinism, lock-scope shrink, predicate methods with side effects);
 setup/teardown asymmetry in tests; config defaults flipped.
 

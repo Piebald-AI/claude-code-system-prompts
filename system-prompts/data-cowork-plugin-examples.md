@@ -13,7 +13,7 @@ A simple plugin with one skill and no other components.
 
 ### Structure
 
-```
+\`\`\`
 meeting-notes/
 ├── .claude-plugin/
 │   └── plugin.json
@@ -21,11 +21,11 @@ meeting-notes/
 │   └── meeting-notes/
 │       └── SKILL.md
 └── README.md
-```
+\`\`\`
 
 ### plugin.json
 
-```json
+\`\`\`json
 {
   "name": "meeting-notes",
   "version": "0.1.0",
@@ -34,11 +34,11 @@ meeting-notes/
     "name": "User"
   }
 }
-```
+\`\`\`
 
 ### skills/meeting-notes/SKILL.md
 
-```markdown
+\`\`\`markdown
 ---
 name: meeting-notes
 description: >
@@ -57,8 +57,8 @@ Include these sections:
 4. **Action Items** — table with columns: Owner, Task, Due Date
 5. **Open Questions** — anything unresolved
 
-Write the notes to a new file named after the transcript with `-notes` appended.
-```
+Write the notes to a new file named after the transcript with \`-notes\` appended.
+\`\`\`
 
 ---
 
@@ -68,7 +68,7 @@ A plugin that combines domain knowledge, user-initiated actions, and external se
 
 ### Structure
 
-```
+\`\`\`
 code-quality/
 ├── .claude-plugin/
 │   └── plugin.json
@@ -83,11 +83,11 @@ code-quality/
 │       └── SKILL.md
 ├── .mcp.json
 └── README.md
-```
+\`\`\`
 
 ### plugin.json
 
-```json
+\`\`\`json
 {
   "name": "code-quality",
   "version": "0.1.0",
@@ -96,11 +96,11 @@ code-quality/
     "name": "User"
   }
 }
-```
+\`\`\`
 
 ### skills/review-changes/SKILL.md
 
-```markdown
+\`\`\`markdown
 ---
 name: review-changes
 description: >
@@ -109,7 +109,7 @@ description: >
   wants a code quality pass on uncommitted work.
 ---
 
-Run `git diff --name-only` to get the list of changed files.
+Run \`git diff --name-only\` to get the list of changed files.
 
 For each changed file:
 
@@ -123,11 +123,11 @@ Present a summary with:
 - File path
 - Issue severity (Error, Warning, Info)
 - Description and suggested fix
-```
+\`\`\`
 
 ### skills/fix-lint/SKILL.md
 
-```markdown
+\`\`\`markdown
 ---
 name: fix-lint
 description: >
@@ -135,7 +135,7 @@ description: >
   "fix lint errors", "clean up linting", or "auto-fix my lint issues".
 ---
 
-Run the linter: `npm run lint -- --format json 2>&1`
+Run the linter: \`npm run lint -- --format json 2>&1\`
 
 Parse the linter output and fix each issue:
 
@@ -144,11 +144,11 @@ Parse the linter output and fix each issue:
 - Skip issues that require architectural changes
 
 After all fixes, run the linter again to confirm clean output.
-```
+\`\`\`
 
 ### skills/coding-standards/SKILL.md
 
-```yaml
+\`\`\`yaml
 ---
 name: coding-standards
 description: >
@@ -158,9 +158,9 @@ description: >
 metadata:
   version: "0.1.0"
 ---
-```
+\`\`\`
 
-```markdown
+\`\`\`markdown
 # Coding Standards
 
 Project coding standards and conventions for consistent, high-quality code.
@@ -182,12 +182,12 @@ Project coding standards and conventions for consistent, high-quality code.
 
 ## Additional Resources
 
-- **`references/style-rules.md`** — complete style rules by language
-```
+- **\`references/style-rules.md\`** — complete style rules by language
+\`\`\`
 
 ### .mcp.json
 
-```json
+\`\`\`json
 {
   "mcpServers": {
     "github": {
@@ -196,7 +196,7 @@ Project coding standards and conventions for consistent, high-quality code.
     }
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -206,7 +206,7 @@ A plugin using skills, agents, hooks, and MCP integration with tool-agnostic con
 
 ### Structure
 
-```
+\`\`\`
 engineering-workflow/
 ├── .claude-plugin/
 │   └── plugin.json
@@ -226,11 +226,11 @@ engineering-workflow/
 ├── .mcp.json
 ├── CONNECTORS.md
 └── README.md
-```
+\`\`\`
 
 ### plugin.json
 
-```json
+\`\`\`json
 {
   "name": "engineering-workflow",
   "version": "0.1.0",
@@ -240,11 +240,11 @@ engineering-workflow/
   },
   "keywords": ["engineering", "workflow", "tickets", "standup"]
 }
-```
+\`\`\`
 
 ### agents/ticket-analyzer.md
 
-```markdown
+\`\`\`markdown
 ---
 name: ticket-analyzer
 description: Use this agent when the user needs to analyze tickets, triage incoming issues, or prioritize a backlog.
@@ -295,11 +295,11 @@ You are a ticket analysis specialist. Analyze tickets for priority, effort, and 
 | ... | ... | ... | ... | ... |
 
 Followed by a brief rationale for the top 5 priorities.
-```
+\`\`\`
 
 ### hooks/hooks.json
 
-```json
+\`\`\`json
 {
   "SessionStart": [
     {
@@ -307,37 +307,37 @@ Followed by a brief rationale for the top 5 priorities.
       "hooks": [
         {
           "type": "command",
-          "command": "echo '## Team Context\n\nSprint cycle: 2 weeks. Standup: daily at 9:30 AM. Use ~~project tracker for ticket management.'",
+          "command": "echo '## Team Context\\n\\nSprint cycle: 2 weeks. Standup: daily at 9:30 AM. Use ~~project tracker for ticket management.'",
           "timeout": 5
         }
       ]
     }
   ]
 }
-```
+\`\`\`
 
 ### CONNECTORS.md
 
-```markdown
+\`\`\`markdown
 # Connectors
 
 ## How tool references work
 
-Plugin files use `~~category` as a placeholder for whatever tool the user
+Plugin files use \`~~category\` as a placeholder for whatever tool the user
 connects in that category. Plugins are tool-agnostic.
 
 ## Connectors for this plugin
 
 | Category        | Placeholder         | Included servers | Other options       |
 | --------------- | ------------------- | ---------------- | ------------------- |
-| Project tracker | `~~project tracker` | Linear           | Asana, Jira, Monday |
-| Chat            | `~~chat`            | Slack            | Microsoft Teams     |
-| Source control  | `~~source control`  | GitHub           | GitLab, Bitbucket   |
-```
+| Project tracker | \`~~project tracker\` | Linear           | Asana, Jira, Monday |
+| Chat            | \`~~chat\`            | Slack            | Microsoft Teams     |
+| Source control  | \`~~source control\`  | GitHub           | GitLab, Bitbucket   |
+\`\`\`
 
 ### .mcp.json
 
-```json
+\`\`\`json
 {
   "mcpServers": {
     "linear": {
@@ -354,4 +354,4 @@ connects in that category. Plugins are tool-agnostic.
     }
   }
 }
-```
+\`\`\`

@@ -1,6 +1,12 @@
 import { readFileSync as readFileSyncOrig, writeFileSync as writeFileSyncOrig, readdirSync, unlinkSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import {
+  assertUniquePromptFilenames,
+  nameToFilename,
+  parseYamlString,
+  renderPromptFrontmatter,
+} from './promptMarkdownUtils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -132,46 +138,6 @@ async function countTokensBatch(prompts, batchSize = 5, delayMs = 100) {
 }
 
 /**
- * Convert prompt name to filename
- * Examples:
- *   "Agent Prompt: Explore" → "agent-prompt-explore.md"
- *   "System Prompt: Main system prompt" → "system-prompt-main-system-prompt.md"
- *   "Tool Description: Bash" → "tool-description-bash.md"
- */
-function nameToFilename(name) {
-  // Determine prefix based on the name prefix
-  let prefix = '';
-  let namePart = name;
-
-  if (name.startsWith('Agent Prompt: ')) {
-    prefix = 'agent-prompt-';
-    namePart = name.substring('Agent Prompt: '.length);
-  } else if (name.startsWith('System Prompt: ')) {
-    prefix = 'system-prompt-';
-    namePart = name.substring('System Prompt: '.length);
-  } else if (name.startsWith('System Reminder: ')) {
-    prefix = 'system-reminder-';
-    namePart = name.substring('System Reminder: '.length);
-  } else if (name.startsWith('Tool Description: ')) {
-    prefix = 'tool-description-';
-    namePart = name.substring('Tool Description: '.length);
-  } else if (name.startsWith('Data: ')) {
-    prefix = 'data-';
-    namePart = name.substring('Data: '.length);
-  }
-
-  // Convert to lowercase and replace special chars
-  const filename = namePart
-    .toLowerCase()
-    .replace(/\s+/g, '-') // Spaces to hyphens
-    .replace(/[^a-z0-9_-]/g, '') // Remove any char not a-z, 0-9, _, or -
-    .replace(/-+/g, '-') // Collapse multiple hyphens
-    .replace(/^-|-$/g, ''); // Trim hyphens from start/end
-
-  return prefix + filename + '.md';
-}
-
-/**
  * Reconstruct the full prompt content from pieces and identifiers
  */
 function reconstructPrompt(prompt) {
@@ -202,21 +168,7 @@ function reconstructPrompt(prompt) {
  * Create markdown file content with HTML comment metadata
  */
 function createMarkdownContent(prompt, reconstructedContent) {
-  const variables = Object.values(prompt.identifierMap || {});
-
-  let content = '<!--\n';
-  content += `name: '${prompt.name}'\n`;
-  content += `description: ${prompt.description.includes('\n') ? '>\n  ' + prompt.description.replace(/\n/g, '\n  ') : prompt.description}\n`;
-  content += `ccVersion: ${prompt.version}\n`;
-
-  if (variables.length > 0) {
-    content += 'variables:\n';
-    variables.forEach(varName => {
-      content += `  - ${varName}\n`;
-    });
-  }
-
-  content += '-->\n';
+  let content = renderPromptFrontmatter(prompt);
   content += reconstructedContent;
 
   // Ensure file ends with newline
@@ -237,12 +189,13 @@ function parseMarkdownFile(filepath) {
     if (!commentMatch) return null;
 
     const metadataSection = commentMatch[1];
-    const nameMatch = metadataSection.match(/name: '(.+)'/);
+    const nameMatch = metadataSection.match(/^name:\s*(.+)$/m);
     const descMatch = metadataSection.match(/description: (.+?)(?=\nccVersion:)/s);
 
     return {
-      name: nameMatch ? nameMatch[1] : null,
+      name: nameMatch ? parseYamlString(nameMatch[1]) : null,
       description: descMatch ? descMatch[1].replace(/>\n\s+/g, '').trim() : null,
+      body: content.slice(commentMatch.index + commentMatch[0].length),
       fullContent: content
     };
   } catch (err) {
@@ -278,6 +231,10 @@ function categorizePrompt(name) {
     return { category: 'Builtin Tool Descriptions', subcategory: null };
   } else if (name.startsWith('Data: ')) {
     return { category: 'Data', subcategory: null };
+  } else if (name.startsWith('Skill: ')) {
+    return { category: 'Skills', subcategory: null };
+  } else if (name.startsWith('Tool Parameter: ')) {
+    return { category: 'Builtin Tool Descriptions', subcategory: 'Additional notes for some Tool Descriptions' };
   }
 
   return { category: 'Other', subcategory: null };
@@ -302,11 +259,13 @@ function parseReadmeTokenCounts() {
   const tokenCounts = new Map();
   try {
     const readme = readFileSync(README_PATH);
-    // Match patterns like: (./system-prompts/filename.md) (**123** tks)
-    const regex = /\(\.\/system-prompts\/([^)]+\.md)\)\s*\(\*\*(\d+)\*\*\s*tks\)/g;
+    // Match name, filename, and token count so filename migrations retain counts.
+    const regex = /- \[(?:\*\*)?([^\]]+?)(?:\*\*)?\]\(\.\/system-prompts\/([^)]+\.md)\)\s*\(\*\*(\d+)\*\*\s*tks\)/g;
     let match;
     while ((match = regex.exec(readme)) !== null) {
-      tokenCounts.set(match[1], parseInt(match[2], 10));
+      const entry = { filename: match[2], tokens: parseInt(match[3], 10) };
+      tokenCounts.set(match[2], entry);
+      tokenCounts.set(match[1], entry);
     }
   } catch (err) {
     // README doesn't exist yet, that's fine
@@ -323,6 +282,7 @@ async function updateFromJSON(jsonPath) {
 
   console.log(`Version: ${jsonData.version}`);
   console.log(`Prompts count: ${jsonData.prompts.length}`);
+  assertUniquePromptFilenames(jsonData.prompts);
 
   // Count version files in the same directory as the input JSON
   const jsonDir = dirname(jsonPath);
@@ -338,6 +298,13 @@ async function updateFromJSON(jsonPath) {
   const newPrompts = new Set();
   const promptsToCount = [];
   const unchangedPrompts = [];
+  const existingFilesByPromptName = new Map();
+  for (const existingFilename of readdirSync(SYSTEM_PROMPTS_DIR).filter(f => f.endsWith('.md'))) {
+    const existingFile = parseMarkdownFile(join(SYSTEM_PROMPTS_DIR, existingFilename));
+    if (existingFile?.name) {
+      existingFilesByPromptName.set(existingFile.name, { filename: existingFilename, ...existingFile });
+    }
+  }
 
   // First pass: Process files and identify what needs token counting
   for (const prompt of jsonData.prompts) {
@@ -346,27 +313,27 @@ async function updateFromJSON(jsonPath) {
     const reconstructedContent = reconstructPrompt(prompt);
     const newMarkdownContent = createMarkdownContent(prompt, reconstructedContent);
 
-    // Check if file exists and compare
-    const existingFile = parseMarkdownFile(filepath);
+    // Match by prompt name as well as canonical path so filename migrations can
+    // retain token counts and distinguish metadata-only rewrites from body changes.
+    const existingFile = parseMarkdownFile(filepath) || existingFilesByPromptName.get(prompt.name);
+    const existingTokenEntry = existingTokenCounts.get(filename) || existingTokenCounts.get(prompt.name);
+    const bodyChanged = existingFile && existingFile.body.trim() !== reconstructedContent.trim();
 
     if (existingFile) {
-      // Compare content
       if (existingFile.fullContent.trim() !== newMarkdownContent.trim()) {
         console.log(`\x1b[33mChanged: ${filename}\x1b[0m`);
-        unlinkSync(filepath); // Delete old file
         writeFileSync(filepath, newMarkdownContent);
         changedPrompts.add(filename);
-        // Need to recount tokens for changed prompts
+      }
+      if (bodyChanged || !existingTokenEntry) {
         promptsToCount.push({ filename, content: reconstructedContent, prompt });
       } else {
-        // Unchanged - use existing token count from README
         unchangedPrompts.push({ filename, prompt });
       }
     } else {
       console.log(`\x1b[32mNew: ${filename}\x1b[0m`);
       writeFileSync(filepath, newMarkdownContent);
       newPrompts.add(filename);
-      // Need to count tokens for new prompts
       promptsToCount.push({ filename, content: reconstructedContent, prompt });
     }
   }
@@ -387,8 +354,8 @@ async function updateFromJSON(jsonPath) {
 
   // Use existing token counts for unchanged prompts
   for (const { filename, prompt } of unchangedPrompts) {
-    const tokens = existingTokenCounts.get(filename) || 0;
-    promptsByFilename.set(filename, { prompt, tokens });
+    const tokenEntry = existingTokenCounts.get(filename) || existingTokenCounts.get(prompt.name);
+    promptsByFilename.set(filename, { prompt, tokens: tokenEntry?.tokens || 0 });
   }
 
   // Find deleted prompts
@@ -449,7 +416,8 @@ function updateReadme(promptsByFilename, version, releaseDate, versionCount) {
       'main': [],
       'Additional notes for some Tool Descriptions': []
     },
-    'Data': { 'main': [] }
+    'Data': { 'main': [] },
+    'Skills': { 'main': [] }
   };
 
   // Categorize all prompts
@@ -471,6 +439,8 @@ function updateReadme(promptsByFilename, version, releaseDate, versionCount) {
       categories['Builtin Tool Descriptions'][subcat].push(entry);
     } else if (category === 'Data') {
       categories['Data']['main'].push(entry);
+    } else if (category === 'Skills') {
+      categories['Skills']['main'].push(entry);
     }
   }
 
@@ -502,15 +472,15 @@ function updateReadme(promptsByFilename, version, releaseDate, versionCount) {
   newLines.push('');
   newLines.push(...categories['Agent Prompts']['Sub-agents']);
   newLines.push('');
-  newLines.push('### Creation Assistants');
+  newLines.push('#### Creation Assistants');
   newLines.push('');
   newLines.push(...categories['Agent Prompts']['Creation Assistants']);
   newLines.push('');
-  newLines.push('### Slash commands');
+  newLines.push('#### Slash Commands');
   newLines.push('');
   newLines.push(...categories['Agent Prompts']['Slash commands']);
   newLines.push('');
-  newLines.push('### Utilities');
+  newLines.push('#### Utilities');
   newLines.push('');
   newLines.push(...categories['Agent Prompts']['Utilities']);
   newLines.push('');
@@ -546,10 +516,19 @@ function updateReadme(promptsByFilename, version, releaseDate, versionCount) {
   newLines.push('');
   newLines.push(...categories['Builtin Tool Descriptions']['main']);
   newLines.push('');
-  newLines.push('**Additional notes for some Tool Desscriptions**');
+  newLines.push('**Additional notes for some Tool Descriptions**');
   newLines.push('');
   newLines.push(...categories['Builtin Tool Descriptions']['Additional notes for some Tool Descriptions']);
   newLines.push('');
+
+  if (categories['Skills']['main'].length > 0) {
+    newLines.push('### Skills');
+    newLines.push('');
+    newLines.push('Built-in skill prompts for specialized tasks.');
+    newLines.push('');
+    newLines.push(...categories['Skills']['main']);
+    newLines.push('');
+  }
 
   // Write updated README
   writeFileSync(README_PATH, newLines.join('\n'));

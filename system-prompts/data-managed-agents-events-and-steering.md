@@ -29,9 +29,9 @@ client.beta.sessions.events.send(
     session.id,
     events=[
         {
-            "type": "system.message",
-            "content": [
-                {"type": "text", "text": "The user's current timezone is America/New_York."},
+            \"type\": \"system.message\",
+            \"content\": [
+                {\"type\": \"text\", \"text\": \"The user's current timezone is America/New_York.\"},
             ],
         },
     ],
@@ -54,7 +54,7 @@ Three methods:
 
 All **persisted** events carry `id`, `type`, and `processed_at` (ISO 8601; `null` if not yet processed by the agent). The stream-only `event_start` / `event_delta` preview events (see § Live previews) carry only the `id` of the event they preview.
 
-> ⚠️ **Robust polling (raw HTTP).** If you bypass the SDK and roll your own poll loop, don't rely on `requests` or `httpx` timeouts as wall-clock caps — they're **per-chunk** read timeouts, reset every time a byte arrives. A trickling response (heartbeats, a wedged chunked-encoding body, a misbehaving proxy) can keep the call blocked indefinitely even with `timeout=(5, 60)` or `httpx.Timeout(120)`. Neither library has a "total wall-clock" timeout built in. For a hard deadline: track `time.monotonic()` at the loop level and break/cancel if a single request exceeds your budget (e.g. via a watchdog thread, or `asyncio.wait_for()` around async httpx). **Prefer the SDK** — `client.beta.sessions.events.stream()` and `client.beta.sessions.events.list()` handle timeout + retry sanely.
+> ⚠️ **Robust polling (raw HTTP).** If you bypass the SDK and roll your own poll loop, don't rely on `requests` or `httpx` timeouts as wall-clock caps — they're **per-chunk** read timeouts, reset every time a byte arrives. A trickling response (heartbeats, a wedged chunked-encoding body, a misbehaving proxy) can keep the call blocked indefinitely even with `timeout=(5, 60)` or `httpx.Timeout(120)`. Neither library has a \"total wall-clock\" timeout built in. For a hard deadline: track `time.monotonic()` at the loop level and break/cancel if a single request exceeds your budget (e.g. via a watchdog thread, or `asyncio.wait_for()` around async httpx). **Prefer the SDK** — `client.beta.sessions.events.stream()` and `client.beta.sessions.events.list()` handle timeout + retry sanely.
 >
 > If `GET /v1/sessions/{id}/events` (paginated) ever hangs after headers, you've likely hit `GET /v1/sessions/{id}/events` by mistake or a server-side stall — report it; don't treat it as a client-config problem.
 
@@ -99,18 +99,18 @@ By default, assistant text reaches the stream as buffered `agent.message` events
 ```python
 stream = client.beta.sessions.events.stream(
     session_id=session.id,
-    event_deltas=["agent.message"],
+    event_deltas=[\"agent.message\"],
 )
 ```
 
 When a previewed event begins, the stream emits an `event_start` carrying the upcoming event's `type` and `id`; for `agent.message` it's followed by `event_delta` events carrying incremental text:
 
 ```json
-{"type": "event_start", "event": {"type": "agent.message", "id": "sevt_01abc..."}}
-{"type": "event_delta", "event_id": "sevt_01abc...", "delta": {"type": "content_delta", "index": 0, "content": {"type": "text", "text": "Here is the summary"}}}
+{\"type\": \"event_start\", \"event\": {\"type\": \"agent.message\", \"id\": \"sevt_01abc...\"}}
+{\"type\": \"event_delta\", \"event_id\": \"sevt_01abc...\", \"delta\": {\"type\": \"content_delta\", \"index\": 0, \"content\": {\"type\": \"text\", \"text\": \"Here is the summary\"}}}
 ```
 
-`event_start` and `event_delta` have no `id` or `processed_at` of their own — the only identifier they carry is the `id` of the event they preview. For `agent.thinking`, **only** the `event_start` is emitted (a "thinking has started" signal) — no deltas follow; read content from the buffered `agent.thinking` event.
+`event_start` and `event_delta` have no `id` or `processed_at` of their own — the only identifier they carry is the `id` of the event they preview. For `agent.thinking`, **only** the `event_start` is emitted (a \"thinking has started\" signal) — no deltas follow; read content from the buffered `agent.thinking` event.
 
 **Accumulate-and-reconcile pattern.** Treat the preview as a scratch buffer keyed by `(event_id, index)`. On `event_start`, create an empty entry for the announced `id`. On each `event_delta`, append `delta.content.text` to `(event_id, delta.index)` and render the running text. When the buffered `agent.message` arrives, match it by `id`, **discard the accumulated preview**, and render the message's content instead. The identifiers always line up: `event_start.event.id`, every `event_delta.event_id`, and the buffered event's `id` are the same value. On a normal turn the order is fixed: `session.status_running` → `span.model_request_start` → `event_start` → `event_delta`* → buffered `agent.message` → `span.model_request_end`. If the turn errors or is interrupted the buffered event may never arrive, but `span.model_request_end` still does — close any unreconciled preview when you see it. Python/TypeScript/Go SDKs ship an accumulator helper that implements this; in other SDKs apply the manual pattern to the generated event types.
 
@@ -177,9 +177,9 @@ def connect_with_consolidation(client, session_id):
 
 ```ts
 // All three go into one session; agent processes them in order
-await sendMessage(sessionId, "Summarize the README");
-await sendMessage(sessionId, "Actually also check the CONTRIBUTING guide");
-await sendMessage(sessionId, "And compare the two");
+await sendMessage(sessionId, \"Summarize the README\");
+await sendMessage(sessionId, \"Actually also check the CONTRIBUTING guide\");
+await sendMessage(sessionId, \"And compare the two\");
 // Stream once — agent responds to all three as a coherent turn
 ```
 
@@ -187,7 +187,7 @@ Events can be sent up to the Session at any time. There is no need to wait on a 
 
 ### Interrupt
 
-An `interrupt` event **jumps the queue** (ahead of any pending user messages) and forces the session into `idle`. Use this for "stop" / "nevermind" / "cancel" commands:
+An `interrupt` event **jumps the queue** (ahead of any pending user messages) and forces the session into `idle`. Use this for \"stop\" / \"nevermind\" / \"cancel\" commands:
 
 ```ts
 await client.beta.sessions.events.send(sessionId, {
@@ -195,7 +195,7 @@ await client.beta.sessions.events.send(sessionId, {
 });
 ```
 
-The agent stops mid-task. It does not see the interrupt as a message — it just halts. Send a follow-up `user` event to explain what to do instead. If an outcome is active, the interrupt also marks `span.outcome_evaluation_end.result: "interrupted"` (see `shared/managed-agents-outcomes.md`).
+The agent stops mid-task. It does not see the interrupt as a message — it just halts. Send a follow-up `user` event to explain what to do instead. If an outcome is active, the interrupt also marks `span.outcome_evaluation_end.result: \"interrupted\"` (see `shared/managed-agents-outcomes.md`).
 
 > **Note**: Interrupt events may have empty IDs in the current implementation. When troubleshooting, use the `processed_at` timestamp along with surrounding event IDs.
 
@@ -206,15 +206,15 @@ some events carry useful metadata beyond the status change itself:
 `session.status_idle` — includes a `stop_reason` field which elaborates on why the session stopped and what type of further action is required by the user.
 ```json
 {
-  "id": "sevt_456",
-  "processed_at": "2026-04-07T04:27:43.197Z",
-  "stop_reason": {
-    "event_ids": [
-      "sevt_123"
+  \"id\": \"sevt_456\",
+  \"processed_at\": \"2026-04-07T04:27:43.197Z\",
+  \"stop_reason\": {
+    \"event_ids\": [
+      \"sevt_123\"
     ],
-    "type": "requires_action"
+    \"type\": \"requires_action\"
   },
-  "type": "status_idle"
+  \"type\": \"status_idle\"
 }
 ```
 
@@ -222,17 +222,17 @@ some events carry useful metadata beyond the status change itself:
 
 ```json
 {
-  "type": "span.model_request_end",
-  "id": "sevt_456",
-  "is_error": false,
-  "model_request_start_id": "sevt_123",
-  "model_usage": {
-    "cache_creation_input_tokens": 0,
-    "cache_read_input_tokens": 6656,
-    "input_tokens": 3571,
-    "output_tokens": 727
+  \"type\": \"span.model_request_end\",
+  \"id\": \"sevt_456\",
+  \"is_error\": false,
+  \"model_request_start_id\": \"sevt_123\",
+  \"model_usage\": {
+    \"cache_creation_input_tokens\": 0,
+    \"cache_read_input_tokens\": 6656,
+    \"input_tokens\": 3571,
+    \"output_tokens\": 727
   },
-  "processed_at": "2026-04-07T04:11:32.189Z"
+  \"processed_at\": \"2026-04-07T04:11:32.189Z\"
 }
 ```
 
@@ -240,9 +240,9 @@ some events carry useful metadata beyond the status change itself:
 
 ```json
 {
-  "id": "sevt_abc123",
-  "processed_at": "2026-03-24T14:05:15.787Z",
-  "type": "agent.thread_context_compacted"
+  \"id\": \"sevt_abc123\",
+  \"processed_at\": \"2026-03-24T14:05:15.787Z\",
+  \"type\": \"agent.thread_context_compacted\"
 }
 ```
 

@@ -5,17 +5,17 @@ ccVersion: "2.1.182"
 -->
 # Prompt Caching — Design & Optimization
 
-This file covers how to design prompt-building code for effective caching. For language-specific syntax, see the `## Prompt Caching` section in each language's README or single-file doc.
+This file covers how to design prompt-building code for effective caching. For language-specific syntax, see the \`## Prompt Caching\` section in each language's README or single-file doc.
 
 ## The one invariant everything follows from
 
 **Prompt caching is a prefix match. Any change anywhere in the prefix invalidates everything after it.**
 
-The cache key is derived from the exact bytes of the rendered prompt up to each `cache_control` breakpoint. A single byte difference at position N — a timestamp, a reordered JSON key, a different tool in the list — invalidates the cache for all breakpoints at positions ≥ N.
+The cache key is derived from the exact bytes of the rendered prompt up to each \`cache_control\` breakpoint. A single byte difference at position N — a timestamp, a reordered JSON key, a different tool in the list — invalidates the cache for all breakpoints at positions ≥ N.
 
-Render order is: `tools` → `system` → `messages`. A breakpoint on the last system block caches both tools and system together.
+Render order is: \`tools\` → \`system\` → \`messages\`. A breakpoint on the last system block caches both tools and system together.
 
-Design the prompt-building path around this constraint. Get the ordering right and most caching works for free. Get it wrong and no amount of `cache_control` markers will help.
+Design the prompt-building path around this constraint. Get the ordering right and most caching works for free. Get it wrong and no amount of \`cache_control\` markers will help.
 
 ---
 
@@ -23,7 +23,7 @@ Design the prompt-building path around this constraint. Get the ordering right a
 
 When asked to add or optimize caching:
 
-1. **Trace the prompt assembly path.** Find where `system`, `tools`, and `messages` are constructed. Identify every input that flows into them.
+1. **Trace the prompt assembly path.** Find where \`system\`, \`tools\`, and \`messages\` are constructed. Identify every input that flows into them.
 2. **Classify each input by stability:**
    - Never changes → belongs early in the prompt, before any breakpoint
    - Changes per-session → belongs after the global prefix, cache per-session
@@ -41,37 +41,37 @@ When asked to add or optimize caching:
 
 Put a breakpoint on the last system text block. If there are tools, they render before system — the marker on the last system block caches tools + system together.
 
-```json
+\`\`\`json
 "system": [
   {"type": "text", "text": "<large shared prompt>", "cache_control": {"type": "ephemeral"}}
 ]
-```
+\`\`\`
 
 ### Multi-turn conversations
 
 Put a breakpoint on the last content block of the most-recently-appended turn. Each subsequent request reuses the entire prior conversation prefix. Earlier breakpoints remain valid read points, so hits accrue incrementally as the conversation grows.
 
-```json
+\`\`\`json
 // Last content block of the last user turn
 messages[-1].content[-1].cache_control = {"type": "ephemeral"}
-```
+\`\`\`
 
 ### Shared prefix, varying suffix
 
 Many requests share a large fixed preamble (few-shot examples, retrieved docs, instructions) but differ in the final question. Put the breakpoint at the end of the **shared** portion, not at the end of the whole prompt — otherwise every request writes a distinct cache entry and nothing is ever read.
 
-```json
+\`\`\`json
 "messages": [{"role": "user", "content": [
   {"type": "text", "text": "<shared context>", "cache_control": {"type": "ephemeral"}},
   {"type": "text", "text": "<varying question>"}  // no marker — differs every time
 ]}]
-```
+\`\`\`
 
 ### Mid-conversation system messages
 
-**{{OPUS_NAME}} only; no beta header.** When an operator instruction arrives mid-conversation — a mode switch, updated context, dynamically injected state — send it as `{"role": "system", "content": "..."}` appended to `messages[]`, rather than editing top-level `system`. Editing top-level `system` changes the prefix ahead of the entire conversation history, so every cached turn is re-processed uncached; a `role: "system"` message sits after the history and leaves the cached prefix intact.
+**{{OPUS_NAME}} only; no beta header.** When an operator instruction arrives mid-conversation — a mode switch, updated context, dynamically injected state — send it as \`{"role": "system", "content": "..."}\` appended to \`messages[]\`, rather than editing top-level \`system\`. Editing top-level \`system\` changes the prefix ahead of the entire conversation history, so every cached turn is re-processed uncached; a \`role: "system"\` message sits after the history and leaves the cached prefix intact.
 
-```json
+\`\`\`json
 // Top-level system stays byte-identical; new instruction goes after the cached history
 "system": [{"type": "text", "text": "<stable core>", "cache_control": {"type": "ephemeral"}}],
 "messages": [
@@ -79,15 +79,15 @@ Many requests share a large fixed preamble (few-shot examples, retrieved docs, i
   {"role": "user", "content": "..."},
   {"role": "system", "content": "Terse mode enabled — keep responses under 40 words."}
 ]
-```
+\`\`\`
 
-This is also the prompt-injection-safe replacement for embedding operator instructions as text inside a user turn (the `<system-reminder>` pattern): both have the same caching profile, but `role: "system"` is the non-spoofable operator channel, whereas text inside user/tool content can be forged by anything that writes to user-visible input.
+This is also the prompt-injection-safe replacement for embedding operator instructions as text inside a user turn (the \`<system-reminder>\` pattern): both have the same caching profile, but \`role: "system"\` is the non-spoofable operator channel, whereas text inside user/tool content can be forged by anything that writes to user-visible input.
 
-Available on {{OPUS_NAME}}; no beta header is required. Must follow a `role: "user"` message (or an `assistant` message ending in server-tool use), and must be either the last entry in `messages` or be followed by an `assistant` turn; cannot be `messages[0]` — use top-level `system` for the initial prompt. Content is text-only. Unsupported models return a 400 (`BadRequestError`: `role 'system' is not supported on this model`); catch that error and fall back to putting the instruction in a user-turn `<system-reminder>` block.
+Available on {{OPUS_NAME}}; no beta header is required. Must follow a \`role: "user"\` message (or an \`assistant\` message ending in server-tool use), and must be either the last entry in \`messages\` or be followed by an \`assistant\` turn; cannot be \`messages[0]\` — use top-level \`system\` for the initial prompt. Content is text-only. Unsupported models return a 400 (\`BadRequestError\`: \`role 'system' is not supported on this model\`); catch that error and fall back to putting the instruction in a user-turn \`<system-reminder>\` block.
 
 ### Prompts that change from the beginning every time
 
-Don't cache. If the first 1K tokens differ per request, there is no reusable prefix. Adding `cache_control` only pays the cache-write premium with zero reads. Leave it off.
+Don't cache. If the first 1K tokens differ per request, there is no reusable prefix. Adding \`cache_control\` only pays the cache-write premium with zero reads. Leave it off.
 
 ---
 
@@ -95,11 +95,11 @@ Don't cache. If the first 1K tokens differ per request, there is no reusable pre
 
 These are the decisions that matter more than marker placement. Fix these first.
 
-**Keep the system prompt frozen.** Don't interpolate "current date: X", "mode: Y", "user name: Z" into the system prompt — those sit at the front of the prefix and invalidate everything downstream. Inject dynamic context later in `messages` instead — as a `{"role": "system", ...}` message where supported (see § Mid-conversation system messages above), or as text in a user message otherwise. A message at turn 5 invalidates nothing before turn 5.
+**Keep the system prompt frozen.** Don't interpolate "current date: X", "mode: Y", "user name: Z" into the system prompt — those sit at the front of the prefix and invalidate everything downstream. Inject dynamic context later in \`messages\` instead — as a \`{"role": "system", ...}\` message where supported (see § Mid-conversation system messages above), or as text in a user message otherwise. A message at turn 5 invalidates nothing before turn 5.
 
 **Don't change tools or model mid-conversation.** Tools render at position 0; adding, removing, or reordering a tool invalidates the entire cache. Same for switching models (caches are model-scoped). If you need "modes", don't swap the tool set — give Claude a tool that records the mode transition, or pass the mode as message content. Serialize tools deterministically (sort by name).
 
-**Fork operations must reuse the parent's exact prefix.** Side computations (summarization, compaction, sub-agents) often spin up a separate API call. If the fork rebuilds `system` / `tools` / `model` with any difference, it misses the parent's cache entirely. Copy the parent's `system`, `tools`, and `model` verbatim, then append fork-specific content at the end.
+**Fork operations must reuse the parent's exact prefix.** Side computations (summarization, compaction, sub-agents) often spin up a separate API call. If the fork rebuilds \`system\` / \`tools\` / \`model\` with any difference, it misses the parent's cache entirely. Copy the parent's \`system\`, \`tools\`, and \`model\` verbatim, then append fork-specific content at the end.
 
 ---
 
@@ -109,12 +109,12 @@ When reviewing code, grep for these inside anything that feeds the prompt prefix
 
 | Pattern | Why it breaks caching |
 |---|---|
-| `datetime.now()` / `Date.now()` / `time.time()` in system prompt | Prefix changes every request |
-| `uuid4()` / `crypto.randomUUID()` / request IDs early in content | Same — every request is unique |
-| `json.dumps(d)` without `sort_keys=True` / iterating a `set` | Non-deterministic serialization → prefix bytes differ |
+| \`datetime.now()\` / \`Date.now()\` / \`time.time()\` in system prompt | Prefix changes every request |
+| \`uuid4()\` / \`crypto.randomUUID()\` / request IDs early in content | Same — every request is unique |
+| \`json.dumps(d)\` without \`sort_keys=True\` / iterating a \`set\` | Non-deterministic serialization → prefix bytes differ |
 | f-string interpolating session/user ID into system prompt | Per-user prefix; no cross-user sharing |
-| Conditional system sections (`if flag: system += ...`) | Every flag combination is a distinct prefix |
-| `tools=build_tools(user)` where set varies per user | Tools render at position 0; nothing caches across users |
+| Conditional system sections (\`if flag: system += ...\`) | Every flag combination is a distinct prefix |
+| \`tools=build_tools(user)\` where set varies per user | Tools render at position 0; nothing caches across users |
 
 Fix by moving the dynamic piece after the last breakpoint, making it deterministic, or deleting it if it's not load-bearing.
 
@@ -122,15 +122,15 @@ Fix by moving the dynamic piece after the last breakpoint, making it determinist
 
 ## API reference
 
-```json
+\`\`\`json
 "cache_control": {"type": "ephemeral"}              // 5-minute TTL (default)
 "cache_control": {"type": "ephemeral", "ttl": "1h"} // 1-hour TTL
-```
+\`\`\`
 
-- Max **4** `cache_control` breakpoints per request.
-- Goes on any content block: system text blocks, tool definitions, message content blocks (`text`, `image`, `tool_use`, `tool_result`, `document`).
-- Top-level `cache_control` on `messages.create()` auto-places on the last cacheable block — simplest option when you don't need fine-grained placement.
-- Minimum cacheable prefix is model-dependent. Shorter prefixes silently won't cache even with a marker — no error, just `cache_creation_input_tokens: 0`:
+- Max **4** \`cache_control\` breakpoints per request.
+- Goes on any content block: system text blocks, tool definitions, message content blocks (\`text\`, \`image\`, \`tool_use\`, \`tool_result\`, \`document\`).
+- Top-level \`cache_control\` on \`messages.create()\` auto-places on the last cacheable block — simplest option when you don't need fine-grained placement.
+- Minimum cacheable prefix is model-dependent. Shorter prefixes silently won't cache even with a marker — no error, just \`cache_creation_input_tokens: 0\`:
 
 | Model | Minimum |
 |---|---:|
@@ -146,19 +146,19 @@ A 3K-token prompt caches on Sonnet 4.5 and Fable 5 but silently won't on Opus 4.
 
 ## Verifying cache hits
 
-The response `usage` object reports cache activity:
+The response \`usage\` object reports cache activity:
 
 | Field | Meaning |
 |---|---|
-| `cache_creation_input_tokens` | Tokens written to cache this request (you paid the ~1.25× write premium) |
-| `cache_read_input_tokens` | Tokens served from cache this request (you paid ~0.1×) |
-| `input_tokens` | Tokens processed at full price (not cached) |
+| \`cache_creation_input_tokens\` | Tokens written to cache this request (you paid the ~1.25× write premium) |
+| \`cache_read_input_tokens\` | Tokens served from cache this request (you paid ~0.1×) |
+| \`input_tokens\` | Tokens processed at full price (not cached) |
 
-If `cache_read_input_tokens` is zero across repeated requests with identical prefixes, a silent invalidator is at work — diff the rendered prompt bytes between two requests to find it.
+If \`cache_read_input_tokens\` is zero across repeated requests with identical prefixes, a silent invalidator is at work — diff the rendered prompt bytes between two requests to find it.
 
-**`input_tokens` is the uncached remainder only.** Total prompt size = `input_tokens + cache_creation_input_tokens + cache_read_input_tokens`. If your agent ran for hours but `input_tokens` shows 4K, the rest was served from cache — check the sum, not the single field.
+**\`input_tokens\` is the uncached remainder only.** Total prompt size = \`input_tokens + cache_creation_input_tokens + cache_read_input_tokens\`. If your agent ran for hours but \`input_tokens\` shows 4K, the rest was served from cache — check the sum, not the single field.
 
-Language-specific access: `response.usage.cache_read_input_tokens` (Python/TS/Ruby), `$message->usage->cacheReadInputTokens` (PHP), `resp.Usage.CacheReadInputTokens` (Go/C#), `.usage().cacheReadInputTokens()` (Java).
+Language-specific access: \`response.usage.cache_read_input_tokens\` (Python/TS/Ruby), \`$message->usage->cacheReadInputTokens\` (PHP), \`resp.Usage.CacheReadInputTokens\` (Go/C#), \`.usage().cacheReadInputTokens()\` (Java).
 
 ---
 
@@ -170,12 +170,12 @@ Not every parameter change invalidates everything. The API has three cache tiers
 |---|:---:|:---:|:---:|
 | Tool definitions (add/remove/reorder) | ❌ | ❌ | ❌ |
 | Model switch | ❌ | ❌ | ❌ |
-| `speed`, web-search, citations toggle | ✅ | ❌ | ❌ |
+| \`speed\`, web-search, citations toggle | ✅ | ❌ | ❌ |
 | System prompt content | ✅ | ❌ | ❌ |
-| `tool_choice`, images, `thinking` enable/disable | ✅ | ✅ | ❌ |
+| \`tool_choice\`, images, \`thinking\` enable/disable | ✅ | ✅ | ❌ |
 | Message content | ✅ | ✅ | ❌ |
 
-Implication: you can change `tool_choice` per-request or toggle `thinking` without losing the tools+system cache. Don't over-worry about these — only tool-definition and model changes force a full rebuild.
+Implication: you can change \`tool_choice\` per-request or toggle \`thinking\` without losing the tools+system cache. Don't over-worry about these — only tool-definition and model changes force a full rebuild.
 
 ---
 
@@ -195,7 +195,7 @@ For fan-out patterns: send 1 request, await the first streamed token (not the fu
 
 ## Pre-warming the cache
 
-To eliminate the cache-miss latency on the *first* real request, send a **`max_tokens: 0`** request at startup (or on an interval). The API runs prefill — writing the cache at your `cache_control` breakpoint — and returns immediately with `content: []`, `stop_reason: "max_tokens"`, and a populated `usage` block (zero output tokens billed; normal cache-write charge on `cache_creation_input_tokens`).
+To eliminate the cache-miss latency on the *first* real request, send a **\`max_tokens: 0\`** request at startup (or on an interval). The API runs prefill — writing the cache at your \`cache_control\` breakpoint — and returns immediately with \`content: []\`, \`stop_reason: "max_tokens"\`, and a populated \`usage\` block (zero output tokens billed; normal cache-write charge on \`cache_creation_input_tokens\`).
 
 **When to pre-warm** — pre-warming trades a cache-write charge *now* for lower TTFT on the *next* real request. It's worth it when all three hold: (a) first-request latency is user-visible (chat/voice/interactive — not background jobs), (b) the shared prefix is large enough that a cold write is noticeably slow, and (c) there's a moment *before* traffic to fire it — app startup, worker boot, post-deploy, start of a scheduled window.
 
@@ -206,9 +206,9 @@ To eliminate the cache-miss latency on the *first* real request, send a **`max_t
 | The prefix varies per request/user | Nothing shared to pre-warm |
 | You'd pre-warm many distinct prefixes speculatively | Each is a ~1.25× write; cost can exceed the latency you save |
 
-**Scheduled re-warms:** only needed when traffic has gaps longer than the TTL. If real requests arrive more often than every 5 minutes, they keep the cache warm on their own — don't add an interval re-warm. For bursty traffic with long idle gaps, either re-warm just under the TTL or switch to `ttl: "1h"` and re-warm less often.
+**Scheduled re-warms:** only needed when traffic has gaps longer than the TTL. If real requests arrive more often than every 5 minutes, they keep the cache warm on their own — don't add an interval re-warm. For bursty traffic with long idle gaps, either re-warm just under the TTL or switch to \`ttl: "1h"\` and re-warm less often.
 
-```python
+\`\`\`python
 client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=0,
@@ -219,10 +219,10 @@ client.messages.create(
     }],
     messages=[{"role": "user", "content": "warmup"}],
 )
-```
+\`\`\`
 
-**Breakpoint placement:** put `cache_control` on the **last block shared with the real request** (the system prompt or tool definitions) — **not** on the placeholder user message, and **not** via top-level automatic caching (which would key the cache to the placeholder). The placeholder can be any non-whitespace string; it's read during prefill but never answered.
+**Breakpoint placement:** put \`cache_control\` on the **last block shared with the real request** (the system prompt or tool definitions) — **not** on the placeholder user message, and **not** via top-level automatic caching (which would key the cache to the placeholder). The placeholder can be any non-whitespace string; it's read during prefill but never answered.
 
-**Rejected combinations:** `max_tokens: 0` is an `invalid_request_error` with `stream: true`, `thinking.type: "enabled"`, `output_config.format`, `tool_choice` of `{"type":"tool"}` or `{"type":"any"}`, or inside a Message Batches request.
+**Rejected combinations:** \`max_tokens: 0\` is an \`invalid_request_error\` with \`stream: true\`, \`thinking.type: "enabled"\`, \`output_config.format\`, \`tool_choice\` of \`{"type":"tool"}\` or \`{"type":"any"}\`, or inside a Message Batches request.
 
-**TTL still applies** — re-warm at least every 5 minutes for the default cache, or use the 1-hour TTL. This replaces the older `max_tokens: 1` workaround (no single-token reply to discard, no output tokens billed, intent is unambiguous).
+**TTL still applies** — re-warm at least every 5 minutes for the default cache, or use the 1-hour TTL. This replaces the older \`max_tokens: 1\` workaround (no single-token reply to discard, no output tokens billed, intent is unambiguous).

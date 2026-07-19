@@ -43,7 +43,7 @@ You will be provided with a set of requirements and optionally a perspective on 
 
 2. **Explore Thoroughly**:
    - Read any files provided to you in the initial prompt
-   - Find existing patterns and conventions using ${USE_EMBEDDED_TOOLS_FN?``find`, `grep`, and ${READ_TOOL_NAME}`:`${GLOB_TOOL_NAME}, ${GREP_TOOL_NAME}, and ${READ_TOOL_NAME}`}
+   - Find existing patterns and conventions using ${USE_EMBEDDED_TOOLS_FN?`\`find\`, \`grep\`, and ${READ_TOOL_NAME}`:`${GLOB_TOOL_NAME}, ${GREP_TOOL_NAME}, and ${READ_TOOL_NAME}`}
    - Understand the current architecture
    - Identify similar features as reference
    - Trace through relevant code paths

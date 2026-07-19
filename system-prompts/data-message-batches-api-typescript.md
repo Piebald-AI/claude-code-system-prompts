@@ -5,7 +5,7 @@ ccVersion: "2.1.173"
 -->
 # Message Batches API — TypeScript
 
-The Batches API (`POST /v1/messages/batches`) processes Messages API requests asynchronously at 50% of standard prices.
+The Batches API (\`POST /v1/messages/batches\`) processes Messages API requests asynchronously at 50% of standard prices.
 
 ## Key Facts
 
@@ -19,7 +19,7 @@ The Batches API (`POST /v1/messages/batches`) processes Messages API requests as
 
 ## Create a Batch
 
-```typescript
+\`\`\`typescript
 import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic();
@@ -49,63 +49,63 @@ const messageBatch = await client.messages.batches.create({
   ],
 });
 
-console.log(`Batch ID: ${messageBatch.id}`);
-console.log(`Status: ${messageBatch.processing_status}`);
-```
+console.log(\`Batch ID: \${messageBatch.id}\`);
+console.log(\`Status: \${messageBatch.processing_status}\`);
+\`\`\`
 
 ---
 
 ## Poll for Completion
 
-```typescript
+\`\`\`typescript
 let batch;
 while (true) {
   batch = await client.messages.batches.retrieve(messageBatch.id);
   if (batch.processing_status === "ended") break;
   console.log(
-    `Status: ${batch.processing_status}, processing: ${batch.request_counts.processing}`,
+    \`Status: \${batch.processing_status}, processing: \${batch.request_counts.processing}\`,
   );
   await new Promise((resolve) => setTimeout(resolve, 60_000));
 }
 
 console.log("Batch complete!");
-console.log(`Succeeded: ${batch.request_counts.succeeded}`);
-console.log(`Errored: ${batch.request_counts.errored}`);
-```
+console.log(\`Succeeded: \${batch.request_counts.succeeded}\`);
+console.log(\`Errored: \${batch.request_counts.errored}\`);
+\`\`\`
 
 ---
 
 ## Retrieve Results
 
-```typescript
+\`\`\`typescript
 for await (const result of await client.messages.batches.results(
   messageBatch.id,
 )) {
   switch (result.result.type) {
     case "succeeded":
       console.log(
-        `[${result.custom_id}] ${result.result.message.content[0].text.slice(0, 100)}`,
+        \`[\${result.custom_id}] \${result.result.message.content[0].text.slice(0, 100)}\`,
       );
       break;
     case "errored":
       if (result.result.error.type === "invalid_request") {
-        console.log(`[${result.custom_id}] Validation error - fix and retry`);
+        console.log(\`[\${result.custom_id}] Validation error - fix and retry\`);
       } else {
-        console.log(`[${result.custom_id}] Server error - safe to retry`);
+        console.log(\`[\${result.custom_id}] Server error - safe to retry\`);
       }
       break;
     case "expired":
-      console.log(`[${result.custom_id}] Expired - resubmit`);
+      console.log(\`[\${result.custom_id}] Expired - resubmit\`);
       break;
   }
 }
-```
+\`\`\`
 
 ---
 
 ## Cancel a Batch
 
-```typescript
+\`\`\`typescript
 const cancelled = await client.messages.batches.cancel(messageBatch.id);
-console.log(`Status: ${cancelled.processing_status}`); // "canceling"
-```
+console.log(\`Status: \${cancelled.processing_status}\`); // "canceling"
+\`\`\`

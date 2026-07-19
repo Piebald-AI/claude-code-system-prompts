@@ -12,21 +12,21 @@ variables:
 -->
 ## Daemon
 
-The background daemon manages `& <prompt>` jobs and `claude agents`. If the issue involves background sessions, look here.
+The background daemon manages \`& <prompt>\` jobs and \`claude agents\`. If the issue involves background sessions, look here.
 
 ### daemon.lock
-```json
+\`\`\`json
 ${DAEMON_LOCK_CONTENT??"(missing)"}
-```
+\`\`\`
 
 ### daemon.status.json
-```json
+\`\`\`json
 ${DAEMON_STATUS_CONTENT??"(missing)"}
-```
+\`\`\`
 
-### Daemon log (`${DAEMON_LOG_PATH}`)
+### Daemon log (\`${DAEMON_LOG_PATH}\`)
 ${DAEMON_LOG_SNIPPET}
 
 Other daemon state on disk (Read if relevant — roster contains user prompts and env vars):
-- `${WORKER_ROSTER_PATH_FN()}` — live worker roster
-- `${DAEMON_STATE_DIR_FN()}/<short>/state.json` — per-job state
+- \`${WORKER_ROSTER_PATH_FN()}\` — live worker roster
+- \`${DAEMON_STATE_DIR_FN()}/<short>/state.json\` — per-job state

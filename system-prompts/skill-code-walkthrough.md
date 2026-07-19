@@ -8,7 +8,7 @@ variables:
   - "ARTIFACT_DESIGN_SKILL_NAME"
   - "ARTIFACT_ITERATION_FOOTER"
 -->
-${WALKTHROUGH_TARGET===""?"No target was given. Ask the user which file, directory, or PR they want explained — one short question — and stop until they answer.":`Walkthrough target: `${WALKTHROUGH_TARGET}``}
+${WALKTHROUGH_TARGET===""?"No target was given. Ask the user which file, directory, or PR they want explained — one short question — and stop until they answer.":`Walkthrough target: \`${WALKTHROUGH_TARGET}\``}
 
 ## Goal
 
@@ -28,7 +28,7 @@ understanding.
 ## Structure of the artifact
 
 Write an HTML file and publish it with the ${ARTIFACT_TOOL_NAME} tool. Load
-the `${ARTIFACT_DESIGN_SKILL_NAME}` skill first and give the page a
+the \`${ARTIFACT_DESIGN_SKILL_NAME}\` skill first and give the page a
 utilitarian treatment — this is a document, not a landing page.
 
 The page should contain, in this order:
@@ -37,7 +37,7 @@ The page should contain, in this order:
 2. **Map** — a short list or simple diagram of the main pieces and how they
    connect. For a single file this is the key functions/types; for a
    directory it's the files; for a PR it's the before→after.
-3. **Walkthrough sections** — one `<details>` block per piece from the map.
+3. **Walkthrough sections** — one \`<details>\` block per piece from the map.
    Inside each:
    - A plain-language explanation of what this piece does.
    - An **annotated code snippet**: the real code (trimmed to the relevant

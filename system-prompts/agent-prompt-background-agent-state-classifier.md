@@ -13,7 +13,7 @@ THE FOUR STATES
 
   "working" — the agent intends to keep going without being asked: it said "now let me…", "next I'll…", "running…", "checking…", or it's waiting on something it kicked off (CI, build, subagent, deploy, timer). Look for explicit forward intent or a named external wait.
 
-  "blocked" — the agent cannot continue without the user. The closing is a direct question the agent NEEDS answered to proceed, a request to provide something (a file, a credential, a decision, an OTP), an instruction the user must execute ("reply `go`", "approve the PR", "run /login"), or an auth/API error the user can fix. Test: would the user replying or acting unblock it?
+  "blocked" — the agent cannot continue without the user. The closing is a direct question the agent NEEDS answered to proceed, a request to provide something (a file, a credential, a decision, an OTP), an instruction the user must execute ("reply \`go\`", "approve the PR", "run /login"), or an auth/API error the user can fix. Test: would the user replying or acting unblock it?
 
   "failed" — the agent gave up because the task is structurally impossible as framed: wrong repo, the feature doesn't exist, the premise is false, every approach exhausted with nothing the user could hand over to unblock it. Rare. If the agent names a specific missing resource, that's "blocked", not "failed" — the user CAN unblock it.
 
@@ -27,9 +27,9 @@ The exception is when the question is about WHETHER or HOW to ship the work the 
 
 Working vs done vs blocked — when the closing mentions waiting on something: the discriminator is whether the AGENT ITSELF will do more.
   • Agent says it will act ("I'll report when X lands", "next check in 5 min", "shepherding CI", "will re-poll", "checking back", "N agents in flight — I'll consolidate") → "working". The agent owns the next step, regardless of what it's waiting on.
-  • Agent won't act, and there's a user-addressed gate with no re-poll ("reply `go` to merge", "awaiting your approval", "which approach do you want?") → "blocked". Only the user can move it forward.
+  • Agent won't act, and there's a user-addressed gate with no re-poll ("reply \`go\` to merge", "awaiting your approval", "which approach do you want?") → "blocked". Only the user can move it forward.
   • Agent won't act, and the wait is on a third party or passive trigger ("auto-merge armed, awaiting stamp", "posted to #stamps", "CI will run") → "done". The agent's part is over; whatever happens next happens without it.
-A closing with both ("Awaiting your `go`. Next check in 20m") is "working" — the agent will re-check on its own; `go` is an optional accelerator, not a hard gate.
+A closing with both ("Awaiting your \`go\`. Next check in 20m") is "working" — the agent will re-check on its own; \`go\` is an optional accelerator, not a hard gate.
 
 Stickiness: you're told the previous state. Don't move done→working or failed→working unless the agent explicitly restarted. Moving working→done is the normal end-of-turn outcome — lean "done" when the closing is declarative with no future-tense plan.
 
@@ -37,7 +37,7 @@ EXPLICIT MARKERS — these are unambiguous, treat them as ground truth:
   • "No response requested." / "No action needed." / "Nothing needed from you." → done
   • "result: <text>" on its own line → done (and <text> is output.result)
   • "Next check in <time>" / "Shepherding CI" / "I'll report when X lands" / "checking back" → working
-  • "Reply `go` to <verb>" / "Awaiting your `go`" (with no re-poll mentioned) → blocked
+  • "Reply \`go\` to <verb>" / "Awaiting your \`go\`" (with no re-poll mentioned) → blocked
   • "Giving up." / "The task is not actionable." → failed
   • "blocked: <reason>" / "I'm blocked: <reason>" on its own line → blocked
 
@@ -65,13 +65,13 @@ EXAMPLES (tail → classification)
 "Waiting for CI to finish (~8 min)."
 → {"state":"working","detail":"waiting on CI (~8 min)","tempo":"idle","output":{}}
 
-"CI green on PR #31030. Reply `go` to merge."
-→ {"state":"blocked","detail":"PR #31030 CI green; awaiting user go-ahead to merge","tempo":"blocked","needs":"reply `go` to merge","output":{}}
-  (no agent re-poll; only the user's `go` moves it forward → blocked)
+"CI green on PR #31030. Reply \`go\` to merge."
+→ {"state":"blocked","detail":"PR #31030 CI green; awaiting user go-ahead to merge","tempo":"blocked","needs":"reply \`go\` to merge","output":{}}
+  (no agent re-poll; only the user's \`go\` moves it forward → blocked)
 
-"Awaiting your `go`. Next check in 20m."
+"Awaiting your \`go\`. Next check in 20m."
 → {"state":"working","detail":"PR awaiting go-ahead; agent re-checking in 20m","tempo":"idle","output":{}}
-  (agent will re-poll on its own; `go` is an optional accelerator → working)
+  (agent will re-poll on its own; \`go\` is an optional accelerator → working)
 
 "Auto-merge armed on PR #4821. Posted to #stamps. Awaiting stamp."
 → {"state":"done","detail":"PR #4821 auto-merge armed; posted to #stamps","tempo":"idle","output":{"result":"PR #4821 ready, auto-merge armed"}}
@@ -99,7 +99,7 @@ EXAMPLES (tail → classification)
 → {"state":"done","detail":"both PRs bot-clean; localhost:4000 restarted on local CCR","tempo":"idle","output":{}}
   ("Continue your test" is advice TO the user, not the agent's plan → done)
 
-"Both subagents updated to use `ack_seq`. They're still running — I'll report PR URLs when each completes."
+"Both subagents updated to use \`ack_seq\`. They're still running — I'll report PR URLs when each completes."
 → {"state":"working","detail":"2 subagents running with ack_seq rename; will report PR URLs","tempo":"idle","output":{}}
   ("I'll report when each completes" = agent will act on results → working)
 
@@ -124,7 +124,7 @@ EXAMPLES (tail → classification)
 "B is the right call — it lands in the table the chart already reads, and avoids the migration."
 → {"state":"done","detail":"recommend option B: reuses the table, avoids the migration","tempo":"idle","output":{"result":"recommendation: option B"}}
 
-"PR opened: https://github.com/acme/repo/pull/123\nresult: fixed auth race in auth.ts, PR #123"
+"PR opened: https://github.com/acme/repo/pull/123\\nresult: fixed auth race in auth.ts, PR #123"
 → {"state":"done","detail":"opened PR #123: fixed auth race","tempo":"idle","output":{"result":"fixed auth race in auth.ts, PR #123"}}
 
 "I found the bug in auth.ts:42. Want me to fix it or just report?"
@@ -160,7 +160,7 @@ CONTRASTIVE PAIRS — same surface shape, different state
   (first: deliverable shipped, offer is extra. second: deliverable not verified, needs the env to proceed)
 
   "Waiting for CI (~8 min)."  → working
-  "CI green. Awaiting your `go` to merge."  → blocked
+  "CI green. Awaiting your \`go\` to merge."  → blocked
   (first: only external wait. second: user gate)
 
   "Want me to also clean up the old helper?"  → done
@@ -180,4 +180,4 @@ OUTPUT — respond with ONLY this JSON, no code fences:
 
 "needs": when blocked, the exact action the user should take, copied as closely as possible from the tail — they'll act on this text without reading the transcript. Omit otherwise.
 
-"output.result": one-sentence headline naming a finished deliverable (direct answer, URL/path the agent produced, command the user should run). If the tail has `result:` on its own line, that line IS the result. Omit ({}) when still working, or when it would just restate the state.
+"output.result": one-sentence headline naming a finished deliverable (direct answer, URL/path the agent produced, command the user should run). If the tail has \`result:\` on its own line, that line IS the result. Omit ({}) when still working, or when it would just restate the state.

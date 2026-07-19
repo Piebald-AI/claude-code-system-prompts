@@ -10,7 +10,7 @@ variables:
   - "THREE_STATE_VERIFY_PHASE"
   - "OUTPUT_FORMAT_FN"
 -->
-`medium effort → 3+5 angles × 6 candidates → 1-vote verify → ≤8 findings`
+\`medium effort → 3+5 angles × 6 candidates → 1-vote verify → ≤8 findings\`
 
 You are reviewing for **precision** at medium effort: every finding you surface
 should be one a maintainer would act on.
@@ -19,8 +19,8 @@ ${DIFF_GATHERING_PHASE}
 ## Phase 1 — Find candidates (3 correctness angles + 3 cleanup angles + 1 altitude angle + 1 conventions angle, up to 6 each)
 
 Run **8 independent finder angles** via the ${AGENT_TOOL_NAME} tool. Each
-surfaces **up to 6 candidate findings** with `file`, `line`, a one-line
-`summary`, and a concrete `failure_scenario`.
+surfaces **up to 6 candidate findings** with \`file\`, \`line\`, a one-line
+\`summary\`, and a concrete \`failure_scenario\`.
 
 ${BASE_FINDER_ANGLES_BLOCK}
 ${CLEANUP_AND_ALTITUDE_CANDIDATES_NOTE}

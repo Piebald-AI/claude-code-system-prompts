@@ -38,7 +38,7 @@ alternatives were considered") instead of inventing an answer.
 ## Structure of the artifact
 
 Write an HTML file and publish it with the ${ARTIFACT_TOOL_NAME} tool. Load
-the `${ARTIFACT_DESIGN_SKILL_NAME}` skill first and give the page a
+the \`${ARTIFACT_DESIGN_SKILL_NAME}\` skill first and give the page a
 utilitarian treatment.
 
 1. **What and why** — two or three sentences: what this PR changes and the
@@ -46,7 +46,7 @@ utilitarian treatment.
 2. **Before / After** — a short side-by-side showing the user-observable
    change (behavior, API shape, or output). Skip if the change has no
    observable surface.
-3. **Tour of the diff** — one `<details>` block per logical piece of the
+3. **Tour of the diff** — one \`<details>\` block per logical piece of the
    change. Inside each: the relevant code snippet (trimmed), a plain-language
    explanation of what it does, and anything a reviewer should look closely
    at.

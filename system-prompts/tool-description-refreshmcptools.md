@@ -13,5 +13,5 @@ MCP servers normally push a notification when their tool list changes, but that 
 The refreshed tools are available immediately — you can call them on your next step.
 
 Usage:
-- Refresh all connected servers: `RefreshMcpTools` with no arguments
-- Refresh one server: `RefreshMcpTools({ server: "myserver" })`
+- Refresh all connected servers: \`RefreshMcpTools\` with no arguments
+- Refresh one server: \`RefreshMcpTools({ server: "myserver" })\`

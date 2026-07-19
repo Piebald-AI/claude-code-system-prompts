@@ -5,7 +5,7 @@ ccVersion: "2.1.198"
 -->
 # Agent Design Patterns
 
-This file covers decision heuristics for building agents on the Claude API: which primitives to reach for, how to design your tool surface, and how to manage context and cost over long runs. For per-tool mechanics and code examples, see `tool-use-concepts.md` and the language-specific folders.
+This file covers decision heuristics for building agents on the Claude API: which primitives to reach for, how to design your tool surface, and how to manage context and cost over long runs. For per-tool mechanics and code examples, see \`tool-use-concepts.md\` and the language-specific folders.
 
 ---
 
@@ -13,10 +13,10 @@ This file covers decision heuristics for building agents on the Claude API: whic
 
 | Parameter | When to use it | What to expect |
 | --- | --- | --- |
-| **Adaptive thinking** (`thinking: {type: "adaptive"}`) | When you want Claude to control when and how much to think. | Claude determines thinking depth per request and automatically interleaves thinking between tool calls. No token budget to tune. |
-| **Effort** (`output_config: {effort: ...}`) | When adjusting the tradeoff between thoroughness and token efficiency. | Lower effort → fewer and more-consolidated tool calls, less preamble, terser confirmations. `medium` is often a favorable balance. Use `max` when correctness matters more than cost. |
+| **Adaptive thinking** (\`thinking: {type: "adaptive"}\`) | When you want Claude to control when and how much to think. | Claude determines thinking depth per request and automatically interleaves thinking between tool calls. No token budget to tune. |
+| **Effort** (\`output_config: {effort: ...}\`) | When adjusting the tradeoff between thoroughness and token efficiency. | Lower effort → fewer and more-consolidated tool calls, less preamble, terser confirmations. \`medium\` is often a favorable balance. Use \`max\` when correctness matters more than cost. |
 
-See `SKILL.md` §Thinking & Effort for model support and parameter details.
+See \`SKILL.md\` §Thinking & Effort for model support and parameter details.
 
 ---
 
@@ -30,10 +30,10 @@ A **bash tool** gives Claude broad programmatic leverage — it can perform almo
 
 **When to promote an action to a dedicated tool:**
 
-- **Security boundary.** Actions that require gating are natural candidates. Reversibility is a useful criterion: hard-to-reverse actions (external API calls, sending messages, deleting data) can be gated behind user confirmation. A `send_email` tool is easy to gate; `bash -c "curl -X POST ..."` is not.
-- **Staleness checks.** A dedicated `edit` tool can reject writes if the file changed since Claude last read it. Bash can't enforce that invariant.
+- **Security boundary.** Actions that require gating are natural candidates. Reversibility is a useful criterion: hard-to-reverse actions (external API calls, sending messages, deleting data) can be gated behind user confirmation. A \`send_email\` tool is easy to gate; \`bash -c "curl -X POST ..."\` is not.
+- **Staleness checks.** A dedicated \`edit\` tool can reject writes if the file changed since Claude last read it. Bash can't enforce that invariant.
 - **Rendering.** Some actions benefit from custom UI. Claude Code promotes question-asking to a tool so it can render as a modal, present options, and block the agent loop until answered.
-- **Scheduling.** Read-only tools like `glob` and `grep` can be marked parallel-safe. When the same actions run through bash, the harness can't tell a parallel-safe `grep` from a parallel-unsafe `git push`, so it must serialize.
+- **Scheduling.** Read-only tools like \`glob\` and \`grep\` can be marked parallel-safe. When the same actions run through bash, the harness can't tell a parallel-safe \`grep\` from a parallel-unsafe \`git push\`, so it must serialize.
 
 **Rule of thumb:** Start with bash for breadth. Promote to dedicated tools when you need to gate, render, audit, or parallelize the action.
 
@@ -48,9 +48,9 @@ A **bash tool** gives Claude broad programmatic leverage — it can perform almo
 | **Computer use** | Client or Server | Claude needs to interact with GUIs, web apps, or visual interfaces. | Claude takes screenshots and issues mouse/keyboard commands. Can be self-hosted (you run the environment) or Anthropic-hosted. |
 | **Code execution** | Server | Claude needs to run code in a sandbox you don't want to manage. | Anthropic-hosted container with built-in file and bash sub-tools. No client-side execution. |
 | **Web search / fetch** | Server | Claude needs information past its training cutoff (news, current events, recent docs) or the content of a specific URL. | Claude issues a query or URL; Anthropic executes it and returns results with citations. |
-| **Memory** | Client | Claude needs to save context across sessions. | Claude reads/writes a `/memories` directory. You implement the storage backend. |
+| **Memory** | Client | Claude needs to save context across sessions. | Claude reads/writes a \`/memories\` directory. You implement the storage backend. |
 
-**Client-side** tools are defined by Anthropic (name, schema, Claude's usage pattern) but executed by your harness. Anthropic provides reference implementations. **Server-side** tools run entirely on Anthropic infrastructure — declare them in `tools` and Claude handles the rest.
+**Client-side** tools are defined by Anthropic (name, schema, Claude's usage pattern) but executed by your harness. Anthropic provides reference implementations. **Server-side** tools run entirely on Anthropic infrastructure — declare them in \`tools\` and Claude handles the rest.
 
 ---
 
@@ -71,7 +71,7 @@ With standard tool use, each tool call is a round trip: Claude calls the tool, t
 | Feature | When to use it | What to expect |
 | --- | --- | --- |
 | **Tool search** | Many tools available, but only a few relevant per request. Don't want all schemas in context upfront. | Claude searches the tool set and loads only relevant schemas. Tool definitions are appended, not swapped — preserves cache (see Caching below). |
-| **Skills** | Task-specific instructions Claude should load only when relevant. | Each skill is a folder with a `SKILL.md`. The skill's description sits in context by default; Claude reads the full file when the task calls for it. |
+| **Skills** | Task-specific instructions Claude should load only when relevant. | Each skill is a folder with a \`SKILL.md\`. The skill's description sits in context by default; Claude reads the full file when the task calls for it. |
 
 Both patterns keep the fixed context small and load detail on demand.
 
@@ -82,7 +82,7 @@ Both patterns keep the fixed context small and load detail on demand.
 | Pattern | When to use it | What to expect |
 | --- | --- | --- |
 | **Context editing** | Context grows stale over many turns (old tool results, completed thinking). | Tool results and thinking blocks are cleared based on configurable thresholds. Keeps the transcript lean without summarizing. |
-| **Compaction** | Conversation likely to reach or exceed the context window limit. | Earlier context is summarized into a compaction block server-side. See `SKILL.md` §Compaction for the critical `response.content` handling. |
+| **Compaction** | Conversation likely to reach or exceed the context window limit. | Earlier context is summarized into a compaction block server-side. See \`SKILL.md\` §Compaction for the critical \`response.content\` handling. |
 | **Memory** | State must persist across sessions (not just within one conversation). | Claude reads/writes files in a memory directory. Survives process restarts. |
 
 **Choosing between them:** Context editing and compaction operate within a session — editing prunes stale turns, compaction summarizes when you're near the limit. Memory is for cross-session persistence. Many long-running agents use all three.
@@ -91,16 +91,16 @@ Both patterns keep the fixed context small and load detail on demand.
 
 ## Caching for Agents
 
-**Read `prompt-caching.md` first.** It covers the prefix-match invariant, breakpoint placement, the silent-invalidator audit, and why changing tools or models mid-session breaks the cache. This section covers only the agent-specific workarounds for those constraints.
+**Read \`prompt-caching.md\` first.** It covers the prefix-match invariant, breakpoint placement, the silent-invalidator audit, and why changing tools or models mid-session breaks the cache. This section covers only the agent-specific workarounds for those constraints.
 
-| Constraint (from `prompt-caching.md`) | Agent-specific workaround |
+| Constraint (from \`prompt-caching.md\`) | Agent-specific workaround |
 | --- | --- |
-| Editing the system prompt mid-session invalidates the cache. | Append a `{"role": "system", ...}` message to `messages[]` instead (no beta header; on supporting models — see `prompt-caching.md` § Mid-conversation system messages). The cached prefix stays intact, and the model treats it as an operator-authority instruction rather than user text. On models that don't support it, fall back to a `<system-reminder>` text block in the user turn. |
+| Editing the system prompt mid-session invalidates the cache. | Append a \`{"role": "system", ...}\` message to \`messages[]\` instead (no beta header; on supporting models — see \`prompt-caching.md\` § Mid-conversation system messages). The cached prefix stays intact, and the model treats it as an operator-authority instruction rather than user text. On models that don't support it, fall back to a \`<system-reminder>\` text block in the user turn. |
 | Switching models mid-session invalidates the cache. | Spawn a **subagent** with the cheaper model for the sub-task; keep the main loop on one model. |
 | Adding/removing tools mid-session invalidates the cache. | Use **tool search** for dynamic discovery — it appends tool schemas rather than swapping them, so the existing prefix is preserved. |
 
-For multi-turn breakpoint placement, use top-level auto-caching — see `prompt-caching.md` §Placement patterns.
+For multi-turn breakpoint placement, use top-level auto-caching — see \`prompt-caching.md\` §Placement patterns.
 
 ---
 
-For live documentation on any of these features, see `live-sources.md`.
+For live documentation on any of these features, see \`live-sources.md\`.
