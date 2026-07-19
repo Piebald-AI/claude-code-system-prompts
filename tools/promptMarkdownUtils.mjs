@@ -31,7 +31,11 @@ export function nameToFilename(name) {
  * Serialize a string as a deterministic YAML-compatible double-quoted scalar.
  */
 export function yamlString(value) {
-  return JSON.stringify(String(value));
+  const stringValue = String(value);
+  if (stringValue.includes('-->')) {
+    throw new Error('Frontmatter strings cannot contain the HTML comment terminator "-->"');
+  }
+  return JSON.stringify(stringValue);
 }
 
 /**

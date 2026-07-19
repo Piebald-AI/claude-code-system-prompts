@@ -56,6 +56,10 @@ test('yamlString safely quotes YAML-significant and multiline values', () => {
   for (const value of values) {
     assert.equal(JSON.parse(yamlString(value)), value);
   }
+  assert.throws(
+    () => yamlString('closes --> the metadata comment'),
+    /HTML comment terminator/
+  );
 });
 
 test('renderPromptFrontmatter quotes every string field and list item', () => {
