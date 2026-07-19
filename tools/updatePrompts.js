@@ -51,7 +51,7 @@ async function countTokens(text) {
       'x-api-key': ANTHROPIC_API_KEY
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-5-20250929',
       messages: [
         {
           role: 'user',
@@ -118,8 +118,7 @@ async function countTokensBatch(prompts, batchSize = 5, delayMs = 100) {
         const tokens = await countTokens(content);
         return { filename, tokens };
       } catch (err) {
-        console.error(`Error counting tokens for ${filename}: ${err.message}`);
-        return { filename, tokens: 0 };
+        throw new Error(`Error counting tokens for ${filename}: ${err.message}`, { cause: err });
       }
     });
 
@@ -299,10 +298,14 @@ async function updateFromJSON(jsonPath) {
   const promptsToCount = [];
   const unchangedPrompts = [];
   const existingFilesByPromptName = new Map();
+  const existingFilesByBody = new Map();
   for (const existingFilename of readdirSync(SYSTEM_PROMPTS_DIR).filter(f => f.endsWith('.md'))) {
     const existingFile = parseMarkdownFile(join(SYSTEM_PROMPTS_DIR, existingFilename));
     if (existingFile?.name) {
-      existingFilesByPromptName.set(existingFile.name, { filename: existingFilename, ...existingFile });
+      const entry = { filename: existingFilename, ...existingFile };
+      existingFilesByPromptName.set(existingFile.name, entry);
+      const bodyKey = existingFile.body.trim();
+      existingFilesByBody.set(bodyKey, existingFilesByBody.has(bodyKey) ? null : entry);
     }
   }
 
@@ -315,8 +318,14 @@ async function updateFromJSON(jsonPath) {
 
     // Match by prompt name as well as canonical path so filename migrations can
     // retain token counts and distinguish metadata-only rewrites from body changes.
-    const existingFile = parseMarkdownFile(filepath) || existingFilesByPromptName.get(prompt.name);
-    const existingTokenEntry = existingTokenCounts.get(filename) || existingTokenCounts.get(prompt.name);
+    const existingFile =
+      parseMarkdownFile(filepath) ||
+      existingFilesByPromptName.get(prompt.name) ||
+      existingFilesByBody.get(reconstructedContent.trim());
+    const existingTokenEntry =
+      existingTokenCounts.get(filename) ||
+      existingTokenCounts.get(prompt.name) ||
+      (existingFile && existingTokenCounts.get(existingFile.filename));
     const bodyChanged = existingFile && existingFile.body.trim() !== reconstructedContent.trim();
 
     if (existingFile) {
@@ -328,7 +337,7 @@ async function updateFromJSON(jsonPath) {
       if (bodyChanged || !existingTokenEntry) {
         promptsToCount.push({ filename, content: reconstructedContent, prompt });
       } else {
-        unchangedPrompts.push({ filename, prompt });
+        unchangedPrompts.push({ filename, prompt, tokens: existingTokenEntry.tokens });
       }
     } else {
       console.log(`\x1b[32mNew: ${filename}\x1b[0m`);
@@ -353,9 +362,8 @@ async function updateFromJSON(jsonPath) {
   }
 
   // Use existing token counts for unchanged prompts
-  for (const { filename, prompt } of unchangedPrompts) {
-    const tokenEntry = existingTokenCounts.get(filename) || existingTokenCounts.get(prompt.name);
-    promptsByFilename.set(filename, { prompt, tokens: tokenEntry?.tokens || 0 });
+  for (const { filename, prompt, tokens } of unchangedPrompts) {
+    promptsByFilename.set(filename, { prompt, tokens });
   }
 
   // Find deleted prompts
