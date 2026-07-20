@@ -98,3 +98,18 @@ test('renderPromptFrontmatter quotes every string field and list item', () => {
   assert.match(frontmatter, /  whenToUse: "Use when: needed\\nAcross lines"/);
   assert.match(frontmatter, /\n-->\n$/);
 });
+
+test('renderPromptFrontmatter preserves scalar tool metadata', () => {
+  const frontmatter = renderPromptFrontmatter({
+    name: 'Agent Prompt: Legacy example',
+    description: 'Legacy scalar metadata',
+    version: '2.1.216',
+    agentMetadata: {
+      tools: '*',
+      disallowedTools: 'Agent',
+    },
+  });
+
+  assert.match(frontmatter, /\n  tools: "\*"\n/);
+  assert.match(frontmatter, /\n  disallowedTools: "Agent"\n/);
+});

@@ -147,6 +147,8 @@ export function renderPromptFrontmatter(prompt) {
       for (const tool of metadata.disallowedTools) {
         lines.push(`    - ${yamlString(tool)}`);
       }
+    } else if (metadata.disallowedTools != null) {
+      lines.push(`  disallowedTools: ${yamlString(metadata.disallowedTools)}`);
     }
     if (metadata.whenToUse != null) {
       lines.push(`  whenToUse: ${yamlString(metadata.whenToUse)}`);
