@@ -15,7 +15,7 @@ variables:
   - "MAX_FINDINGS"
   - "INLINE_REVIEW_DISCLOSURE"
 -->
-\`${REVIEW_MODE_TAG}\`
+`${REVIEW_MODE_TAG}`
 
 ${REVIEW_LEAD_IN}
 
@@ -24,7 +24,7 @@ ${DIFF_GATHERING_PHASE}## Phase 1 — Find candidates (${ANGLE_COUNT} angles, si
 
 Work through **${ANGLE_COUNT} angles** yourself, in sequence, in this same
 context — do not spawn subagents. Each surfaces candidate findings with
-\`file\`, \`line\`, a one-line \`summary\`, and a concrete \`failure_scenario\`.
+`file`, `line`, a one-line `summary`, and a concrete `failure_scenario`.
 
 ${FINDER_ANGLES_BLOCK}
 ${CLEANUP_AND_ALTITUDE_CANDIDATES_NOTE}

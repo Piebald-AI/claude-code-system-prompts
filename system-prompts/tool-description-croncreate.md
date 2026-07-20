@@ -29,7 +29,7 @@ For "every N minutes" / "every hour" / "weekdays at 9am" requests:
 
 ## Avoid the :00 and :30 minute marks when the task allows it
 
-Every user who asks for "9am" gets \`0 9\`, and every user who asks for "hourly" gets \`0 *\` — which means requests from across the planet land on the API at the same instant. When the user's request is approximate, pick a minute that is NOT 0 or 30:
+Every user who asks for "9am" gets `0 9`, and every user who asks for "hourly" gets `0 *` — which means requests from across the planet land on the API at the same instant. When the user's request is approximate, pick a minute that is NOT 0 or 30:
   "every morning around 9" → "57 8 * * *" or "3 9 * * *" (not "0 9 * * *")
   "hourly" → "7 * * * *" (not "0 * * * *")
   "in an hour or so, remind me to..." → pick whatever minute you land on, don't round

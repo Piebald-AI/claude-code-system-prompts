@@ -12,7 +12,7 @@ variables:
 -->
 Reads a file from the local filesystem.
 
-- \`file_path\` must be an absolute path.
+- `file_path` must be an absolute path.
 - Reads up to ${MAX_LINES_CONSTANT} lines by default${CONDITIONAL_LENGTH_NOTE}.
 ${CAT_DASH_N_NOTE}
 ${READ_FULL_FILE_NOTE}

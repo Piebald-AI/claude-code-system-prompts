@@ -44,8 +44,8 @@ If a chart *is* right, pick the type by the job:
 - **Emphasis** = the most underused form. One series in the accent hue, the rest in
   the de-emphasis gray. Often the honest answer to "make this chart clearer."
 - **Texture is an opt-in expression, not a default form.** It earns its place only
-  for accessibility (full CVD), print/export, and \`forced-colors\`. Never decorative.
-  → see \`marks-and-anatomy.md\`.
+  for accessibility (full CVD), print/export, and `forced-colors`. Never decorative.
+  → see `marks-and-anatomy.md`.
 
 ## Series-count ladder (categorical)
 

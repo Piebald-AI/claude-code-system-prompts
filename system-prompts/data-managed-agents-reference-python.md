@@ -26,7 +26,7 @@ import anthropic
 client = anthropic.Anthropic()
 
 # Explicit API key (only when you must inject a specific key)
-client = anthropic.Anthropic(api_key=\"your-api-key\")
+client = anthropic.Anthropic(api_key="your-api-key")
 ```
 
 ---
@@ -35,10 +35,10 @@ client = anthropic.Anthropic(api_key=\"your-api-key\")
 
 ```python
 environment = client.beta.environments.create(
-    name=\"my-dev-env\",
+    name="my-dev-env",
     config={
-        \"type\": \"cloud\",
-        \"networking\": {\"type\": \"unrestricted\"},
+        "type": "cloud",
+        "networking": {"type": "unrestricted"},
     },
 )
 print(environment.id)  # env_...
@@ -48,25 +48,25 @@ print(environment.id)  # env_...
 
 ## Create an Agent (required first step)
 
-> ⚠️ **There is no inline agent config.** `model`/`system`/`tools` live on the agent object, not the session. Always start with `agents.create()` — the session only takes `agent={\"type\": \"agent\", \"id\": agent.id}`.
+> ⚠️ **There is no inline agent config.** `model`/`system`/`tools` live on the agent object, not the session. Always start with `agents.create()` — the session only takes `agent={"type": "agent", "id": agent.id}`.
 
 ### Minimal
 
 ```python
 # 1. Create the agent (reusable, versioned)
 agent = client.beta.agents.create(
-    name=\"Coding Assistant\",
-    model=\"{{OPUS_ID}}\",
-    tools=[{\"type\": \"agent_toolset_20260401\", \"default_config\": {\"enabled\": True}}],
+    name="Coding Assistant",
+    model="{{OPUS_ID}}",
+    tools=[{"type": "agent_toolset_20260401", "default_config": {"enabled": True}}],
 )
 
 # 2. Start a session
 session = client.beta.sessions.create(
-    agent={\"type\": \"agent\", \"id\": agent.id, \"version\": agent.version},
+    agent={"type": "agent", "id": agent.id, "version": agent.version},
     environment_id=environment.id,
 )
 print(session.id, session.status)
-print(f\"Trace: https://platform.claude.com/workspaces/default/sessions/{session.id}\")  # swap 'default' for your workspace ID if the API key is not in the Default workspace
+print(f"Trace: https://platform.claude.com/workspaces/default/sessions/{session.id}")  # swap 'default' for your workspace ID if the API key is not in the Default workspace
 ```
 
 ### With system prompt and custom tools
@@ -75,37 +75,37 @@ print(f\"Trace: https://platform.claude.com/workspaces/default/sessions/{session
 import os
 
 agent = client.beta.agents.create(
-    name=\"Code Reviewer\",
-    model=\"{{OPUS_ID}}\",
-    system=\"You are a senior code reviewer.\",
+    name="Code Reviewer",
+    model="{{OPUS_ID}}",
+    system="You are a senior code reviewer.",
     tools=[
-        {\"type\": \"agent_toolset_20260401\"},
+        {"type": "agent_toolset_20260401"},
         {
-            \"type\": \"custom\",
-            \"name\": \"run_tests\",
-            \"description\": \"Run the test suite\",
-            \"input_schema\": {
-                \"type\": \"object\",
-                \"properties\": {
-                    \"test_path\": {\"type\": \"string\", \"description\": \"Path to test file\"}
+            "type": "custom",
+            "name": "run_tests",
+            "description": "Run the test suite",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "test_path": {"type": "string", "description": "Path to test file"}
                 },
-                \"required\": [\"test_path\"],
+                "required": ["test_path"],
             },
         },
     ],
 )
 
 session = client.beta.sessions.create(
-    agent={\"type\": \"agent\", \"id\": agent.id, \"version\": agent.version},
+    agent={"type": "agent", "id": agent.id, "version": agent.version},
     environment_id=environment.id,
-    title=\"Code review session\",
+    title="Code review session",
     resources=[
         {
-            \"type\": \"github_repository\",
-            \"url\": \"https://github.com/owner/repo\",
-            \"mount_path\": \"/workspace/repo\",
-            \"authorization_token\": os.environ[\"GITHUB_TOKEN\"],
-            \"branch\": \"main\",
+            "type": "github_repository",
+            "url": "https://github.com/owner/repo",
+            "mount_path": "/workspace/repo",
+            "authorization_token": os.environ["GITHUB_TOKEN"],
+            "branch": "main",
         }
     ],
 )
@@ -120,8 +120,8 @@ client.beta.sessions.events.send(
     session_id=session.id,
     events=[
         {
-            \"type\": \"user.message\",
-            \"content\": [{\"type\": \"text\", \"text\": \"Review the auth module\"}],
+            "type": "user.message",
+            "content": [{"type": "text", "text": "Review the auth module"}],
         }
     ],
 )
@@ -142,7 +142,7 @@ with client.beta.sessions.events.stream(
 ) as stream:
     client.beta.sessions.events.send(
         session_id=session.id,
-        events=[{\"type\": \"user.message\", \"content\": [{\"type\": \"text\", \"text\": \"...\"}]}],
+        events=[{"type": "user.message", "content": [{"type": "text", "text": "..."}]}],
     )
     for event in stream:
         ...  # process events
@@ -152,22 +152,22 @@ with client.beta.sessions.events.stream(
     session_id=session.id,
 ) as stream:
     for event in stream:
-        if event.type == \"agent.message\":
+        if event.type == "agent.message":
             for block in event.content:
-                if block.type == \"text\":
-                    print(block.text, end=\"\", flush=True)
-        elif event.type == \"agent.custom_tool_use\":
+                if block.type == "text":
+                    print(block.text, end="", flush=True)
+        elif event.type == "agent.custom_tool_use":
             # Custom tool invocation — session is now idle
-            print(f\"\
-Custom tool call: {event.name}\")
-            print(f\"Input: {json.dumps(event.input)}\")
+            print(f"\
+Custom tool call: {event.name}")
+            print(f"Input: {json.dumps(event.input)}")
             # Send result back (see below)
-        elif event.type == \"session.status_idle\":
-            print(\"\
---- Agent idle ---\")
-        elif event.type == \"session.status_terminated\":
-            print(\"\
---- Session terminated ---\")
+        elif event.type == "session.status_idle":
+            print("\
+--- Agent idle ---")
+        elif event.type == "session.status_terminated":
+            print("\
+--- Session terminated ---")
             break
 ```
 
@@ -180,9 +180,9 @@ client.beta.sessions.events.send(
     session_id=session.id,
     events=[
         {
-            \"type\": \"user.custom_tool_result\",
-            \"custom_tool_use_id\": \"sevt_abc123\",
-            \"content\": [{\"type\": \"text\", \"text\": \"All 42 tests passed.\"}],
+            "type": "user.custom_tool_result",
+            "custom_tool_use_id": "sevt_abc123",
+            "content": [{"type": "text", "text": "All 42 tests passed."}],
         }
     ],
 )
@@ -197,7 +197,7 @@ events = client.beta.sessions.events.list(
     session_id=session.id,
 )
 for event in events.data:
-    print(f\"{event.type}: {event.id}\")
+    print(f"{event.type}: {event.id}")
 ```
 
 > ⚠️ **Prefer the SDK over raw `requests`/`httpx`.** If you hand-roll a poll loop, don't assume `timeout=(5, 60)` or `httpx.Timeout(120)` caps total call duration — both are **per-chunk** read timeouts (reset on every byte), so a trickling response can block forever. For a hard wall-clock deadline, track `time.monotonic()` at the loop level and bail explicitly, or wrap with `asyncio.wait_for()`. See [Receiving Events](../../shared/managed-agents-events.md#receiving-events).
@@ -211,30 +211,30 @@ import json
 
 
 def run_custom_tool(tool_name: str, tool_input: dict) -> str:
-    \"\"\"Execute a custom tool and return the result.\"\"\"
-    if tool_name == \"run_tests\":
+    """Execute a custom tool and return the result."""
+    if tool_name == "run_tests":
         # Your tool implementation here
-        return \"All tests passed.\"
-    return f\"Unknown tool: {tool_name}\"
+        return "All tests passed."
+    return f"Unknown tool: {tool_name}"
 
 
 def run_session(client, session_id: str):
-    \"\"\"Stream events and handle custom tool calls.\"\"\"
+    """Stream events and handle custom tool calls."""
     while True:
         with client.beta.sessions.events.stream(
             session_id=session_id,
         ) as stream:
             tool_calls = []
             for event in stream:
-                if event.type == \"agent.message\":
+                if event.type == "agent.message":
                     for block in event.content:
-                        if block.type == \"text\":
-                            print(block.text, end=\"\", flush=True)
-                elif event.type == \"agent.custom_tool_use\":
+                        if block.type == "text":
+                            print(block.text, end="", flush=True)
+                elif event.type == "agent.custom_tool_use":
                     tool_calls.append(event)
-                elif event.type == \"session.status_idle\":
+                elif event.type == "session.status_idle":
                     break
-                elif event.type == \"session.status_terminated\":
+                elif event.type == "session.status_terminated":
                     return
 
         if not tool_calls:
@@ -245,9 +245,9 @@ def run_session(client, session_id: str):
         for call in tool_calls:
             result = run_custom_tool(call.name, call.input)
             results.append({
-                \"type\": \"user.custom_tool_result\",
-                \"custom_tool_use_id\": call.id,
-                \"content\": [{\"type\": \"text\", \"text\": result}],
+                "type": "user.custom_tool_result",
+                "custom_tool_use_id": call.id,
+                "content": [{"type": "text", "text": result}],
             })
 
         client.beta.sessions.events.send(
@@ -261,16 +261,16 @@ def run_session(client, session_id: str):
 ## Upload a File
 
 ```python
-with open(\"data.csv\", \"rb\") as f:
+with open("data.csv", "rb") as f:
     file = client.beta.files.upload(
         file=f,
     )
 
 # Use in a session
 session = client.beta.sessions.create(
-    agent={\"type\": \"agent\", \"id\": agent.id, \"version\": agent.version},
+    agent={"type": "agent", "id": agent.id, "version": agent.version},
     environment_id=environment.id,
-    resources=[{\"type\": \"file\", \"file_id\": file.id, \"mount_path\": \"/workspace/data.csv\"}],
+    resources=[{"type": "file", "file_id": file.id, "mount_path": "/workspace/data.csv"}],
 )
 ```
 
@@ -284,7 +284,7 @@ List files the agent wrote to `/mnt/session/outputs/` during a session, then dow
 # List files associated with a session
 files = client.beta.files.list(
     scope_id=session.id,
-    betas=[\"managed-agents-2026-04-01\"],
+    betas=["managed-agents-2026-04-01"],
 )
 for f in files.data:
     print(f.filename, f.size_bytes)
@@ -301,17 +301,17 @@ for f in files.data:
 
 ```python
 # Get session details
-session = client.beta.sessions.retrieve(session_id=\"sesn_011CZxAbc123Def456\")
+session = client.beta.sessions.retrieve(session_id="sesn_011CZxAbc123Def456")
 print(session.status, session.usage)
 
 # List sessions
 sessions = client.beta.sessions.list()
 
 # Delete a session
-client.beta.sessions.delete(session_id=\"sesn_011CZxAbc123Def456\")
+client.beta.sessions.delete(session_id="sesn_011CZxAbc123Def456")
 
 # Archive a session
-client.beta.sessions.archive(session_id=\"sesn_011CZxAbc123Def456\")
+client.beta.sessions.archive(session_id="sesn_011CZxAbc123Def456")
 ```
 
 ---
@@ -321,14 +321,14 @@ client.beta.sessions.archive(session_id=\"sesn_011CZxAbc123Def456\")
 ```python
 # Agent declares MCP server (no auth here — auth goes in a vault)
 agent = client.beta.agents.create(
-    name=\"MCP Agent\",
-    model=\"{{OPUS_ID}}\",
+    name="MCP Agent",
+    model="{{OPUS_ID}}",
     mcp_servers=[
-        {\"type\": \"url\", \"name\": \"my-tools\", \"url\": \"https://my-mcp-server.example.com/sse\"},
+        {"type": "url", "name": "my-tools", "url": "https://my-mcp-server.example.com/sse"},
     ],
     tools=[
-        {\"type\": \"agent_toolset_20260401\", \"default_config\": {\"enabled\": True}},
-        {\"type\": \"mcp_toolset\", \"mcp_server_name\": \"my-tools\"},
+        {"type": "agent_toolset_20260401", "default_config": {"enabled": True}},
+        {"type": "mcp_toolset", "mcp_server_name": "my-tools"},
     ],
 )
 

@@ -15,6 +15,6 @@ Constraints:
 - Never fabricate or exaggerate user sentiment — report only what actually happened.
 - Keep details factual and reproducible: what was attempted, what happened, exact error text if short, and repro steps. No speculation.
 - If a field is genuinely unknown, leave it blank rather than guess — everything in the draft should be sourced from the user or the session, not inferred.
-- Use \`area\` to name the part of Claude Code the feedback is about (a feature, command, or workflow — e.g. "hooks config", "/help", "file editing") when there is a clear one; leave it blank otherwise.
+- Use `area` to name the part of Claude Code the feedback is about (a feature, command, or workflow — e.g. "hooks config", "/help", "file editing") when there is a clear one; leave it blank otherwise.
 - Do not include secrets, credentials, or personal information in the title or details.
 - At most one draft per distinct issue; do not re-draft the same issue in a session.

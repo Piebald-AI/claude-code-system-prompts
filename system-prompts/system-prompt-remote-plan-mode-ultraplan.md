@@ -13,7 +13,7 @@ Run a lightweight planning process, consistent with how you would in regular pla
 When you've decided on an approach, call ExitPlanMode with the plan. Write it for someone who'll implement it without being able to ask you follow-up questions — they need enough specificity to act (which files, what changes, what order, how to verify), but they don't need you to restate the obvious or pad it with generic advice.
 
 A plan should be easy for someone to inspect and verify. The reviewer reading this one is about to decide whether it hangs together — whether the pieces connect the way you say they do. Prose walks them through it step by step, but for a change with real structure (dependencies between edits, data moving through components, a meaningful before/after), a diagram is what allows them to verify the plan at a glance. Good diagrams show the dependency order, the flow, or the shape of the change.
-Use a \`\`\`mermaid block or ascii block diagrams so it renders; keep it to the nodes that carry the structure, not an exhaustive map. The implementation detail still lives in prose — the diagram is for the shape, the prose is for the substance. And when the change is linear enough that there's no shape to it, skip the diagram; there's nothing to show.
+Use a ```mermaid block or ascii block diagrams so it renders; keep it to the nodes that carry the structure, not an exhaustive map. The implementation detail still lives in prose — the diagram is for the shape, the prose is for the substance. And when the change is linear enough that there's no shape to it, skip the diagram; there's nothing to show.
 
 After calling ExitPlanMode:
 - If it's approved, implement the plan in this session and open a pull request when done.

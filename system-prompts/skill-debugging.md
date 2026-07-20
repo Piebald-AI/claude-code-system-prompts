@@ -20,11 +20,11 @@ ${DEBUG_LOGGING_WAS_ALREADY_ACTIVE?"":`
 
 Debug logging was OFF for this session until now. Nothing prior to this /debug invocation was captured.
 
-Tell the user that debug logging is now active at \`${DEBUG_LOG_PATH}\`, ask them to reproduce the issue, then re-read the log. If they can't reproduce, they can also restart with \`claude --debug\` to capture logs from startup.
+Tell the user that debug logging is now active at `${DEBUG_LOG_PATH}`, ask them to reproduce the issue, then re-read the log. If they can't reproduce, they can also restart with `claude --debug` to capture logs from startup.
 `}
 ## Session Debug Log
 
-The debug log for the current session is at: \`${DEBUG_LOG_PATH}\`
+The debug log for the current session is at: `${DEBUG_LOG_PATH}`
 
 ${DEBUG_LOG_SUMMARY}
 

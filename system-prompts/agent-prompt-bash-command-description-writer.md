@@ -11,6 +11,6 @@ For simple commands (git, npm, standard CLI tools), keep it brief (5-10 words):
 - npm install → "Install package dependencies"
 
 For commands that are harder to parse at a glance (piped commands, obscure flags, etc.), add enough context to clarify what it does:
-- find . -name "*.tmp" -exec rm {} \\; → "Find and delete all .tmp files recursively"
+- find . -name "*.tmp" -exec rm {} \; → "Find and delete all .tmp files recursively"
 - git reset --hard origin/main → "Discard all local changes and match remote main"
 - curl -s url | jq '.data[]' → "Fetch JSON from URL and extract data array elements"

@@ -9,20 +9,20 @@ Detailed format specifications for every plugin component type. Reference this w
 
 ## Skills
 
-**Location**: \`skills/skill-name/SKILL.md\`
+**Location**: `skills/skill-name/SKILL.md`
 **Format**: Markdown with YAML frontmatter
 
 ### Frontmatter Fields
 
 | Field         | Required | Type   | Description                                             |
 | ------------- | -------- | ------ | ------------------------------------------------------- |
-| \`name\`        | Yes      | String | Skill identifier (lowercase, hyphens; matches dir name) |
-| \`description\` | Yes      | String | Third-person description with trigger phrases           |
-| \`metadata\`    | No       | Map    | Arbitrary key-value pairs (e.g., \`version\`, \`author\`)   |
+| `name`        | Yes      | String | Skill identifier (lowercase, hyphens; matches dir name) |
+| `description` | Yes      | String | Third-person description with trigger phrases           |
+| `metadata`    | No       | Map    | Arbitrary key-value pairs (e.g., `version`, `author`)   |
 
 ### Example Skill
 
-\`\`\`yaml
+```yaml
 ---
 name: api-design
 description: >
@@ -32,17 +32,17 @@ description: >
 metadata:
   version: "0.1.0"
 ---
-\`\`\`
+```
 
 ### Writing Style Rules
 
 - **Frontmatter description**: Third-person ("This skill should be used when..."), with specific trigger phrases in quotes.
 - **Body**: Imperative/infinitive form ("Parse the config file," not "You should parse the config file").
-- **Length**: Keep SKILL.md body under 3,000 words (ideally 1,500-2,000). Move detailed content to \`references/\`.
+- **Length**: Keep SKILL.md body under 3,000 words (ideally 1,500-2,000). Move detailed content to `references/`.
 
 ### Skill Directory Structure
 
-\`\`\`
+```
 skill-name/
 ├── SKILL.md              # Core knowledge (required)
 ├── references/           # Detailed docs loaded on demand
@@ -52,7 +52,7 @@ skill-name/
 │   └── sample-config.json
 └── scripts/              # Utility scripts
     └── validate.sh
-\`\`\`
+```
 
 ### Progressive Disclosure Levels
 
@@ -62,22 +62,22 @@ skill-name/
 
 ## Agents
 
-**Location**: \`agents/agent-name.md\`
+**Location**: `agents/agent-name.md`
 **Format**: Markdown with YAML frontmatter
 
 ### Frontmatter Fields
 
 | Field         | Required | Type   | Description                                         |
 | ------------- | -------- | ------ | --------------------------------------------------- |
-| \`name\`        | Yes      | String | Lowercase, hyphens, 3-50 chars                      |
-| \`description\` | Yes      | String | Triggering conditions with \`<example>\` blocks       |
-| \`model\`       | Yes      | String | \`inherit\`, \`sonnet\`, \`opus\`, or \`haiku\`             |
-| \`color\`       | Yes      | String | \`blue\`, \`cyan\`, \`green\`, \`yellow\`, \`magenta\`, \`red\` |
-| \`tools\`       | No       | Array  | Restrict to specific tools                          |
+| `name`        | Yes      | String | Lowercase, hyphens, 3-50 chars                      |
+| `description` | Yes      | String | Triggering conditions with `<example>` blocks       |
+| `model`       | Yes      | String | `inherit`, `sonnet`, `opus`, or `haiku`             |
+| `color`       | Yes      | String | `blue`, `cyan`, `green`, `yellow`, `magenta`, `red` |
+| `tools`       | No       | Array  | Restrict to specific tools                          |
 
 ### Example Agent
 
-\`\`\`markdown
+```markdown
 ---
 name: code-reviewer
 description: Use this agent when the user asks for a thorough code review or wants detailed analysis of code quality, security, and best practices.
@@ -127,7 +127,7 @@ Present findings grouped by severity (Critical, Warning, Info) with:
 - File path and line number
 - Description of the issue
 - Suggested fix
-\`\`\`
+```
 
 ### Agent Naming Rules
 
@@ -146,50 +146,50 @@ Present findings grouped by severity (Critical, Warning, Info) with:
 
 ## Hooks
 
-**Location**: \`hooks/hooks.json\`
+**Location**: `hooks/hooks.json`
 **Format**: JSON
 
 ### Available Events
 
 | Event              | When it fires                   |
 | ------------------ | ------------------------------- |
-| \`PreToolUse\`       | Before a tool call executes     |
-| \`PostToolUse\`      | After a tool call completes     |
-| \`Stop\`             | When Claude finishes a response |
-| \`SubagentStop\`     | When a subagent finishes        |
-| \`SessionStart\`     | When a session begins           |
-| \`SessionEnd\`       | When a session ends             |
-| \`UserPromptSubmit\` | When the user sends a message   |
-| \`PreCompact\`       | Before context compaction       |
-| \`Notification\`     | When a notification fires       |
+| `PreToolUse`       | Before a tool call executes     |
+| `PostToolUse`      | After a tool call completes     |
+| `Stop`             | When Claude finishes a response |
+| `SubagentStop`     | When a subagent finishes        |
+| `SessionStart`     | When a session begins           |
+| `SessionEnd`       | When a session ends             |
+| `UserPromptSubmit` | When the user sends a message   |
+| `PreCompact`       | Before context compaction       |
+| `Notification`     | When a notification fires       |
 
 ### Hook Types
 
 **Prompt-based** (recommended for complex logic):
 
-\`\`\`json
+```json
 {
   "type": "prompt",
   "prompt": "Evaluate whether this file write follows project conventions: $TOOL_INPUT",
   "timeout": 30
 }
-\`\`\`
+```
 
 Supported events: Stop, SubagentStop, UserPromptSubmit, PreToolUse.
 
 **Command-based** (deterministic checks):
 
-\`\`\`json
+```json
 {
   "type": "command",
-  "command": "bash \${CLAUDE_PLUGIN_ROOT}/hooks/scripts/validate.sh",
+  "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/validate.sh",
   "timeout": 60
 }
-\`\`\`
+```
 
 ### Example hooks.json
 
-\`\`\`json
+```json
 {
   "PreToolUse": [
     {
@@ -209,54 +209,54 @@ Supported events: Stop, SubagentStop, UserPromptSubmit, PreToolUse.
       "hooks": [
         {
           "type": "command",
-          "command": "cat \${CLAUDE_PLUGIN_ROOT}/context/project-context.md",
+          "command": "cat ${CLAUDE_PLUGIN_ROOT}/context/project-context.md",
           "timeout": 10
         }
       ]
     }
   ]
 }
-\`\`\`
+```
 
 ### Hook Output Format (Command Hooks)
 
 Command hooks return JSON to stdout:
 
-\`\`\`json
+```json
 {
   "decision": "block",
   "reason": "File write violates naming convention"
 }
-\`\`\`
+```
 
-Decisions: \`approve\`, \`block\`, \`ask_user\` (ask for confirmation).
+Decisions: `approve`, `block`, `ask_user` (ask for confirmation).
 
 ## MCP Servers
 
-**Location**: \`.mcp.json\` at plugin root
+**Location**: `.mcp.json` at plugin root
 **Format**: JSON
 
 ### Server Types
 
 **stdio** (local process):
 
-\`\`\`json
+```json
 {
   "mcpServers": {
     "my-server": {
       "command": "node",
-      "args": ["\${CLAUDE_PLUGIN_ROOT}/servers/server.js"],
+      "args": ["${CLAUDE_PLUGIN_ROOT}/servers/server.js"],
       "env": {
-        "API_KEY": "\${API_KEY}"
+        "API_KEY": "${API_KEY}"
       }
     }
   }
 }
-\`\`\`
+```
 
 **SSE** (remote server, server-sent events transport):
 
-\`\`\`json
+```json
 {
   "mcpServers": {
     "asana": {
@@ -265,56 +265,56 @@ Decisions: \`approve\`, \`block\`, \`ask_user\` (ask for confirmation).
     }
   }
 }
-\`\`\`
+```
 
 **HTTP** (remote server, streamable HTTP transport):
 
-\`\`\`json
+```json
 {
   "mcpServers": {
     "api-service": {
       "type": "http",
       "url": "https://api.example.com/mcp",
       "headers": {
-        "Authorization": "Bearer \${API_TOKEN}"
+        "Authorization": "Bearer ${API_TOKEN}"
       }
     }
   }
 }
-\`\`\`
+```
 
 ### Environment Variable Expansion
 
-All MCP configs support \`\${VAR_NAME}\` substitution:
+All MCP configs support `${VAR_NAME}` substitution:
 
-- \`\${CLAUDE_PLUGIN_ROOT}\` — plugin directory (always use for portability)
-- \`\${ANY_ENV_VAR}\` — user environment variables
+- `${CLAUDE_PLUGIN_ROOT}` — plugin directory (always use for portability)
+- `${ANY_ENV_VAR}` — user environment variables
 
 Document all required environment variables in the plugin README.
 
 ### Directory Servers Without a URL
 
-Some MCP directory entries have no \`url\` because the endpoint is dynamic. Plugins can reference these servers by **name** instead — if the server name in the plugin's MCP config matches the directory entry name, it is treated the same as a URL match.
+Some MCP directory entries have no `url` because the endpoint is dynamic. Plugins can reference these servers by **name** instead — if the server name in the plugin's MCP config matches the directory entry name, it is treated the same as a URL match.
 
 ## Commands (Legacy)
 
-> **Prefer \`skills/*/SKILL.md\` for new plugins.** The Cowork UI now presents commands and skills as a single "Skills" concept. The \`commands/\` format still works, but only use it if you specifically need the single-file format with \`$ARGUMENTS\`/\`$1\` substitution and inline bash execution.
+> **Prefer `skills/*/SKILL.md` for new plugins.** The Cowork UI now presents commands and skills as a single "Skills" concept. The `commands/` format still works, but only use it if you specifically need the single-file format with `$ARGUMENTS`/`$1` substitution and inline bash execution.
 
-**Location**: \`commands/command-name.md\`
+**Location**: `commands/command-name.md`
 **Format**: Markdown with optional YAML frontmatter
 
 ### Frontmatter Fields
 
 | Field           | Required | Type            | Description                                         |
 | --------------- | -------- | --------------- | --------------------------------------------------- |
-| \`description\`   | No       | String          | Brief description shown in \`/help\` (under 60 chars) |
-| \`allowed-tools\` | No       | String or Array | Tools the command can use                           |
-| \`model\`         | No       | String          | Model override: \`sonnet\`, \`opus\`, \`haiku\`           |
-| \`argument-hint\` | No       | String          | Documents expected arguments for autocomplete       |
+| `description`   | No       | String          | Brief description shown in `/help` (under 60 chars) |
+| `allowed-tools` | No       | String or Array | Tools the command can use                           |
+| `model`         | No       | String          | Model override: `sonnet`, `opus`, `haiku`           |
+| `argument-hint` | No       | String          | Documents expected arguments for autocomplete       |
 
 ### Example Command
 
-\`\`\`markdown
+```markdown
 ---
 description: Review code for security issues
 allowed-tools: Read, Grep, Bash(git:*)
@@ -329,19 +329,19 @@ Review @$1 for security vulnerabilities including:
 - Insecure data handling
 
 Provide specific line numbers, severity ratings, and remediation suggestions.
-\`\`\`
+```
 
 ### Key Rules
 
 - Commands are instructions FOR Claude, not messages for the user. Write them as directives.
-- \`$ARGUMENTS\` captures all arguments as a single string; \`$1\`, \`$2\`, \`$3\` capture positional arguments.
-- \`@path\` syntax includes file contents in the command context.
-- \`!\` backtick syntax executes bash inline for dynamic context (e.g., \`\` !\`git diff --name-only\` \`\`).
-- Use \`\${CLAUDE_PLUGIN_ROOT}\` to reference plugin files portably.
+- `$ARGUMENTS` captures all arguments as a single string; `$1`, `$2`, `$3` capture positional arguments.
+- `@path` syntax includes file contents in the command context.
+- `!` backtick syntax executes bash inline for dynamic context (e.g., `` !`git diff --name-only` ``).
+- Use `${CLAUDE_PLUGIN_ROOT}` to reference plugin files portably.
 
 ### allowed-tools Patterns
 
-\`\`\`yaml
+```yaml
 # Specific tools
 allowed-tools: Read, Write, Edit, Bash(git:*)
 
@@ -350,7 +350,7 @@ allowed-tools: Bash(npm:*), Read
 
 # MCP tools (specific)
 allowed-tools: ["mcp__plugin_name_server__tool_name"]
-\`\`\`
+```
 
 ## CONNECTORS.md
 
@@ -359,13 +359,13 @@ allowed-tools: ["mcp__plugin_name_server__tool_name"]
 
 ### Format
 
-\`\`\`markdown
+```markdown
 # Connectors
 
 ## How tool references work
 
-Plugin files use \`~~category\` as a placeholder for whatever tool the user
-connects in that category. For example, \`~~project tracker\` might mean
+Plugin files use `~~category` as a placeholder for whatever tool the user
+connects in that category. For example, `~~project tracker` might mean
 Asana, Linear, Jira, or any other project tracker with an MCP server.
 
 Plugins are tool-agnostic — they describe workflows in terms of categories
@@ -375,18 +375,18 @@ rather than specific products.
 
 | Category        | Placeholder         | Included servers | Other options            |
 | --------------- | ------------------- | ---------------- | ------------------------ |
-| Chat            | \`~~chat\`            | Slack            | Microsoft Teams, Discord |
-| Project tracker | \`~~project tracker\` | Linear           | Asana, Jira, Monday      |
-\`\`\`
+| Chat            | `~~chat`            | Slack            | Microsoft Teams, Discord |
+| Project tracker | `~~project tracker` | Linear           | Asana, Jira, Monday      |
+```
 
 ### Using ~~ Placeholders
 
 In plugin files (skills, agents), reference tools generically:
 
-\`\`\`markdown
+```markdown
 Check ~~project tracker for open tickets assigned to the user.
 Post a summary to ~~chat in the team channel.
-\`\`\`
+```
 
 During customization (via the cowork-plugin-customizer skill), these get replaced with specific tool names.
 

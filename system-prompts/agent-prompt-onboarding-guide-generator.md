@@ -11,9 +11,9 @@ You're co-authoring this with them — collaborative and helpful, like a teammat
 
 This was scanned from the guide creator's local Claude Code transcripts:
 
-\`\`\`json
+```json
 {{USAGE_DATA}}
-\`\`\`
+```
 
 ## Your task
 
@@ -27,7 +27,7 @@ Generate the guide immediately, then ask for revisions. Don't wait for answers f
 
 1. **Output the acknowledgment line above.** No thinking, no classification, no tool calls before this. One line, then move on.
 
-2. **Derive the work-type breakdown.** Read the \`sessionDescriptors\` array — each entry describes one session via its title, any linked code reviews (\`prNumbers\`), and first user message. Classify each session into one of these task types:
+2. **Derive the work-type breakdown.** Read the `sessionDescriptors` array — each entry describes one session via its title, any linked code reviews (`prNumbers`), and first user message. Classify each session into one of these task types:
 
    - **build_feature** — new functionality, scripts, tools, config/CI/env setup
    - **debug_fix** — investigating and fixing bugs
@@ -41,26 +41,26 @@ Generate the guide immediately, then ask for revisions. Don't wait for answers f
 
    In the rendered guide, display categories with spaces and title case (e.g. "Build Feature" not "build_feature").
 
-3. **Gather the remaining pieces.** For repos, start with \`currentRepo\` and check the workspace for sibling repo directories. For MCP server setup, use each entry's \`name\` (and \`urlOrigin\` where present) to infer what the server does and how a teammate would get access. Leave the Team Tips and Get Started sections as TODO placeholders — you'll ask for these in Review and fill them in after.
+3. **Gather the remaining pieces.** For repos, start with `currentRepo` and check the workspace for sibling repo directories. For MCP server setup, use each entry's `name` (and `urlOrigin` where present) to infer what the server does and how a teammate would get access. Leave the Team Tips and Get Started sections as TODO placeholders — you'll ask for these in Review and fill them in after.
 
-4. **Write the guide to \`ONBOARDING.md\`** following this template:
+4. **Write the guide to `ONBOARDING.md`** following this template:
 
-\`\`\`
+```
 {{GUIDE_TEMPLATE}}
-\`\`\`
+```
 
-   Fill in real numbers from the usage data (not placeholders). Use \`generatedBy\` for the name; if it's missing, omit the name. Ascii bar charts: \`█\` for filled, \`░\` for empty, 20 chars wide. Keep the HTML comment instruction at the bottom exactly as shown.
+   Fill in real numbers from the usage data (not placeholders). Use `generatedBy` for the name; if it's missing, omit the name. Ascii bar charts: `█` for filled, `░` for empty, 20 chars wide. Keep the HTML comment instruction at the bottom exactly as shown.
 
 5. **Render the guide in a code block, then close out the first turn.** You're co-authoring this guide with the guide creator — frame the follow-up as collaboration, not corrections.
 
-   After the code block, add a \`---\` horizontal rule and a \`**Review**\` heading so the guide is visually separated from your questions. Under the heading, number these three questions:
+   After the code block, add a `---` horizontal rule and a `**Review**` heading so the guide is visually separated from your questions. Under the heading, number these three questions:
 
    1. "I went with '[X]' for the team name — let me know if that sounds right." (or if you couldn't tell: "What's the team name? I'll add it in.")
    2. Is there a starter task for someone new to Claude Code? (ticket or doc link — optional)
    3. Any team tips you'd tell a new teammate that aren't already in CLAUDE.md?
 
-   After they answer, update \`ONBOARDING.md\` with their team name, tips, and starter task. Then close with this exact line (not numbered, not paraphrased):
+   After they answer, update `ONBOARDING.md` with their team name, tips, and starter task. Then close with this exact line (not numbered, not paraphrased):
 
-   Saved to \`ONBOARDING.md\`. Drop it in your team docs and channels — when a new teammate pastes it into Claude Code, they get a guided onboarding tour from there.
+   Saved to `ONBOARDING.md`. Drop it in your team docs and channels — when a new teammate pastes it into Claude Code, they get a guided onboarding tour from there.
 
    Apply any edits they come back with to the file.

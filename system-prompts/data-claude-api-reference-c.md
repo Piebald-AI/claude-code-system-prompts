@@ -32,10 +32,10 @@ Write from this table instead of reflecting the SDK assembly. Endpoint column te
 | Feature | Endpoint | Key C# types (namespace per table above) |
 |---|---|---|
 | User profiles | beta | `client.Beta.UserProfiles.Create(...)` / `.Retrieve(id)` / `.List()`. Pass the returned profile id on the beta messages call. Requires a beta header — check the SDK's beta-headers reference for the current flag. |
-| Agent Skills | beta | `BetaContainerParams` (with `Skills = [new BetaSkillParams { ... }]`), `BetaCodeExecutionTool20250825`. `Betas = [\"code-execution-2025-08-25\", \"skills-2025-10-02\"]`. Download the output via `client.Beta.Files.Download(fileId)`. |
+| Agent Skills | beta | `BetaContainerParams` (with `Skills = [new BetaSkillParams { ... }]`), `BetaCodeExecutionTool20250825`. `Betas = ["code-execution-2025-08-25", "skills-2025-10-02"]`. Download the output via `client.Beta.Files.Download(fileId)`. |
 | Advisor tool | beta | `BetaAdvisorTool20260301` — may not be in all SDK releases yet |
 | Cache diagnostics | beta | `Diagnostics = new() { PreviousMessageID = … }`, `BetaCacheControlEphemeral`, `BetaContentBlockParam` |
-| Context editing | beta | `ContextManagement = new BetaContextManagementConfig { Edits = [new BetaClearToolUses20250919Edit()] }`. `Betas = [\"context-management-2025-06-27\"]` (not `compact-2026-01-12` — that's for `BetaCompact20260112Edit`). |
+| Context editing | beta | `ContextManagement = new BetaContextManagementConfig { Edits = [new BetaClearToolUses20250919Edit()] }`. `Betas = ["context-management-2025-06-27"]` (not `compact-2026-01-12` — that's for `BetaCompact20260112Edit`). |
 | Memory tool | non-beta | `Tools = [new ToolUnion(new MemoryTool20250818())]` |
 | Programmatic tool calling | non-beta | `CodeExecutionTool20260120`, `ToolResultBlockParam`, `ContentBlockParam` |
 | Task budgets | beta | `BetaOutputConfig` with `TaskBudget = new BetaTokenTaskBudget { ... }` |
@@ -65,7 +65,7 @@ var message = await client.Messages.Create(new MessageCreateParams
 {
     Model = Model.ClaudeOpus4_8,
     MaxTokens = 1024,
-    Messages = [ new() { Role = Role.User, Content = \"Hello, Claude\" } ],
+    Messages = [ new() { Role = Role.User, Content = "Hello, Claude" } ],
 });
 
 Console.WriteLine(message);
@@ -82,10 +82,10 @@ AnthropicClient client = new();
 
 var response = await client.Beta.Messages.Create(new MessageCreateParams
 {
-    Model = \"{{OPUS_ID}}\",
+    Model = "{{OPUS_ID}}",
     MaxTokens = 4096,
-    Betas = [\"<beta-flag>\"],
-    Messages = [ new() { Role = Role.User, Content = \"…\" } ],
+    Betas = ["<beta-flag>"],
+    Messages = [ new() { Role = Role.User, Content = "…" } ],
     // Tools = new BetaToolUnion[] { new BetaSomeTool { … } },   // for tool features
 });
 
@@ -115,7 +115,7 @@ AnthropicClient client = new();
 
 // Explicit API key (use environment variables — never hardcode keys)
 AnthropicClient client = new() {
-    ApiKey = Environment.GetEnvironmentVariable(\"ANTHROPIC_API_KEY\")
+    ApiKey = Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY")
 };
 ```
 
@@ -130,7 +130,7 @@ var parameters = new MessageCreateParams
 {
     Model = Model.ClaudeOpus4_8,
     MaxTokens = 16000,
-    Messages = [new() { Role = Role.User, Content = \"What is the capital of France?\" }]
+    Messages = [new() { Role = Role.User, Content = "What is the capital of France?" }]
 };
 var response = await client.Messages.Create(parameters);
 
@@ -165,7 +165,7 @@ var response = await client.Messages.Create(new MessageCreateParams
     Thinking = new ThinkingConfigAdaptive { Display = Display.Summarized },
     Messages =
     [
-        new() { Role = Role.User, Content = \"Solve: 27 * 453\" },
+        new() { Role = Role.User, Content = "Solve: 27 * 453" },
     ],
 });
 
@@ -174,7 +174,7 @@ foreach (var block in response.Content)
 {
     if (block.TryPickThinking(out ThinkingBlock? t))
     {
-        Console.WriteLine($\"[thinking] {t.Thinking}\");
+        Console.WriteLine($"[thinking] {t.Thinking}");
     }
     else if (block.TryPickText(out TextBlock? text))
     {
@@ -207,7 +207,7 @@ var betaParams = new MessageCreateParams   // no Beta prefix — see unprefixed 
 {
     Model = Model.ClaudeOpus4_8,
     MaxTokens = 16000,
-    Betas = [\"compact-2026-01-12\"],
+    Betas = ["compact-2026-01-12"],
     ContextManagement = new BetaContextManagementConfig
     {
         Edits = [new BetaCompact20260112Edit()],
@@ -221,7 +221,7 @@ foreach (BetaContentBlock block in resp.Content)
     if (block.TryPickCompaction(out BetaCompactionBlock? compaction))
     {
         // Content is nullable — compaction can fail server-side
-        Console.WriteLine($\"compaction summary: {compaction.Content}\");
+        Console.WriteLine($"compaction summary: {compaction.Content}");
     }
 }
 
@@ -229,7 +229,7 @@ foreach (BetaContentBlock block in resp.Content)
 if (resp.ContextManagement is { } ctx)
 {
     foreach (var edit in ctx.AppliedEdits)
-        Console.WriteLine($\"cleared {edit.ClearedInputTokens} tokens\");
+        Console.WriteLine($"cleared {edit.ClearedInputTokens} tokens");
 }
 
 // ROUND-TRIP: BetaMessageParam.Content is BetaMessageParamContent (a string|list
@@ -252,8 +252,8 @@ All 15 `BetaContentBlock.TryPick*` variants: `Text`, `Thinking`, `RedactedThinki
 ```csharp
 if (block.TryPickToolUse(out BetaToolUseBlock? tu))
 {
-    int a = tu.Input[\"a\"].GetInt32();
-    string s = tu.Input[\"name\"].GetString()!;
+    int a = tu.Input["a"].GetInt32();
+    string s = tu.Input["name"].GetString()!;
 }
 ```
 
@@ -279,7 +279,7 @@ Values: `Effort.Low`, `Effort.Medium`, `Effort.High`, `Effort.Max`. Combine with
 System = new List<TextBlockParam> {
     new() {
         Text = longSystemPrompt,
-        CacheControl = new CacheControlEphemeral(),  // auto-sets Type = \"ephemeral\"
+        CacheControl = new CacheControlEphemeral(),  // auto-sets Type = "ephemeral"
     },
 },
 ```
@@ -295,7 +295,7 @@ Verify hits via `response.Usage.CacheCreationInputTokens` / `response.Usage.Cach
 ```csharp
 MessageTokensCount result = await client.Messages.CountTokens(new MessageCountTokensParams {
     Model = Model.ClaudeOpus4_8,
-    Messages = [new() { Role = Role.User, Content = \"Hello\" }],
+    Messages = [new() { Role = Role.User, Content = "Hello" }],
 });
 long tokens = result.InputTokens;
 ```
@@ -306,14 +306,14 @@ long tokens = result.InputTokens;
 
 ## PDF / Document Input
 
-`DocumentBlockParam` takes a `DocumentBlockParamSource` union: `Base64PdfSource` / `UrlPdfSource` / `PlainTextSource` / `ContentBlockSource`. `Base64PdfSource` auto-sets `MediaType = \"application/pdf\"` and `Type = \"base64\"`.
+`DocumentBlockParam` takes a `DocumentBlockParamSource` union: `Base64PdfSource` / `UrlPdfSource` / `PlainTextSource` / `ContentBlockSource`. `Base64PdfSource` auto-sets `MediaType = "application/pdf"` and `Type = "base64"`.
 
 ```csharp
 new MessageParam {
     Role = Role.User,
     Content = new List<ContentBlockParam> {
         new DocumentBlockParam { Source = new Base64PdfSource { Data = base64String } },
-        new TextBlockParam { Text = \"Summarize this PDF\" },
+        new TextBlockParam { Text = "Summarize this PDF" },
     },
 }
 ```
@@ -324,9 +324,9 @@ new MessageParam {
 
 ```csharp
 var response = await client.Beta.Messages.Create(new MessageCreateParams {
-    Model = \"{{OPUS_ID}}\", MaxTokens = 4096,
+    Model = "{{OPUS_ID}}", MaxTokens = 4096,
     Speed = Speed.Fast,
-    Betas = [\"fast-mode-2026-02-01\"],
+    Betas = ["fast-mode-2026-02-01"],
     Messages = [...],
 });
 ```
@@ -336,7 +336,7 @@ var response = await client.Beta.Messages.Create(new MessageCreateParams {
 ```csharp
 var page = await client.Models.List();
 foreach (var m in page.Items) { Console.WriteLine(m.ID); }
-var one = await client.Models.Retrieve(\"{{OPUS_ID}}\");
+var one = await client.Models.Retrieve("{{OPUS_ID}}");
 ```
 
 ## Long Output (128k) + Prefill
@@ -347,13 +347,13 @@ Set `MaxTokens = 128000` on `client.Messages` and use the streaming path (see `s
 
 ## Stop Details
 
-When `StopReason` is `\"refusal\"`, the response includes structured `StopDetails`:
+When `StopReason` is `"refusal"`, the response includes structured `StopDetails`:
 
 ```csharp
-if (response.StopReason == \"refusal\" && response.StopDetails is { } details)
+if (response.StopReason == "refusal" && response.StopDetails is { } details)
 {
-    Console.WriteLine($\"Category: {details.Category}\");
-    Console.WriteLine($\"Explanation: {details.Explanation}\");
+    Console.WriteLine($"Category: {details.Category}");
+    Console.WriteLine($"Explanation: {details.Explanation}");
 }
 ```
 

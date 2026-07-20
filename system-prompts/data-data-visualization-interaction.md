@@ -18,14 +18,14 @@ as on hover.
 - **The crosshair finds the X.** A vertical hairline tracks the pointer and snaps to
   the nearest data position. Readers aim at a date, never at a 2px line.
 - **On bars and cells, the mark is the hit target.** No crosshair — each bar, segment,
-  dot, or heat-cell carries its own \`pointermove\`/\`focus\` tooltip showing category and
+  dot, or heat-cell carries its own `pointermove`/`focus` tooltip showing category and
   value, and the hovered mark lifts (slight lighten or outline) so the reader sees it respond.
 - **One tooltip, every series.** The readout lists every series at that X — the
   pointer never has to land on a line or a fill to get a value.
-- **Labels are untrusted data — use \`textContent\`.** Series and category names
+- **Labels are untrusted data — use `textContent`.** Series and category names
   often come from CSV headers, tool output, or API responses. Insert them into
-  tooltip/legend/table DOM with \`textContent\` or \`createTextNode\`, never via
-  \`innerHTML\` string concatenation.
+  tooltip/legend/table DOM with `textContent` or `createTextNode`, never via
+  `innerHTML` string concatenation.
 - **Values lead, labels follow.** In the tooltip the value is the Strong,
   high-contrast element and the series name is secondary — the legend's hierarchy
   inverted, because here the reader has the series and wants the number.
@@ -39,7 +39,7 @@ as on hover.
   has to be *closest*, not dead-center. (The crosshair already does this for the X on
   line and bar charts; scatter and bubble need the per-point version.)
 - **A value pushed off its mark lives in the tooltip.** When a label won't fit inside a
-  small bar (see \`marks-and-anatomy.md\`), that bar's hit area carries the value on hover
+  small bar (see `marks-and-anatomy.md`), that bar's hit area carries the value on hover
   and focus — the tooltip is its overflow home, and the table view keeps it reachable
   without hovering at all.
 
@@ -62,4 +62,4 @@ chart chrome. Dataviz only adds composition rules:
 A good date picker lists presets as rows (nobody fights a calendar grid for "last 30
 days"), marks selection with a 16px bold check, keeps hover a ghost wash so it never
 competes with selection, and tucks the custom range behind a hairline in the footer.
-(See \`palette.md\` for the reference spec.)
+(See `palette.md` for the reference spec.)

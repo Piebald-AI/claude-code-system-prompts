@@ -14,7 +14,7 @@ variables:
 After the findings are produced, also publish them as an artifact so they can
 be shared and iterated on outside the terminal:
 
-1. Load the \`${ARTIFACT_DESIGN_SKILL_NAME}\` skill (utilitarian treatment —
+1. Load the `${ARTIFACT_DESIGN_SKILL_NAME}` skill (utilitarian treatment —
    this is a document).
 2. Write the findings to an HTML file: one section per finding with the file
    path and line, the one-line summary, the concrete failure scenario, and the

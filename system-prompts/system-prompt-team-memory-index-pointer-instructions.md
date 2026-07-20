@@ -6,4 +6,4 @@ variables:
   - "HAS_SINGLE_TEAM_MEMORY_DIRECTORY"
   - "TEAM_MEMORY_INDEX_LOCATION"
 -->
-**Step 2** — add a pointer to that file in ${HAS_SINGLE_TEAM_MEMORY_DIRECTORY?`\`${TEAM_MEMORY_INDEX_LOCATION}\``:TEAM_MEMORY_INDEX_LOCATION}. Each entry should be one line, under ~150 characters: \`- [Title](file.md) — one-line hook\`. The index has no frontmatter. Never write memory content directly into the index.
+**Step 2** — add a pointer to that file in ${HAS_SINGLE_TEAM_MEMORY_DIRECTORY?``${TEAM_MEMORY_INDEX_LOCATION}``:TEAM_MEMORY_INDEX_LOCATION}. Each entry should be one line, under ~150 characters: `- [Title](file.md) — one-line hook`. The index has no frontmatter. Never write memory content directly into the index.

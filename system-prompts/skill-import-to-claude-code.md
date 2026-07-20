@@ -10,7 +10,7 @@ variables:
 -->
 ---
 name: import-to-claude-code
-description: Finish importing leftover config that \`claude import\` couldn't map automatically.
+description: Finish importing leftover config that `claude import` couldn't map automatically.
 ---
 
 The automatic import left the following items for you to review. For each
@@ -25,8 +25,8 @@ ${[...IMPORT_SOURCES.filter((IMPORT_SOURCE)=>IMPORT_SOURCE.unmappable.length>0).
 `)}
 
 Relevant Claude Code config locations:
-- Settings: \`~/.claude/settings.json\` (user) or \`.claude/settings.json\` (project)
-- MCP servers: \`.mcp.json\` (project) or \`claude mcp add\`
-- Slash commands: \`~/.claude/commands/*.md\`
-- Skills: \`~/.claude/skills/<name>/SKILL.md\`
-- Hooks: the \`hooks\` key in settings.json (PreToolUse/PostToolUse/UserPromptSubmit/…)
+- Settings: `~/.claude/settings.json` (user) or `.claude/settings.json` (project)
+- MCP servers: `.mcp.json` (project) or `claude mcp add`
+- Slash commands: `~/.claude/commands/*.md`
+- Skills: `~/.claude/skills/<name>/SKILL.md`
+- Hooks: the `hooks` key in settings.json (PreToolUse/PostToolUse/UserPromptSubmit/…)

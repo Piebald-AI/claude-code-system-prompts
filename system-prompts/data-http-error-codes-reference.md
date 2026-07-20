@@ -36,12 +36,12 @@ This file documents HTTP error codes returned by the Claude API, their common ca
 
 ```json
 {
-  \"type\": \"error\",
-  \"error\": {
-    \"type\": \"invalid_request_error\",
-    \"message\": \"messages: roles must alternate between \\\"user\\\" and \\\"assistant\\\"\"
+  "type": "error",
+  "error": {
+    "type": "invalid_request_error",
+    "message": "messages: roles must alternate between \"user\" and \"assistant\""
   },
-  \"request_id\": \"req_011CSHoEeqs5C35K2UUqR7Fy\"
+  "request_id": "req_011CSHoEeqs5C35K2UUqR7Fy"
 }
 ```
 
@@ -115,8 +115,8 @@ Some 400 errors are specifically related to parameter validation:
 **Model-specific 400s on Fable 5 / Opus 4.8 / 4.7:**
 
 - `temperature`, `top_p`, `top_k` are removed — sending any of them returns 400. Delete the parameter; see `shared/model-migration.md` → Per-SDK Syntax Reference.
-- `thinking: {type: \"enabled\", budget_tokens: N}` is removed — sending it returns 400. Use `thinking: {type: \"adaptive\"}` instead.
-- **Fable 5 only:** an explicit `thinking: {type: \"disabled\"}` returns 400 (it is accepted on Opus 4.8/4.7). Omit the `thinking` param entirely instead.
+- `thinking: {type: "enabled", budget_tokens: N}` is removed — sending it returns 400. Use `thinking: {type: "adaptive"}` instead.
+- **Fable 5 only:** an explicit `thinking: {type: "disabled"}` returns 400 (it is accepted on Opus 4.8/4.7). Omit the `thinking` param entirely instead.
 - **Fable 5 only:** if the organization is set to zero data retention (ZDR) — or any retention below the required 30 days — then **all** Fable 5 requests return `400 invalid_request_error`, even with a perfectly valid payload. Check the org's retention configuration before debugging the request body.
 
 **Common mistake with extended thinking on older models (Opus 4.6 and earlier):**
@@ -176,8 +176,8 @@ thinking: budget_tokens=10000, max_tokens=16000
 | Mistake                         | Error            | Fix                                                     |
 | ------------------------------- | ---------------- | ------------------------------------------------------- |
 | `temperature`/`top_p`/`top_k` on Fable 5 / Opus 4.8 / 4.7 | 400 | Remove the parameter (see `shared/model-migration.md`)  |
-| `budget_tokens` on Fable 5 / Opus 4.8 / 4.7 | 400  | Use `thinking: {type: \"adaptive\"}`                      |
-| `thinking: {type: \"disabled\"}` on Fable 5 | 400    | Omit the `thinking` param entirely (accepted on Opus 4.8/4.7) |
+| `budget_tokens` on Fable 5 / Opus 4.8 / 4.7 | 400  | Use `thinking: {type: "adaptive"}`                      |
+| `thinking: {type: "disabled"}` on Fable 5 | 400    | Omit the `thinking` param entirely (accepted on Opus 4.8/4.7) |
 | Org set to ZDR / retention below 30 days (Fable 5) | 400 on every request | Fix the org's data-retention configuration — the payload isn't the problem |
 | `budget_tokens` >= `max_tokens` (older models) | 400 | Ensure `budget_tokens` < `max_tokens`                  |
 | Typo in model ID                | 404              | Use valid model ID like `{{OPUS_ID}}`               |
@@ -192,7 +192,7 @@ thinking: budget_tokens=10000, max_tokens=16000
 
 ### Exception class names by language
 
-| HTTP | Python (`anthropic.*`) / TypeScript (`Anthropic.*`) | Ruby (`Anthropic::Errors::*`) | Java (`com.anthropic.errors.*`) | C# | PHP (`Anthropic\\Core\\Exceptions\\*`) |
+| HTTP | Python (`anthropic.*`) / TypeScript (`Anthropic.*`) | Ruby (`Anthropic::Errors::*`) | Java (`com.anthropic.errors.*`) | C# | PHP (`Anthropic\Core\Exceptions\*`) |
 |---|---|---|---|---|---|
 | 400 | `BadRequestError` | `BadRequestError` | `BadRequestException` | `AnthropicBadRequestException` | `BadRequestException` |
 | 401 | `AuthenticationError` | `AuthenticationError` | `UnauthorizedException` | `AnthropicUnauthorizedException` | `AuthenticationException` |
@@ -204,7 +204,7 @@ thinking: budget_tokens=10000, max_tokens=16000
 | net | `APIConnectionError` | `APIConnectionError` | `AnthropicIoException` | `AnthropicIOException` | `APIConnectionException` |
 | base | `APIError` (both); `APIStatusError` (Python only) | `APIStatusError` / `APIError` | `AnthropicServiceException` | `AnthropicApiException` | `APIStatusException` / `APIException` |
 
-The Ruby and PHP classes live in a dedicated errors namespace — write `Anthropic::Errors::RateLimitError` and `Anthropic\\Core\\Exceptions\\RateLimitException` (not bare `Anthropic::RateLimitError`). All 4xx C# exceptions also inherit from `Anthropic4xxException`.
+The Ruby and PHP classes live in a dedicated errors namespace — write `Anthropic::Errors::RateLimitError` and `Anthropic\Core\Exceptions\RateLimitException` (not bare `Anthropic::RateLimitError`). All 4xx C# exceptions also inherit from `Anthropic4xxException`.
 
 ### Catch most-specific first, in a chain
 
@@ -250,12 +250,12 @@ if err != nil {
 
 ### Error `.type` Field
 
-All `APIStatusError` subclasses now expose a `.type` property (Python: `.type`, TypeScript: `.type`, Java: `.errorType()`, Go: `.Type()`, Ruby: `.type`, PHP: `.type`) that returns the API error type string (e.g., `\"invalid_request_error\"`, `\"authentication_error\"`, `\"rate_limit_error\"`, `\"overloaded_error\"`). Use this for programmatic error classification when you need finer granularity than the HTTP status code — for example, distinguishing `\"billing_error\"` from `\"permission_error\"` (both map to 403).
+All `APIStatusError` subclasses now expose a `.type` property (Python: `.type`, TypeScript: `.type`, Java: `.errorType()`, Go: `.Type()`, Ruby: `.type`, PHP: `.type`) that returns the API error type string (e.g., `"invalid_request_error"`, `"authentication_error"`, `"rate_limit_error"`, `"overloaded_error"`). Use this for programmatic error classification when you need finer granularity than the HTTP status code — for example, distinguishing `"billing_error"` from `"permission_error"` (both map to 403).
 
 ```python
 except anthropic.APIStatusError as e:
-    if e.type == \"rate_limit_error\":
+    if e.type == "rate_limit_error":
         # handle rate limiting
-    elif e.type == \"overloaded_error\":
+    elif e.type == "overloaded_error":
         # handle overload
 ```

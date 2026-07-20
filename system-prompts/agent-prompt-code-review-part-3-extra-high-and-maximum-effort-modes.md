@@ -12,7 +12,7 @@ variables:
   - "GAP_SWEEP_PHASE"
   - "OUTPUT_FORMAT_FN"
 -->
-\`${EFFORT_LEVEL} effort → 5+5 angles × 8 candidates → 1-vote verify → sweep → ≤15 findings\`
+`${EFFORT_LEVEL} effort → 5+5 angles × 8 candidates → 1-vote verify → sweep → ≤15 findings`
 
 You are reviewing for **recall** at ${EFFORT_LEVEL==="max"?"maximum":"extra-high"} effort: catch every real bug. At
 this level, catching real bugs matters more than avoiding false positives — a

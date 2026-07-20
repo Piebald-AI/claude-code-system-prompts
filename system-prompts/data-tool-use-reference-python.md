@@ -11,9 +11,9 @@ For conceptual overview (tool definitions, tool choice, tips), see [shared/tool-
 
 **Beta:** The tool runner is in beta in the Python SDK.
 
-Use the \`@beta_tool\` decorator to define tools as typed functions, then pass them to \`client.beta.messages.tool_runner()\`:
+Use the `@beta_tool` decorator to define tools as typed functions, then pass them to `client.beta.messages.tool_runner()`:
 
-\`\`\`python
+```python
 import anthropic
 from anthropic import beta_tool
 
@@ -41,9 +41,9 @@ runner = client.beta.messages.tool_runner(
 # Each iteration yields a BetaMessage; iteration stops when Claude is done
 for message in runner:
     print(message)
-\`\`\`
+```
 
-For async usage, use \`@beta_async_tool\` with \`async def\` functions.
+For async usage, use `@beta_async_tool` with `async def` functions.
 
 **Key benefits of the tool runner:**
 
@@ -54,11 +54,11 @@ For async usage, use \`@beta_async_tool\` with \`async def\` functions.
 
 ### Server tools with the tool runner
 
-The runner's \`tools\` list accepts raw server-tool definitions (\`web_search_20260209\`, \`web_fetch_20260209\`, code execution) alongside decorated tools — pass the literal tool dict; server tools run on Anthropic's servers, so there is no function to implement.
+The runner's `tools` list accepts raw server-tool definitions (`web_search_20260209`, `web_fetch_20260209`, code execution) alongside decorated tools — pass the literal tool dict; server tools run on Anthropic's servers, so there is no function to implement.
 
-**Caution — the runner does not auto-resume \`pause_turn\` (as of \`anthropic\` 0.116.0).** A long-running server-tool turn can stop with \`stop_reason: "pause_turn"\`. The runner only continues after a client tool produces a result, so a paused turn ends the loop and is returned as the final message — no error, no warning, just a silently truncated answer. Unlike the TypeScript runner, the Python runner cannot be resumed mid-loop: it exits unconditionally when no client tool ran, and \`runner.append_messages(...)\` does not prevent the exit. To handle \`pause_turn\`, mirror the conversation history as you iterate, then restart the runner with the paused turn appended:
+**Caution — the runner does not auto-resume `pause_turn` (as of `anthropic` 0.116.0).** A long-running server-tool turn can stop with `stop_reason: "pause_turn"`. The runner only continues after a client tool produces a result, so a paused turn ends the loop and is returned as the final message — no error, no warning, just a silently truncated answer. Unlike the TypeScript runner, the Python runner cannot be resumed mid-loop: it exits unconditionally when no client tool ran, and `runner.append_messages(...)` does not prevent the exit. To handle `pause_turn`, mirror the conversation history as you iterate, then restart the runner with the paused turn appended:
 
-\`\`\`python
+```python
 messages = [{"role": "user", "content": user_input}]
 
 max_restarts = 5  # cap pause_turn restarts, mirroring max_continuations advice
@@ -83,23 +83,23 @@ while True:
     restarts += 1
     if restarts > max_restarts:
         raise RuntimeError("giving up: turn still paused after max_restarts")
-    # Paused mid-turn: \`messages\` already ends with the paused assistant
+    # Paused mid-turn: `messages` already ends with the paused assistant
     # turn, so the next runner resumes it
-\`\`\`
+```
 
-Alternatively, use the manual loop below, which handles \`pause_turn\` explicitly.
+Alternatively, use the manual loop below, which handles `pause_turn` explicitly.
 
 ---
 
 ## MCP Tool Conversion Helpers
 
-**Beta.** Convert [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) tools, prompts, and resources to Anthropic API types for use with the tool runner. Requires \`pip install anthropic[mcp]\` (Python 3.10+).
+**Beta.** Convert [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) tools, prompts, and resources to Anthropic API types for use with the tool runner. Requires `pip install anthropic[mcp]` (Python 3.10+).
 
-> **Note:** The Claude API also supports an \`mcp_servers\` parameter that lets Claude connect directly to remote MCP servers. Use these helpers instead when you need local MCP servers, prompts, resources, or more control over the MCP connection.
+> **Note:** The Claude API also supports an `mcp_servers` parameter that lets Claude connect directly to remote MCP servers. Use these helpers instead when you need local MCP servers, prompts, resources, or more control over the MCP connection.
 
 ### MCP Tools with Tool Runner
 
-\`\`\`python
+```python
 from anthropic import AsyncAnthropic
 from anthropic.lib.tools.mcp import async_mcp_tool
 from mcp import ClientSession
@@ -121,13 +121,13 @@ async with stdio_client(StdioServerParameters(command="mcp-server")) as (read, w
         )
         async for message in runner:
             print(message)
-\`\`\`
+```
 
-For sync usage, use \`mcp_tool\` instead of \`async_mcp_tool\`.
+For sync usage, use `mcp_tool` instead of `async_mcp_tool`.
 
 ### MCP Prompts
 
-\`\`\`python
+```python
 from anthropic.lib.tools.mcp import mcp_message
 
 prompt = await mcp_client.get_prompt(name="my-prompt")
@@ -136,11 +136,11 @@ response = await client.beta.messages.create(
     max_tokens=16000,
     messages=[mcp_message(m) for m in prompt.messages],
 )
-\`\`\`
+```
 
 ### MCP Resources as Content
 
-\`\`\`python
+```python
 from anthropic.lib.tools.mcp import mcp_resource_to_content
 
 resource = await mcp_client.read_resource(uri="file:///path/to/doc.txt")
@@ -155,28 +155,28 @@ response = await client.beta.messages.create(
         ],
     }],
 )
-\`\`\`
+```
 
 ### Upload MCP Resources as Files
 
-\`\`\`python
+```python
 from anthropic.lib.tools.mcp import mcp_resource_to_file
 
 resource = await mcp_client.read_resource(uri="file:///path/to/data.json")
 uploaded = await client.beta.files.upload(file=mcp_resource_to_file(resource))
-\`\`\`
+```
 
-Conversion functions raise \`UnsupportedMCPValueError\` if an MCP value cannot be converted (e.g., unsupported content types like audio, unsupported MIME types).
+Conversion functions raise `UnsupportedMCPValueError` if an MCP value cannot be converted (e.g., unsupported content types like audio, unsupported MIME types).
 
 ---
 
 ## Manual Agentic Loop
 
-Prefer the tool runner above. Drop to a manual loop only when you need control the runner does not expose (e.g., a custom transport, request shapes the SDK cannot build, or avoiding a beta dependency — the runner is beta). Human-in-the-loop approval does *not* require a manual loop — gate inside the tool function (return a "user declined" result) or inspect pending \`tool_use\` blocks in the \`for message in runner:\` body and call \`runner.set_messages_params()\`.
+Prefer the tool runner above. Drop to a manual loop only when you need control the runner does not expose (e.g., a custom transport, request shapes the SDK cannot build, or avoiding a beta dependency — the runner is beta). Human-in-the-loop approval does *not* require a manual loop — gate inside the tool function (return a "user declined" result) or inspect pending `tool_use` blocks in the `for message in runner:` body and call `runner.set_messages_params()`.
 
 If you do need a manual loop:
 
-\`\`\`python
+```python
 import anthropic
 
 client = anthropic.Anthropic()
@@ -225,13 +225,13 @@ while True:
 
 # Final response text
 final_text = next(b.text for b in response.content if b.type == "text")
-\`\`\`
+```
 
 ---
 
 ## Handling Tool Results
 
-\`\`\`python
+```python
 response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
@@ -264,13 +264,13 @@ for block in response.content:
                 }
             ]
         )
-\`\`\`
+```
 
 ---
 
 ## Multiple Tool Calls
 
-\`\`\`python
+```python
 tool_results = []
 
 for block in response.content:
@@ -294,26 +294,26 @@ if tool_results:
             {"role": "user", "content": tool_results}
         ]
     )
-\`\`\`
+```
 
 ---
 
 ## Error Handling in Tool Results
 
-\`\`\`python
+```python
 tool_result = {
     "type": "tool_result",
     "tool_use_id": tool_use_id,
     "content": "Error: Location 'xyz' not found. Please provide a valid city name.",
     "is_error": True
 }
-\`\`\`
+```
 
 ---
 
 ## Tool Choice
 
-\`\`\`python
+```python
 response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
@@ -321,7 +321,7 @@ response = client.messages.create(
     tool_choice={"type": "tool", "name": "get_weather"},  # Force specific tool
     messages=[{"role": "user", "content": "What's the weather in Paris?"}]
 )
-\`\`\`
+```
 
 ---
 
@@ -329,7 +329,7 @@ response = client.messages.create(
 
 ### Basic Usage
 
-\`\`\`python
+```python
 import anthropic
 
 client = anthropic.Anthropic()
@@ -352,11 +352,11 @@ for block in response.content:
         print(block.text)
     elif block.type == "bash_code_execution_tool_result":
         print(f"stdout: {block.content.stdout}")
-\`\`\`
+```
 
 ### Upload Files for Analysis
 
-\`\`\`python
+```python
 # 1. Upload a file
 uploaded = client.beta.files.upload(file=open("sales_data.csv", "rb"))
 
@@ -375,11 +375,11 @@ response = client.messages.create(
     }],
     tools=[{"type": "code_execution_20260120", "name": "code_execution"}]
 )
-\`\`\`
+```
 
 ### Retrieve Generated Files
 
-\`\`\`python
+```python
 import os
 
 OUTPUT_DIR = "./claude_outputs"
@@ -401,11 +401,11 @@ for block in response.content:
                     output_path = os.path.join(OUTPUT_DIR, safe_name)
                     file_content.write_to_file(output_path)
                     print(f"Saved: {output_path}")
-\`\`\`
+```
 
 ### Container Reuse
 
-\`\`\`python
+```python
 # First request: set up environment
 response1 = client.messages.create(
     model="{{OPUS_ID}}",
@@ -425,11 +425,11 @@ response2 = client.messages.create(
     messages=[{"role": "user", "content": "Read data.json and display as a formatted table"}],
     tools=[{"type": "code_execution_20260120", "name": "code_execution"}]
 )
-\`\`\`
+```
 
 ### Response Structure
 
-\`\`\`python
+```python
 for block in response.content:
     if block.type == "text":
         print(block.text)  # Claude's explanation
@@ -446,7 +446,7 @@ for block in response.content:
             print(f"Tool error: {result.error_code}")
     elif block.type == "text_editor_code_execution_tool_result":
         print(f"File operation: {block.content}")
-\`\`\`
+```
 
 ---
 
@@ -454,7 +454,7 @@ for block in response.content:
 
 ### Basic Usage
 
-\`\`\`python
+```python
 import anthropic
 
 client = anthropic.Anthropic()
@@ -465,13 +465,13 @@ response = client.messages.create(
     messages=[{"role": "user", "content": "Remember that my preferred language is Python."}],
     tools=[{"type": "memory_20250818", "name": "memory"}],
 )
-\`\`\`
+```
 
 ### SDK Memory Helper
 
-Subclass \`BetaAbstractMemoryTool\`:
+Subclass `BetaAbstractMemoryTool`:
 
-\`\`\`python
+```python
 from anthropic.lib.tools import BetaAbstractMemoryTool
 
 class MyMemoryTool(BetaAbstractMemoryTool):
@@ -494,11 +494,11 @@ runner = client.beta.messages.tool_runner(
 
 for message in runner:
     print(message)
-\`\`\`
+```
 
 For full implementation examples, use WebFetch:
 
-- \`https://github.com/anthropics/anthropic-sdk-python/blob/main/examples/memory/basic.py\`
+- `https://github.com/anthropics/anthropic-sdk-python/blob/main/examples/memory/basic.py`
 
 ---
 
@@ -506,7 +506,7 @@ For full implementation examples, use WebFetch:
 
 ### JSON Outputs (Pydantic — Recommended)
 
-\`\`\`python
+```python
 from pydantic import BaseModel
 from typing import List
 import anthropic
@@ -534,11 +534,11 @@ response = client.messages.parse(
 contact = response.parsed_output
 print(contact.name)           # "Jane Doe"
 print(contact.interests)      # ["API", "SDKs"]
-\`\`\`
+```
 
 ### Raw Schema
 
-\`\`\`python
+```python
 response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
@@ -568,11 +568,11 @@ import json
 # output_config.format guarantees the first block is text with valid JSON
 text = next(b.text for b in response.content if b.type == "text")
 data = json.loads(text)
-\`\`\`
+```
 
 ### Strict Tool Use
 
-\`\`\`python
+```python
 response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
@@ -593,11 +593,11 @@ response = client.messages.create(
         }
     }]
 )
-\`\`\`
+```
 
 ### Using Both Together
 
-\`\`\`python
+```python
 response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
@@ -631,4 +631,4 @@ response = client.messages.create(
         }
     }]
 )
-\`\`\`
+```

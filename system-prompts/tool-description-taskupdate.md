@@ -24,7 +24,7 @@ Use this tool to update a task in the task list.
 
 **Delete tasks:**
 - When a task is no longer relevant or was created in error
-- Setting status to \`deleted\` permanently removes the task
+- Setting status to `deleted` permanently removes the task
 
 **Update task details:**
 - When requirements change or become clearer
@@ -43,37 +43,37 @@ Use this tool to update a task in the task list.
 
 ## Status Workflow
 
-Status progresses: \`pending\` → \`in_progress\` → \`completed\`
+Status progresses: `pending` → `in_progress` → `completed`
 
-Use \`deleted\` to permanently remove a task.
+Use `deleted` to permanently remove a task.
 
 ## Staleness
 
-Make sure to read a task's latest state using \`TaskGet\` before updating it.
+Make sure to read a task's latest state using `TaskGet` before updating it.
 
 ## Examples
 
 Mark task as in progress when starting work:
-\`\`\`json
+```json
 {"taskId": "1", "status": "in_progress"}
-\`\`\`
+```
 
 Mark task as completed after finishing work:
-\`\`\`json
+```json
 {"taskId": "1", "status": "completed"}
-\`\`\`
+```
 
 Delete a task:
-\`\`\`json
+```json
 {"taskId": "1", "status": "deleted"}
-\`\`\`
+```
 
 Claim a task by setting owner:
-\`\`\`json
+```json
 {"taskId": "1", "owner": "my-name"}
-\`\`\`
+```
 
 Set up task dependencies:
-\`\`\`json
+```json
 {"taskId": "2", "addBlockedBy": ["1"]}
-\`\`\`
+```

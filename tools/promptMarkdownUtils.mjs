@@ -53,6 +53,33 @@ export function parseYamlString(value) {
 }
 
 /**
+ * Decode JavaScript source escapes preserved by the prompt extractor.
+ */
+export function decodeSourceEscapes(value) {
+  const text = String(value);
+  let result = '';
+
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === '\\' && i + 1 < text.length) {
+      const next = text[i + 1];
+      if (next === '`' || next === '"' || next === "'" || next === '$') {
+        result += next;
+        i++;
+      } else if (next === '\\') {
+        result += '\\';
+        i++;
+      } else {
+        result += text[i];
+      }
+    } else {
+      result += text[i];
+    }
+  }
+
+  return result;
+}
+
+/**
  * Reject filename collisions before generation can overwrite one prompt with another.
  */
 export function assertUniquePromptFilenames(prompts) {

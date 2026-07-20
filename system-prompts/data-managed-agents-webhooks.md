@@ -7,7 +7,7 @@ ccVersion: "2.1.197"
 
 Anthropic can POST to your HTTPS endpoint when a Managed Agents resource changes state — an alternative to holding an SSE stream or polling. Payloads are **thin** (event type + resource IDs only); on receipt, fetch the resource for current state. Every delivery is HMAC-signed.
 
-> **Direction matters.** This page covers *Anthropic → you* notifications about session/vault state. It does **not** cover *third-party → you* webhooks that *trigger* a session (e.g. a GitHub push handler that calls \`sessions.create()\`) — that's ordinary application code on your side with no Anthropic-specific wire format.
+> **Direction matters.** This page covers *Anthropic → you* notifications about session/vault state. It does **not** cover *third-party → you* webhooks that *trigger* a session (e.g. a GitHub push handler that calls `sessions.create()`) — that's ordinary application code on your side with no Anthropic-specific wire format.
 
 ---
 
@@ -18,16 +18,16 @@ Console → **Manage → Webhooks**. There is no programmatic endpoint-managemen
 | Field | Constraint |
 |---|---|
 | URL | HTTPS on port 443, publicly resolvable hostname |
-| Event types | Subscribe per \`data.type\` — you only receive subscribed types (plus test events) |
-| Signing secret | \`whsec_\`-prefixed, 32 bytes, **shown once at creation** — store it |
+| Event types | Subscribe per `data.type` — you only receive subscribed types (plus test events) |
+| Signing secret | `whsec_`-prefixed, 32 bytes, **shown once at creation** — store it |
 
 ---
 
 ## Verify the signature
 
-Every delivery is HMAC-signed. **Use the SDK's \`client.beta.webhooks.unwrap()\`** — it verifies the signature, rejects payloads more than ~5 minutes old, and returns the parsed event. It reads the \`whsec_\` secret from \`ANTHROPIC_WEBHOOK_SIGNING_KEY\`.
+Every delivery is HMAC-signed. **Use the SDK's `client.beta.webhooks.unwrap()`** — it verifies the signature, rejects payloads more than ~5 minutes old, and returns the parsed event. It reads the `whsec_` secret from `ANTHROPIC_WEBHOOK_SIGNING_KEY`.
 
-\`\`\`python
+```python
 import anthropic
 from flask import Flask, request
 
@@ -57,15 +57,15 @@ def webhook():
             alert_oncall(event.data.id)
 
     return "", 204
-\`\`\`
+```
 
-Pass the **raw request body** to \`unwrap()\` — frameworks that re-serialize JSON (Express \`.json()\`, Flask \`.get_json()\`) change the bytes and break the MAC. For other languages, look up the \`beta.webhooks.unwrap\` binding in the SDK repo (\`shared/live-sources.md\`); don't hand-roll verification.
+Pass the **raw request body** to `unwrap()` — frameworks that re-serialize JSON (Express `.json()`, Flask `.get_json()`) change the bytes and break the MAC. For other languages, look up the `beta.webhooks.unwrap` binding in the SDK repo (`shared/live-sources.md`); don't hand-roll verification.
 
 ---
 
 ## Payload envelope
 
-\`\`\`json
+```json
 {
   "type": "event",
   "id": "event_01ABC...",
@@ -77,52 +77,52 @@ Pass the **raw request body** to \`unwrap()\` — frameworks that re-serialize J
     "workspace_id": "c7b0e4d9-..."
   }
 }
-\`\`\`
+```
 
-Switch on \`data.type\`, fetch the resource by \`data.id\`, return any **2xx** to acknowledge. \`created_at\` is when the *state transition* happened, not when the webhook fired.
+Switch on `data.type`, fetch the resource by `data.id`, return any **2xx** to acknowledge. `created_at` is when the *state transition* happened, not when the webhook fired.
 
 ---
 
-## Supported \`data.type\` values
+## Supported `data.type` values
 
-| \`data.type\` | Fires when |
+| `data.type` | Fires when |
 |---|---|
-| \`session.status_scheduled\` | Session created and ready to accept events |
-| \`session.status_run_started\` | Agent execution kicked off (every transition to \`running\`) |
-| \`session.status_idled\` | Agent awaiting input (tool approval, custom tool result, or next message) |
-| \`session.status_terminated\` | Session hit a terminal error |
-| \`session.thread_created\` | Multiagent: coordinator opened a new subagent thread |
-| \`session.thread_idled\` | Multiagent: a subagent thread is waiting for input |
-| \`session.outcome_evaluation_ended\` | Outcome grader finished one iteration |
-| \`vault.archived\` | Vault was archived |
-| \`vault.created\` | Vault was created |
-| \`vault.deleted\` | Vault was deleted |
-| \`vault_credential.archived\` | Vault credential was archived |
-| \`vault_credential.created\` | Vault credential was created |
-| \`vault_credential.deleted\` | Vault credential was deleted |
-| \`vault_credential.refresh_failed\` | MCP OAuth vault credential failed to refresh |
-| \`agent.created\` | Agent created |
-| \`agent.updated\` | A new agent version was published. Updates that do not create a new version do **not** fire this. |
-| \`agent.archived\` | Agent archived |
-| \`agent.deleted\` | Agent permanently deleted — no object left to fetch; treat the event itself as final |
-| \`deployment.created\` | Scheduled deployment created |
-| \`deployment.updated\` | Deployment properties changed (e.g. schedule edited) |
-| \`deployment.paused\` | Deployment paused — by request, or automatically when a scheduled run fails with a **non-recoverable** error (archived agent, missing environment). Recoverable failures, including rate limits, do **not** auto-pause. |
-| \`deployment.unpaused\` | Deployment unpaused; schedule resumes |
-| \`deployment.archived\` | Deployment archived — directly, or as a result of agent archival/deletion |
-| \`deployment.deleted\` | Deployment permanently deleted — no object left to fetch; treat the event itself as final |
-| \`deployment_run.started\` | A **scheduled** run started. Manual runs do **not** emit \`deployment_run.*\` events. |
-| \`deployment_run.succeeded\` | Scheduled run created its session. Same \`data.id\` (the run ID) as the run's \`.started\` event — fetch the deployment run for its \`session_id\`, then subscribe to the session events to follow the work. |
-| \`deployment_run.failed\` | Scheduled run did not create a session. Same \`data.id\` as the run's \`.started\` event — fetch the deployment run for \`error.type\` / \`error.message\`. |
+| `session.status_scheduled` | Session created and ready to accept events |
+| `session.status_run_started` | Agent execution kicked off (every transition to `running`) |
+| `session.status_idled` | Agent awaiting input (tool approval, custom tool result, or next message) |
+| `session.status_terminated` | Session hit a terminal error |
+| `session.thread_created` | Multiagent: coordinator opened a new subagent thread |
+| `session.thread_idled` | Multiagent: a subagent thread is waiting for input |
+| `session.outcome_evaluation_ended` | Outcome grader finished one iteration |
+| `vault.archived` | Vault was archived |
+| `vault.created` | Vault was created |
+| `vault.deleted` | Vault was deleted |
+| `vault_credential.archived` | Vault credential was archived |
+| `vault_credential.created` | Vault credential was created |
+| `vault_credential.deleted` | Vault credential was deleted |
+| `vault_credential.refresh_failed` | MCP OAuth vault credential failed to refresh |
+| `agent.created` | Agent created |
+| `agent.updated` | A new agent version was published. Updates that do not create a new version do **not** fire this. |
+| `agent.archived` | Agent archived |
+| `agent.deleted` | Agent permanently deleted — no object left to fetch; treat the event itself as final |
+| `deployment.created` | Scheduled deployment created |
+| `deployment.updated` | Deployment properties changed (e.g. schedule edited) |
+| `deployment.paused` | Deployment paused — by request, or automatically when a scheduled run fails with a **non-recoverable** error (archived agent, missing environment). Recoverable failures, including rate limits, do **not** auto-pause. |
+| `deployment.unpaused` | Deployment unpaused; schedule resumes |
+| `deployment.archived` | Deployment archived — directly, or as a result of agent archival/deletion |
+| `deployment.deleted` | Deployment permanently deleted — no object left to fetch; treat the event itself as final |
+| `deployment_run.started` | A **scheduled** run started. Manual runs do **not** emit `deployment_run.*` events. |
+| `deployment_run.succeeded` | Scheduled run created its session. Same `data.id` (the run ID) as the run's `.started` event — fetch the deployment run for its `session_id`, then subscribe to the session events to follow the work. |
+| `deployment_run.failed` | Scheduled run did not create a session. Same `data.id` as the run's `.started` event — fetch the deployment run for `error.type` / `error.message`. |
 
-> These are **webhook** \`data.type\` values — a separate namespace from SSE event types (\`session.status_idle\`, \`span.outcome_evaluation_end\`, etc. in \`shared/managed-agents-events.md\`). Don't reuse SSE constants in webhook handlers.
+> These are **webhook** `data.type` values — a separate namespace from SSE event types (`session.status_idle`, `span.outcome_evaluation_end`, etc. in `shared/managed-agents-events.md`). Don't reuse SSE constants in webhook handlers.
 
 ---
 
 ## Delivery behavior & pitfalls
 
-- **No ordering guarantee.** \`session.status_idled\` may arrive before \`session.outcome_evaluation_ended\` even if the evaluation finished first. Sort by envelope \`created_at\` if order matters.
-- **Retries carry the same \`event.id\`.** At least one retry on non-2xx. Dedupe on \`event.id\`.
+- **No ordering guarantee.** `session.status_idled` may arrive before `session.outcome_evaluation_ended` even if the evaluation finished first. Sort by envelope `created_at` if order matters.
+- **Retries carry the same `event.id`.** At least one retry on non-2xx. Dedupe on `event.id`.
 - **3xx is failure.** Redirects are not followed — update the URL in Console if your endpoint moves.
 - **Auto-disable** after ~20 consecutive failed deliveries, or immediately if the hostname resolves to a private IP or returns a redirect. Re-enable manually in Console.
-- **Thin payload is intentional.** Don't expect \`stop_reason\`, \`outcome_evaluations\`, credential secrets, etc. on the webhook body — fetch the resource.
+- **Thin payload is intentional.** Don't expect `stop_reason`, `outcome_evaluations`, credential secrets, etc. on the webhook body — fetch the resource.

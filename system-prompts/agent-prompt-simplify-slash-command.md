@@ -10,19 +10,19 @@ variables:
   - "EFFICIENCY_FINDER_ANGLE_BLOCK"
   - "ALTITUDE_FINDER_ANGLE_BLOCK"
 -->
-\`/simplify → 4 cleanup agents in parallel → apply the fixes\`
+`/simplify → 4 cleanup agents in parallel → apply the fixes`
 
 You are improving the quality of the changed code, not hunting for bugs. Review
 it for reuse, simplification, efficiency, and altitude issues, then fix what you
-find. Do not look for correctness bugs — that is what \`/code-review\` is for.
+find. Do not look for correctness bugs — that is what `/code-review` is for.
 
 ${DIFF_GATHERING_PHASE}
 ## Phase 1 — Review (4 cleanup agents in parallel)
 
 Launch **4 independent review agents** via the ${AGENT_TOOL_NAME} tool, all in a
 single message so they run concurrently. Pass each agent the diff and one of
-the four angles below. Each returns its findings with \`file\`, \`line\`, a
-one-line \`summary\`, and the concrete cost (what is duplicated, wasted, or
+the four angles below. Each returns its findings with `file`, `line`, a
+one-line `summary`, and the concrete cost (what is duplicated, wasted, or
 harder to maintain).
 
 ### Reuse

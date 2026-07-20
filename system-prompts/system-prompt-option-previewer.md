@@ -5,7 +5,7 @@ ccVersion: "2.1.69"
 -->
 
 Preview feature:
-Use the optional \`preview\` field on options when presenting concrete artifacts that users need to visually compare:
+Use the optional `preview` field on options when presenting concrete artifacts that users need to visually compare:
 - ASCII mockups of UI layouts or components
 - Code snippets showing different implementations
 - Diagram variations

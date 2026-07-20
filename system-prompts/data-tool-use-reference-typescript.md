@@ -11,9 +11,9 @@ For conceptual overview (tool definitions, tool choice, tips), see [shared/tool-
 
 **Beta:** The tool runner is in beta in the TypeScript SDK.
 
-Use \`betaZodTool\` with Zod schemas to define tools with a \`run\` function, then pass them to \`client.beta.messages.toolRunner()\`:
+Use `betaZodTool` with Zod schemas to define tools with a `run` function, then pass them to `client.beta.messages.toolRunner()`:
 
-\`\`\`typescript
+```typescript
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodTool } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { z } from "zod";
@@ -29,7 +29,7 @@ const getWeather = betaZodTool({
   }),
   run: async (input) => {
     // Your implementation here
-    return \`72°F and sunny in \${input.location}\`;
+    return `72°F and sunny in ${input.location}`;
   },
 });
 
@@ -42,24 +42,24 @@ const finalMessage = await client.beta.messages.toolRunner({
 });
 
 console.log(finalMessage.content);
-\`\`\`
+```
 
-Zod is optional — \`betaTool()\` from \`@anthropic-ai/sdk/helpers/beta/json-schema\` accepts a raw JSON Schema \`inputSchema\` plus a \`run\` function if you don't want a Zod dependency.
+Zod is optional — `betaTool()` from `@anthropic-ai/sdk/helpers/beta/json-schema` accepts a raw JSON Schema `inputSchema` plus a `run` function if you don't want a Zod dependency.
 
 **Key benefits of the tool runner:**
 
 - No manual loop — the SDK handles calling tools and feeding results back
-- Type-safe tool inputs via Zod schemas (or raw JSON Schema via \`betaTool()\`)
+- Type-safe tool inputs via Zod schemas (or raw JSON Schema via `betaTool()`)
 - Tool schemas are generated automatically from Zod definitions
 - Iteration stops automatically when Claude has no more tool calls
 
 ### Server tools with the tool runner
 
-The runner's \`tools\` array accepts raw server-tool definitions (\`web_search_20260209\`, \`web_fetch_20260209\`, code execution) alongside runnable tools — pass the literal tool object; server tools run on Anthropic's servers, so there is no \`run\` function.
+The runner's `tools` array accepts raw server-tool definitions (`web_search_20260209`, `web_fetch_20260209`, code execution) alongside runnable tools — pass the literal tool object; server tools run on Anthropic's servers, so there is no `run` function.
 
-**Caution — the runner does not auto-resume \`pause_turn\` (as of \`@anthropic-ai/sdk\` 0.110.0).** A long-running server-tool turn can stop with \`stop_reason: "pause_turn"\`. The runner only continues after a client tool produces a result, so a paused turn ends the loop and is returned as the final message — no error, no warning, just a silently truncated answer. If you mix server tools into the runner, check \`stop_reason\` on every iteration and resume by pushing the paused assistant turn back:
+**Caution — the runner does not auto-resume `pause_turn` (as of `@anthropic-ai/sdk` 0.110.0).** A long-running server-tool turn can stop with `stop_reason: "pause_turn"`. The runner only continues after a client tool produces a result, so a paused turn ends the loop and is returned as the final message — no error, no warning, just a silently truncated answer. If you mix server tools into the runner, check `stop_reason` on every iteration and resume by pushing the paused assistant turn back:
 
-\`\`\`typescript
+```typescript
 const params = {
   model: "{{OPUS_ID}}",
   max_tokens: 16000,
@@ -76,9 +76,9 @@ for await (const message of runner) {
   }
 }
 
-// Streaming alternative — construct the runner with \`stream: true\` (same
+// Streaming alternative — construct the runner with `stream: true` (same
 // params as above). Each iteration then yields a stream, not a message — a
-// bare \`message.stop_reason\` check never fires. Resolve the stream first:
+// bare `message.stop_reason` check never fires. Resolve the stream first:
 const streamingRunner = client.beta.messages.toolRunner({ ...params, stream: true });
 for await (const stream of streamingRunner) {
   const message = await stream.finalMessage();
@@ -86,19 +86,19 @@ for await (const stream of streamingRunner) {
     streamingRunner.pushMessages({ role: "assistant", content: message.content });
   }
 }
-\`\`\`
+```
 
-Each pause–resume consumes a \`max_iterations\` tick, so a capped run can still end paused — check the final message's \`stop_reason\` before trusting the result (after the loop, call \`.done()\` on the runner you iterated to get the final message). Alternatively, use the manual loop below, which handles \`pause_turn\` explicitly.
+Each pause–resume consumes a `max_iterations` tick, so a capped run can still end paused — check the final message's `stop_reason` before trusting the result (after the loop, call `.done()` on the runner you iterated to get the final message). Alternatively, use the manual loop below, which handles `pause_turn` explicitly.
 
 ---
 
 ## Manual Agentic Loop
 
-Prefer the tool runner above. Drop to a manual loop only when you need control the runner does not expose (e.g., a custom transport, request shapes the SDK cannot build, or avoiding a beta dependency — the runner is beta, and it supports per-token streaming via \`stream: true\`). Human-in-the-loop approval does *not* require a manual loop — gate inside the tool's \`run()\` function (return a "user declined" result) or inspect pending \`tool_use\` blocks and call \`setMessagesParams()\` between iterations.
+Prefer the tool runner above. Drop to a manual loop only when you need control the runner does not expose (e.g., a custom transport, request shapes the SDK cannot build, or avoiding a beta dependency — the runner is beta, and it supports per-token streaming via `stream: true`). Human-in-the-loop approval does *not* require a manual loop — gate inside the tool's `run()` function (return a "user declined" result) or inspect pending `tool_use` blocks and call `setMessagesParams()` between iterations.
 
 If you do need a manual loop:
 
-\`\`\`typescript
+```typescript
 import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic();
@@ -139,13 +139,13 @@ while (true) {
 
   messages.push({ role: "user", content: toolResults });
 }
-\`\`\`
+```
 
 ### Streaming Manual Loop
 
-Use \`client.messages.stream()\` + \`finalMessage()\` instead of \`.create()\` when you need streaming within a manual loop. Text deltas are streamed on each iteration; \`finalMessage()\` collects the complete \`Message\` so you can inspect \`stop_reason\` and extract tool-use blocks:
+Use `client.messages.stream()` + `finalMessage()` instead of `.create()` when you need streaming within a manual loop. Text deltas are streamed on each iteration; `finalMessage()` collects the complete `Message` so you can inspect `stop_reason` and extract tool-use blocks:
 
-\`\`\`typescript
+```typescript
 import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic();
@@ -195,19 +195,19 @@ while (true) {
 
   messages.push({ role: "user", content: toolResults });
 }
-\`\`\`
+```
 
-> **Important:** Don't wrap \`.on()\` events in \`new Promise()\` to collect the final message — use \`stream.finalMessage()\` instead. The SDK handles all error/abort/completion states internally.
+> **Important:** Don't wrap `.on()` events in `new Promise()` to collect the final message — use `stream.finalMessage()` instead. The SDK handles all error/abort/completion states internally.
 
-> **Error handling in the loop:** Use the SDK's typed exceptions (e.g., \`Anthropic.RateLimitError\`, \`Anthropic.APIError\`) — see [Error Handling](./README.md#error-handling) for examples. Don't check error messages with string matching.
+> **Error handling in the loop:** Use the SDK's typed exceptions (e.g., `Anthropic.RateLimitError`, `Anthropic.APIError`) — see [Error Handling](./README.md#error-handling) for examples. Don't check error messages with string matching.
 
-> **SDK types:** Use \`Anthropic.MessageParam\`, \`Anthropic.Tool\`, \`Anthropic.ToolUseBlock\`, \`Anthropic.ToolResultBlockParam\`, \`Anthropic.Message\`, etc. for all API-related data structures. Don't redefine equivalent interfaces.
+> **SDK types:** Use `Anthropic.MessageParam`, `Anthropic.Tool`, `Anthropic.ToolUseBlock`, `Anthropic.ToolResultBlockParam`, `Anthropic.Message`, etc. for all API-related data structures. Don't redefine equivalent interfaces.
 
 ---
 
 ## Handling Tool Results
 
-\`\`\`typescript
+```typescript
 const response = await client.messages.create({
   model: "{{OPUS_ID}}",
   max_tokens: 16000,
@@ -236,13 +236,13 @@ for (const block of response.content) {
     });
   }
 }
-\`\`\`
+```
 
 ---
 
 ## Tool Choice
 
-\`\`\`typescript
+```typescript
 const response = await client.messages.create({
   model: "{{OPUS_ID}}",
   max_tokens: 16000,
@@ -250,17 +250,17 @@ const response = await client.messages.create({
   tool_choice: { type: "tool", name: "get_weather" },
   messages: [{ role: "user", content: "What's the weather in Paris?" }],
 });
-\`\`\`
+```
 
 ---
 
 ## Anthropic-Defined Tools
 
-Version-suffixed \`type\` literals; \`name\` is fixed per interface. Web search and code execution are server-executed; bash and text editor are client-executed (you handle the \`tool_use\` locally — see \`shared/tool-use-concepts.md\`). Pass plain object literals — the \`ToolUnion\` type is satisfied structurally. **The \`name\`/\`type\` pair must match the interface**: mixing \`str_replace_based_edit_tool\` (20250728 name) with \`text_editor_20250124\` (which expects \`str_replace_editor\`) is a TS2322.
+Version-suffixed `type` literals; `name` is fixed per interface. Web search and code execution are server-executed; bash and text editor are client-executed (you handle the `tool_use` locally — see `shared/tool-use-concepts.md`). Pass plain object literals — the `ToolUnion` type is satisfied structurally. **The `name`/`type` pair must match the interface**: mixing `str_replace_based_edit_tool` (20250728 name) with `text_editor_20250124` (which expects `str_replace_editor`) is a TS2322.
 
-**Don't type-annotate as \`Tool[]\`** — \`Tool\` is just the custom-tool variant. Let structural typing infer from the \`tools\` param, or annotate as \`Anthropic.Messages.ToolUnion[]\` if you must:
+**Don't type-annotate as `Tool[]`** — `Tool` is just the custom-tool variant. Let structural typing infer from the `tools` param, or annotate as `Anthropic.Messages.ToolUnion[]` if you must:
 
-\`\`\`typescript
+```typescript
 // ✓ let inference work — no annotation
 const response = await client.messages.create({
   model: "{{OPUS_ID}}",
@@ -276,19 +276,19 @@ const response = await client.messages.create({
 
 // ✗ this is a TS2352 — Tool is the CUSTOM tool variant only
 // const tools: Anthropic.Tool[] = [{ type: "text_editor_20250728", ... }]
-\`\`\`
+```
 
-| Interface | \`name\` | \`type\` |
+| Interface | `name` | `type` |
 |---|---|---|
-| \`ToolTextEditor20250124\` | \`str_replace_editor\` | \`text_editor_20250124\` |
-| \`ToolTextEditor20250429\` | \`str_replace_based_edit_tool\` | \`text_editor_20250429\` |
-| \`ToolTextEditor20250728\` | \`str_replace_based_edit_tool\` | \`text_editor_20250728\` |
-| \`ToolBash20250124\` | \`bash\` | \`bash_20250124\` |
-| \`WebSearchTool20260209\` | \`web_search\` | \`web_search_20260209\` |
-| \`WebFetchTool20260209\` | \`web_fetch\` | \`web_fetch_20260209\` |
-| \`CodeExecutionTool20260120\` | \`code_execution\` | \`code_execution_20260120\` |
+| `ToolTextEditor20250124` | `str_replace_editor` | `text_editor_20250124` |
+| `ToolTextEditor20250429` | `str_replace_based_edit_tool` | `text_editor_20250429` |
+| `ToolTextEditor20250728` | `str_replace_based_edit_tool` | `text_editor_20250728` |
+| `ToolBash20250124` | `bash` | `bash_20250124` |
+| `WebSearchTool20260209` | `web_search` | `web_search_20260209` |
+| `WebFetchTool20260209` | `web_fetch` | `web_fetch_20260209` |
+| `CodeExecutionTool20260120` | `code_execution` | `code_execution_20260120` |
 
-**Don't mix beta and non-beta types**: if you call \`client.beta.messages.create()\`, the response \`content\` is \`BetaContentBlock[]\` — you cannot pass that to a non-beta \`ContentBlockParam[]\` without narrowing each element.
+**Don't mix beta and non-beta types**: if you call `client.beta.messages.create()`, the response `content` is `BetaContentBlock[]` — you cannot pass that to a non-beta `ContentBlockParam[]` without narrowing each element.
 
 ---
 
@@ -297,7 +297,7 @@ const response = await client.messages.create({
 
 ### Basic Usage
 
-\`\`\`typescript
+```typescript
 import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic();
@@ -314,26 +314,26 @@ const response = await client.messages.create({
   ],
   tools: [{ type: "code_execution_20260120", name: "code_execution" }],
 });
-\`\`\`
+```
 
 ### Reading Local Files (ESM note)
 
-\`__dirname\` doesn't exist in ES modules. For script-relative paths use \`import.meta.url\`:
+`__dirname` doesn't exist in ES modules. For script-relative paths use `import.meta.url`:
 
-\`\`\`typescript
+```typescript
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const pdfBytes = readFileSync(join(__dirname, "sample.pdf"));
-\`\`\`
+```
 
-Or use a CWD-relative path if the script runs from a known directory: \`readFileSync("./sample.pdf")\`.
+Or use a CWD-relative path if the script runs from a known directory: `readFileSync("./sample.pdf")`.
 
 ### Upload Files for Analysis
 
-\`\`\`typescript
+```typescript
 import Anthropic, { toFile } from "@anthropic-ai/sdk";
 import { createReadStream } from "fs";
 
@@ -369,11 +369,11 @@ const response = await client.messages.create(
   },
   { headers: { "anthropic-beta": "files-api-2025-04-14" } },
 );
-\`\`\`
+```
 
 ### Retrieve Generated Files
 
-\`\`\`typescript
+```typescript
 import path from "path";
 import fs from "fs";
 
@@ -393,22 +393,22 @@ for (const block of response.content) {
           const fileBytes = Buffer.from(await downloadResponse.arrayBuffer());
           const safeName = path.basename(metadata.filename);
           if (!safeName || safeName === "." || safeName === "..") {
-            console.warn(\`Skipping invalid filename: \${metadata.filename}\`);
+            console.warn(`Skipping invalid filename: ${metadata.filename}`);
             continue;
           }
           const outputPath = path.join(OUTPUT_DIR, safeName);
           await fs.promises.writeFile(outputPath, fileBytes);
-          console.log(\`Saved: \${outputPath}\`);
+          console.log(`Saved: ${outputPath}`);
         }
       }
     }
   }
 }
-\`\`\`
+```
 
 ### Container Reuse
 
-\`\`\`typescript
+```typescript
 // First request: set up environment
 const response1 = await client.messages.create({
   model: "{{OPUS_ID}}",
@@ -438,7 +438,7 @@ const response2 = await client.messages.create({
   ],
   tools: [{ type: "code_execution_20260120", name: "code_execution" }],
 });
-\`\`\`
+```
 
 ---
 
@@ -446,7 +446,7 @@ const response2 = await client.messages.create({
 
 ### Basic Usage
 
-\`\`\`typescript
+```typescript
 const response = await client.messages.create({
   model: "{{OPUS_ID}}",
   max_tokens: 16000,
@@ -458,13 +458,13 @@ const response = await client.messages.create({
   ],
   tools: [{ type: "memory_20250818", name: "memory" }],
 });
-\`\`\`
+```
 
 ### SDK Memory Helper
 
-Use \`betaMemoryTool\` with a \`MemoryToolHandlers\` implementation:
+Use `betaMemoryTool` with a `MemoryToolHandlers` implementation:
 
-\`\`\`typescript
+```typescript
 import {
   betaMemoryTool,
   type MemoryToolHandlers,
@@ -491,11 +491,11 @@ const runner = client.beta.messages.toolRunner({
 for await (const message of runner) {
   console.log(message);
 }
-\`\`\`
+```
 
 For full implementation examples, use WebFetch:
 
-- \`https://github.com/anthropics/anthropic-sdk-typescript/blob/main/examples/tools-helpers-memory.ts\`
+- `https://github.com/anthropics/anthropic-sdk-typescript/blob/main/examples/tools-helpers-memory.ts`
 
 ---
 
@@ -503,7 +503,7 @@ For full implementation examples, use WebFetch:
 
 ### JSON Outputs (Zod — Recommended)
 
-\`\`\`typescript
+```typescript
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
@@ -535,11 +535,11 @@ const response = await client.messages.parse({
 
 // parsed_output is null if parsing failed — assert or guard
 console.log(response.parsed_output!.name); // "Jane Doe"
-\`\`\`
+```
 
 ### Strict Tool Use
 
-\`\`\`typescript
+```typescript
 const response = await client.messages.create({
   model: "{{OPUS_ID}}",
   max_tokens: 16000,
@@ -570,15 +570,15 @@ const response = await client.messages.create({
     },
   ],
 });
-\`\`\`
+```
 
 ---
 
 ## Agent Skills
 
-Enable an Anthropic-managed skill (e.g., \`pptx\`) via \`container.skills\` + the \`code_execution\` tool on the beta path. Both beta headers are required. Outputs land as files in the response content — download by file ID via the Files API.
+Enable an Anthropic-managed skill (e.g., `pptx`) via `container.skills` + the `code_execution` tool on the beta path. Both beta headers are required. Outputs land as files in the response content — download by file ID via the Files API.
 
-\`\`\`typescript
+```typescript
 const response = await client.beta.messages.create({
   model: "{{OPUS_ID}}",
   max_tokens: 16000,
@@ -591,4 +591,4 @@ const response = await client.beta.messages.create({
 });
 // Find the file_id in response.content, then:
 // await client.beta.files.download(fileId)
-\`\`\`
+```

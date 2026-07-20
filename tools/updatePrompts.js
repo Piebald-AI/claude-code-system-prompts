@@ -3,6 +3,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {
   assertUniquePromptFilenames,
+  decodeSourceEscapes,
   nameToFilename,
   parseYamlString,
   renderPromptFrontmatter,
@@ -141,7 +142,7 @@ async function countTokensBatch(prompts, batchSize = 5, delayMs = 100) {
  */
 function reconstructPrompt(prompt) {
   if (prompt.pieces.length === 0) return '';
-  if (prompt.pieces.length === 1) return prompt.pieces[0];
+  if (prompt.pieces.length === 1) return decodeSourceEscapes(prompt.pieces[0]);
 
   let result = '';
   let identifierIndex = 0;
@@ -160,7 +161,7 @@ function reconstructPrompt(prompt) {
     }
   }
 
-  return result;
+  return decodeSourceEscapes(result);
 }
 
 /**
@@ -246,7 +247,7 @@ function createReadmeEntry(prompt, filename, tokens, isBold = false) {
   const link = isBold ? `[**${prompt.name}**]` : `[${prompt.name}]`;
   const path = `./system-prompts/${filename}`;
   const tokenCount = `(**${tokens}** tks)`;
-  const description = prompt.description.replace(/\n\s+/g, ' ').trim();
+  const description = prompt.description.replace(/\n\s+/g, ' ').trim().replace(/\.$/, '');
 
   return `- ${link}(${path}) ${tokenCount} - ${description}.`;
 }

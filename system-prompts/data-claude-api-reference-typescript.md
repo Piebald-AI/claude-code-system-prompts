@@ -7,7 +7,7 @@ ccVersion: "2.1.182"
 
 | Feature | Namespace | Key types / call |
 |---|---|---|
-| User profiles | beta | `client.beta.userProfiles.create(...)` / `.retrieve(id)` / `.list()`. Pass the returned profile id on `client.beta.messages.create`. Requires a beta header — check the SDK\'s beta-headers reference for the current flag. |
+| User profiles | beta | `client.beta.userProfiles.create(...)` / `.retrieve(id)` / `.list()`. Pass the returned profile id on `client.beta.messages.create`. Requires a beta header — check the SDK's beta-headers reference for the current flag. |
 
 ## Installation
 
@@ -24,7 +24,7 @@ import Anthropic from "@anthropic-ai/sdk";
 
 // Default — resolves credentials from the environment:
 // ANTHROPIC_API_KEY, or ANTHROPIC_AUTH_TOKEN, or an `ant auth login` profile.
-// Prefer this for local dev; don\'t hardcode a key.
+// Prefer this for local dev; don't hardcode a key.
 const client = new Anthropic();
 
 // Explicit API key (only when you must inject a specific key)
@@ -66,7 +66,7 @@ const response = await client.messages.create({
 
 ### Mid-conversation system messages (model-gated)
 
-For operator instructions that arrive mid-conversation (mode switches, injected state), append `{role: "system", ...}` to `messages` instead of editing top-level `system` — this preserves the cached prefix and carries operator authority. Must follow a user message (or an `assistant` message ending in server-tool use), and must be either the last entry in `messages` or be followed by an `assistant` turn; cannot be `messages[0]`. Unsupported models return a 400 (`role \'system\' is not supported on this model`). See `shared/prompt-caching.md` for when to use this vs. top-level `system`.
+For operator instructions that arrive mid-conversation (mode switches, injected state), append `{role: "system", ...}` to `messages` instead of editing top-level `system` — this preserves the cached prefix and carries operator authority. Must follow a user message (or an `assistant` message ending in server-tool use), and must be either the last entry in `messages` or be followed by an `assistant` turn; cannot be `messages[0]`. Unsupported models return a 400 (`role 'system' is not supported on this model`). See `shared/prompt-caching.md` for when to use this vs. top-level `system`.
 
 ```typescript
 // No beta header needed — use regular client.messages.create.
@@ -127,7 +127,7 @@ const response = await client.messages.create({
           type: "image",
           source: { type: "base64", media_type: "image/png", data: imageData },
         },
-        { type: "text", text: "What\'s in this image?" },
+        { type: "text", text: "What's in this image?" },
       ],
     },
   ],
@@ -229,7 +229,7 @@ for (const block of response.content) {
 
 ## Error Handling
 
-Use the SDK\'s typed exception classes — never check error messages with string matching:
+Use the SDK's typed exception classes — never check error messages with string matching:
 
 ```typescript
 import Anthropic from "@anthropic-ai/sdk";
@@ -261,7 +261,7 @@ The API is stateless — send the full conversation history each time. Use `Anth
 const messages: Anthropic.MessageParam[] = [
   { role: "user", content: "My name is Alice." },
   { role: "assistant", content: "Hello Alice! Nice to meet you." },
-  { role: "user", content: "What\'s my name?" },
+  { role: "user", content: "What's my name?" },
 ];
 
 const response = await client.messages.create({
@@ -275,7 +275,7 @@ const response = await client.messages.create({
 
 - Consecutive same-role messages are allowed — the API combines them into a single turn
 - First message must be `user`
-- Use SDK types (`Anthropic.MessageParam`, `Anthropic.Message`, `Anthropic.Tool`, etc.) for all API data structures — don\'t redefine equivalent interfaces
+- Use SDK types (`Anthropic.MessageParam`, `Anthropic.Message`, `Anthropic.Tool`, etc.) for all API data structures — don't redefine equivalent interfaces
 
 ---
 
@@ -345,7 +345,7 @@ if (response.stop_reason === "refusal" && response.stop_details) {
 
 ### Refusal Fallbacks ({{FABLE_NAME}}) — opt in by default
 
-Fallbacks are **opt-in**: without them a refused request simply stops. Include the server-side `fallbacks` parameter in `{{FABLE_ID}}` code by default — on a policy decline the API re-runs the same request on the fallback model inside the same call. A decline before any output isn\'t billed (a mid-stream decline bills the streamed partial); the rescue bills at the fallback model\'s own rates, with cache repricing applied automatically.
+Fallbacks are **opt-in**: without them a refused request simply stops. Include the server-side `fallbacks` parameter in `{{FABLE_ID}}` code by default — on a policy decline the API re-runs the same request on the fallback model inside the same call. A decline before any output isn't billed (a mid-stream decline bills the streamed partial); the rescue bills at the fallback model's own rates, with cache repricing applied automatically.
 
 ```typescript
 const response = await client.beta.messages.create({

@@ -11,9 +11,9 @@ For conceptual overview (tool definitions, tool choice, tips), see [shared/tool-
 
 ### Tool Runner (Beta — Recommended)
 
-**Beta:** The Go SDK provides \`BetaToolRunner\` for automatic tool use loops via the \`toolrunner\` package.
+**Beta:** The Go SDK provides `BetaToolRunner` for automatic tool use loops via the `toolrunner` package.
 
-\`\`\`go
+```go
 import (
     "context"
     "fmt"
@@ -25,7 +25,7 @@ import (
 
 // Define tool input with jsonschema tags for automatic schema generation
 type GetWeatherInput struct {
-    City string \`json:"city" jsonschema:"required,description=The city name"\`
+    City string `json:"city" jsonschema:"required,description=The city name"`
 }
 
 // Create a tool with automatic schema generation from struct tags
@@ -74,23 +74,23 @@ for _, block := range message.Content {
         fmt.Println(block.Text)
     }
 }
-\`\`\`
+```
 
 **Key features of the Go tool runner:**
 
-- Automatic schema generation from Go structs via \`jsonschema\` tags
-- \`RunToCompletion()\` for simple one-shot usage
-- \`All()\` iterator for processing each message in the conversation
-- \`NextMessage()\` for step-by-step iteration
-- Streaming variant via \`NewToolRunnerStreaming()\` with \`AllStreaming()\`
+- Automatic schema generation from Go structs via `jsonschema` tags
+- `RunToCompletion()` for simple one-shot usage
+- `All()` iterator for processing each message in the conversation
+- `NextMessage()` for step-by-step iteration
+- Streaming variant via `NewToolRunnerStreaming()` with `AllStreaming()`
 
 ### Manual Loop
 
-Prefer the tool runner above. For interception, validation, logging, or human-in-the-loop approval, gate inside the tool's run function or step the runner with \`NextMessage()\`/\`All()\` and inspect each message (the runner's public \`Params\` field lets you adjust the next request) — a manual loop is not required. Drop to a manual loop only when you need control the runner does not expose: define tools with \`ToolParam\`, check \`StopReason\`, execute tools yourself, and feed \`tool_result\` blocks back.
+Prefer the tool runner above. For interception, validation, logging, or human-in-the-loop approval, gate inside the tool's run function or step the runner with `NextMessage()`/`All()` and inspect each message (the runner's public `Params` field lets you adjust the next request) — a manual loop is not required. Drop to a manual loop only when you need control the runner does not expose: define tools with `ToolParam`, check `StopReason`, execute tools yourself, and feed `tool_result` blocks back.
 
-Derived from \`anthropic-sdk-go/examples/tools/main.go\`.
+Derived from `anthropic-sdk-go/examples/tools/main.go`.
 
-\`\`\`go
+```go
 package main
 
 import (
@@ -149,8 +149,8 @@ func main() {
                 // 4. Parse the tool input. Use variant.JSON.Input.Raw() to get the
                 //    raw JSON — block.Input is json.RawMessage, not the parsed value.
                 var in struct {
-                    A int \`json:"a"\`
-                    B int \`json:"b"\`
+                    A int `json:"a"`
+                    B int `json:"b"`
                 }
                 if err := json.Unmarshal([]byte(variant.JSON.Input.Raw()), &in); err != nil {
                     log.Fatal(err)
@@ -172,42 +172,42 @@ func main() {
         messages = append(messages, anthropic.NewUserMessage(toolResults...))
     }
 }
-\`\`\`
+```
 
 **Key API surface:**
 
 | Symbol | Purpose |
 |---|---|
-| \`resp.ToParam()\` | Convert \`Message\` response → \`MessageParam\` for history |
-| \`block.AsAny().(type)\` | Type-switch on \`ContentBlockUnion\` variants |
-| \`variant.JSON.Input.Raw()\` | Raw JSON string of tool input (for \`json.Unmarshal\`) |
-| \`anthropic.NewToolResultBlock(id, content, isError)\` | Build \`tool_result\` block |
-| \`anthropic.NewUserMessage(blocks...)\` | Wrap tool results as a user turn |
-| \`anthropic.StopReasonToolUse\` | \`StopReason\` constant to check loop termination |
-| \`anthropic.ToolUnionParam{OfTool: &t}\` | Wrap \`ToolParam\` in the union for \`Tools:\` |
+| `resp.ToParam()` | Convert `Message` response → `MessageParam` for history |
+| `block.AsAny().(type)` | Type-switch on `ContentBlockUnion` variants |
+| `variant.JSON.Input.Raw()` | Raw JSON string of tool input (for `json.Unmarshal`) |
+| `anthropic.NewToolResultBlock(id, content, isError)` | Build `tool_result` block |
+| `anthropic.NewUserMessage(blocks...)` | Wrap tool results as a user turn |
+| `anthropic.StopReasonToolUse` | `StopReason` constant to check loop termination |
+| `anthropic.ToolUnionParam{OfTool: &t}` | Wrap `ToolParam` in the union for `Tools:` |
 
 ---
 
 ## Anthropic-Defined Tools
 
-Version-suffixed struct names with \`Param\` suffix. \`Name\`/\`Type\` are \`constant.*\` types — zero value marshals correctly, so \`{}\` works. Wrap in \`ToolUnionParam\` with the matching \`Of*\` field. Web search and code execution are server-executed; bash and text editor are client-executed (you handle the \`tool_use\` locally — see \`shared/tool-use-concepts.md\`).
+Version-suffixed struct names with `Param` suffix. `Name`/`Type` are `constant.*` types — zero value marshals correctly, so `{}` works. Wrap in `ToolUnionParam` with the matching `Of*` field. Web search and code execution are server-executed; bash and text editor are client-executed (you handle the `tool_use` locally — see `shared/tool-use-concepts.md`).
 
-\`\`\`go
+```go
 Tools: []anthropic.ToolUnionParam{
     {OfWebSearchTool20260209: &anthropic.WebSearchTool20260209Param{}},
     {OfBashTool20250124: &anthropic.ToolBash20250124Param{}},
     {OfTextEditor20250728: &anthropic.ToolTextEditor20250728Param{}},
     {OfCodeExecutionTool20260120: &anthropic.CodeExecutionTool20260120Param{}},
 },
-\`\`\`
+```
 
-Also available: \`WebFetchTool20260209Param\`, \`ToolSearchToolBm25_20251119Param\`, \`ToolSearchToolRegex20251119Param\`. For the advisor and memory tools, use \`BetaAdvisorTool20260301Param\` / \`BetaMemoryTool20250818Param\` in the beta namespace on \`client.Beta.Messages.New\`.
+Also available: `WebFetchTool20260209Param`, `ToolSearchToolBm25_20251119Param`, `ToolSearchToolRegex20251119Param`. For the advisor and memory tools, use `BetaAdvisorTool20260301Param` / `BetaMemoryTool20250818Param` in the beta namespace on `client.Beta.Messages.New`.
 
 ### Advisor tool (beta)
 
 Server-side — no tool_result round-trip. The advisor model must be ≥ the executor (top-level) model; invalid pairs return 400.
 
-\`\`\`go
+```go
 response, err := client.Beta.Messages.New(ctx, anthropic.BetaMessageNewParams{
     Model:     anthropic.ModelClaudeSonnet4_6,
     MaxTokens: 4096,
@@ -219,7 +219,7 @@ response, err := client.Beta.Messages.New(ctx, anthropic.BetaMessageNewParams{
     Messages: []anthropic.BetaMessageParam{ /* ... */ },
     Betas:    []anthropic.AnthropicBeta{anthropic.AnthropicBetaAdvisorTool2026_03_01},
 })
-\`\`\`
+```
 
 ---
 

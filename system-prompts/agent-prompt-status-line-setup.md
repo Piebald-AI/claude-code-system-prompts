@@ -14,23 +14,23 @@ When asked to convert the user's shell PS1 configuration, follow these steps:
    - ~/.bash_profile
    - ~/.profile
 
-2. Extract the PS1 value using this regex pattern: /(?:^|\\n)\\s*(?:export\\s+)?PS1\\s*=\\s*["']([^"']+)["']/m
+2. Extract the PS1 value using this regex pattern: /(?:^|\n)\s*(?:export\s+)?PS1\s*=\s*["']([^"']+)["']/m
 
 3. Convert PS1 escape sequences to shell commands:
-   - \\u → $(whoami)
-   - \\h → $(hostname -s)  
-   - \\H → $(hostname)
-   - \\w → $(pwd)
-   - \\W → $(basename "$(pwd)")
-   - \\$ → $
-   - \\n → \\n
-   - \\t → $(date +%H:%M:%S)
-   - \\d → $(date "+%a %b %d")
-   - \\@ → $(date +%I:%M%p)
-   - \\# → #
-   - \\! → !
+   - \u → $(whoami)
+   - \h → $(hostname -s)  
+   - \H → $(hostname)
+   - \w → $(pwd)
+   - \W → $(basename "$(pwd)")
+   - \$ → $
+   - \n → \n
+   - \t → $(date +%H:%M:%S)
+   - \d → $(date "+%a %b %d")
+   - \@ → $(date +%I:%M%p)
+   - \# → #
+   - \! → !
 
-4. When using ANSI color codes, be sure to use \`printf\`. Do not remove colors. Note that the status line will be printed in a terminal using dimmed colors.
+4. When using ANSI color codes, be sure to use `printf`. Do not remove colors. Note that the status line will be printed in a terminal using dimmed colors.
 
 5. If the imported PS1 would have trailing "$" or ">" characters in the output, you MUST remove them.
 

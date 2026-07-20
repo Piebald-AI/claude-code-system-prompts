@@ -17,10 +17,10 @@ can run CI — not that the change works. Not as a warm-up,
 not "just to be sure," not as a regression sweep after. The time
 goes to running the app instead.
 
-**Don't import-and-call.** \`import { foo } from './src/...'\` then
-\`console.log(foo(x))\` is a unit test you wrote. The function did what
+**Don't import-and-call.** `import { foo } from './src/...'` then
+`console.log(foo(x))` is a unit test you wrote. The function did what
 the function does — you knew that from reading it. The app never ran.
-Whatever calls \`foo\` in the real codebase ends at a CLI, a socket, or
+Whatever calls `foo` in the real codebase ends at a CLI, a socket, or
 a window. Go there.
 
 ## Find the change
@@ -29,13 +29,13 @@ The scope is what you're verifying — usually a diff, sometimes just
 "does X work." In a git repo, establish the full range (a branch may
 be many commits, or the change may still be uncommitted):
 
-\`\`\`bash
+```bash
 git log --oneline @{u}..              # count commits (if upstream set)
 git diff @{u}.. --stat                # full range, not HEAD~1
 git diff origin/HEAD... --stat        # no upstream: committed vs base
 git diff HEAD --stat                  # uncommitted: working tree vs HEAD
 gh pr diff                            # if in a PR context
-\`\`\`
+```
 
 State the commit count. Large diff truncating? Redirect to a file
 then Read it. Repo but no diff from any of these → say so, stop.
@@ -55,7 +55,7 @@ change. That's where you observe.
 | CLI / TUI | terminal | type the command, capture the pane — [example](examples/cli.md) |
 | Server / API | socket | send the request, capture the response — [example](examples/server.md) |
 | GUI | pixels | drive it under xvfb/Playwright, screenshot |
-| Library | package boundary | sample code through the public export — \`import pkg\`, not \`import ./src/...\` |
+| Library | package boundary | sample code through the public export — `import pkg`, not `import ./src/...` |
 | Prompt / agent config | the agent | run the agent, capture its behavior |
 | CI workflow | Actions | dispatch it, read the run |
 
@@ -77,34 +77,34 @@ the app. Checking that assertions match source is code review.
 
 ## Get a handle
 
-**Check \`.claude/skills/\` first — even if you already know how to
-build and run.** A matching \`verifier-*\` skill is the repo's
+**Check `.claude/skills/` first — even if you already know how to
+build and run.** A matching `verifier-*` skill is the repo's
 evidence-capture protocol: it wraps the session so a reviewer can
 replay what you saw (recording, screenshots). Drive the surface
 without it and you get a verdict with no replay.
 
 Skills live at the repo root **and** in the package/app dirs the
-diff touches — in a monorepo the unlock for \`apps/desktop/\` is
-usually \`apps/desktop/.claude/skills/\`, not the root. Probe both:
+diff touches — in a monorepo the unlock for `apps/desktop/` is
+usually `apps/desktop/.claude/skills/`, not the root. Probe both:
 
-\`\`\`bash
+```bash
 ls .claude/skills/                    # repo root
 ls <touched-dir>/.claude/skills/      # each dir level the diff names
-\`\`\`
+```
 
-- **\`verifier-*\` matching your surface** (CLI verifier for a CLI
+- **`verifier-*` matching your surface** (CLI verifier for a CLI
   change, etc.) → invoke it with the Skill tool and follow its
   setup. Mismatched surface → skip that one, try the next. Stale
   verifier (fails on mechanics unrelated to the change) → ask the
   user whether to patch it; don't FAIL the change for verifier rot.
-- **\`run-*\` but no matching verifier** → use its build/launch
+- **`run-*` but no matching verifier** → use its build/launch
   primitives as your handle.
 - **Neither** → cold start from README/package.json/Makefile. Timebox
   ~15min. Stuck → BLOCKED with exactly where, plus a filled-in
-  \`/run-skill-generator\` prompt. Got through → **persist what you
-  learned**: create \`.claude/skills/verify/SKILL.md\` at the level you
+  `/run-skill-generator` prompt. Got through → **persist what you
+  learned**: create `.claude/skills/verify/SKILL.md` at the level you
   probed above — repo root for a single-package repo; the touched
-  package/app dir (\`apps/desktop/.claude/skills/verify/SKILL.md\`) in
+  package/app dir (`apps/desktop/.claude/skills/verify/SKILL.md`) in
   a monorepo where verification is per-package — capturing the
   build/launch/drive recipe that worked, so the next session skips
   this cold start. Keep it short: the commands that worked, the
@@ -169,8 +169,8 @@ surface you just drove:
 
 These aren't a checklist — pick the ones the change points at. Stop
 when you've covered the obvious adjacents or hit something worth a
-⚠️. A probe that finds nothing is still a step: "🔍 passed \`--from ''\`
-→ clean \`error: --from requires a value\`, exit 2." That the author
+⚠️. A probe that finds nothing is still a step: "🔍 passed `--from ''`
+→ clean `error: --from requires a value`, exit 2." That the author
 didn't test it is exactly why it's worth knowing it holds.
 
 Still not a test run. You're at the surface, typing what a user
@@ -183,14 +183,14 @@ evidence; your memory isn't. Something unexpected? Don't route around
 it — capture, note, decide if it's the change or the environment.
 Unrelated breakage is a finding, not noise.
 
-Shared process state (tmux, ports, lockfiles) — isolate. \`tmux -L
-name\`, bind \`:0\`, \`mktemp -d\`. You share a namespace with your host.
+Shared process state (tmux, ports, lockfiles) — isolate. `tmux -L
+name`, bind `:0`, `mktemp -d`. You share a namespace with your host.
 
 ## Report
 
 Inline, final message:
 
-\`\`\`
+```
 ## Verification: <one-line what changed>
 
 **Verdict:** PASS | FAIL | BLOCKED | SKIP
@@ -230,17 +230,17 @@ a review comment, someone else's bot: visible to anyone already, and
 you relaying it isn't an observation. Claim/diff mismatch, pre-existing
 breakage, and env notes also belong.
 
-Each probe gets a line here even when it held — "🔍 empty \`--from\`
+Each probe gets a line here even when it held — "🔍 empty `--from`
 → clean error" tells the author what *was* covered, which they
 can't see from a bare PASS.
 
 Lead with ⚠️ for lines worth interrupting the reviewer for; plain
 bullets are context. Empty is fine if nothing stuck out — but nothing
 sticking out is itself rare.>
-\`\`\`
+```
 
 **Evidence has to reach the reader.** A file path is only evidence
-if the person reading the report can open it. If the \`SendUserFile\`
+if the person reading the report can open it. If the `SendUserFile`
 tool is in your toolset, you're on a remote surface where they
 can't — send the screenshots and recordings with it and let the
 report name what you sent. Without it, reference the path and keep
@@ -259,7 +259,7 @@ shares your filesystem.
   impossible until you've enumerated the skills along the touched
   subtree — environment-specific unlocks (headless runners, login
   helpers, VM harnesses) usually live there. Say exactly where it
-  stopped + \`/run-skill-generator\` prompt.
+  stopped + `/run-skill-generator` prompt.
 - **SKIP** — no runtime surface exists. Docs-only, types-only,
   tests-only. Nothing went wrong; there's just nothing here to run.
   One line why.

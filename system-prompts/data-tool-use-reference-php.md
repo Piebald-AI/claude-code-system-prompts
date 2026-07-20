@@ -11,10 +11,10 @@ For conceptual overview (tool definitions, tool choice, tips), see [shared/tool-
 
 ### Tool Runner (Beta)
 
-**Beta:** The PHP SDK provides a tool runner via \`$client->beta->messages->toolRunner()\`. Define tools with \`BetaRunnableTool\` — a definition array plus a \`run\` closure:
+**Beta:** The PHP SDK provides a tool runner via `$client->beta->messages->toolRunner()`. Define tools with `BetaRunnableTool` — a definition array plus a `run` closure:
 
-\`\`\`php
-use Anthropic\\Lib\\Tools\\BetaRunnableTool;
+```php
+use Anthropic\Lib\Tools\BetaRunnableTool;
 
 $weatherTool = new BetaRunnableTool(
     definition: [
@@ -47,14 +47,14 @@ foreach ($runner as $message) {
         }
     }
 }
-\`\`\`
+```
 
 ### Manual Loop
 
-Tools are passed as arrays. **The SDK uses camelCase keys** (\`inputSchema\`, \`toolUseID\`, \`stopReason\`) and auto-maps to the API's snake_case on the wire — since v0.5.0. See [shared tool use concepts](../../shared/tool-use-concepts.md) for the loop pattern.
+Tools are passed as arrays. **The SDK uses camelCase keys** (`inputSchema`, `toolUseID`, `stopReason`) and auto-maps to the API's snake_case on the wire — since v0.5.0. See [shared tool use concepts](../../shared/tool-use-concepts.md) for the loop pattern.
 
-\`\`\`php
-use Anthropic\\Messages\\ToolUseBlock;
+```php
+use Anthropic\Messages\ToolUseBlock;
 
 $tools = [
     [
@@ -113,9 +113,9 @@ foreach ($response->content as $block) {
         echo $block->text;
     }
 }
-\`\`\`
+```
 
-\`$block->type === 'tool_use'\` also works; \`instanceof ToolUseBlock\` narrows for PHPStan.
+`$block->type === 'tool_use'` also works; `instanceof ToolUseBlock` narrows for PHPStan.
 
 
 ---
@@ -124,12 +124,12 @@ foreach ($response->content as $block) {
 
 ### Using StructuredOutputModel (Recommended)
 
-Define a PHP class implementing \`StructuredOutputModel\` and pass it as \`outputConfig\`:
+Define a PHP class implementing `StructuredOutputModel` and pass it as `outputConfig`:
 
-\`\`\`php
-use Anthropic\\Lib\\Contracts\\StructuredOutputModel;
-use Anthropic\\Lib\\Concerns\\StructuredOutputModelTrait;
-use Anthropic\\Lib\\Attributes\\Constrained;
+```php
+use Anthropic\Lib\Contracts\StructuredOutputModel;
+use Anthropic\Lib\Concerns\StructuredOutputModelTrait;
+use Anthropic\Lib\Attributes\Constrained;
 
 class Person implements StructuredOutputModel
 {
@@ -152,13 +152,13 @@ $message = $client->messages->create(
 
 $person = $message->parsedOutput();  // Person instance
 echo $person->name;
-\`\`\`
+```
 
-Types are inferred from PHP type hints. Use \`#[Constrained(description: '...')]\` to add descriptions. Nullable properties (\`?string\`) become optional fields.
+Types are inferred from PHP type hints. Use `#[Constrained(description: '...')]` to add descriptions. Nullable properties (`?string`) become optional fields.
 
 ### Raw Schema
 
-\`\`\`php
+```php
 $message = $client->messages->create(
     model: '{{OPUS_ID}}',
     maxTokens: 16000,
@@ -187,16 +187,16 @@ foreach ($message->content as $block) {
         break;
     }
 }
-\`\`\`
+```
 
 ---
 
 ## Beta Features & Anthropic-Defined Tools
 
-**\`betas:\` is NOT a param on \`$client->messages->create()\`** — it only exists on the beta namespace. Use it for features that need an explicit opt-in header:
+**`betas:` is NOT a param on `$client->messages->create()`** — it only exists on the beta namespace. Use it for features that need an explicit opt-in header:
 
-\`\`\`php
-use Anthropic\\Beta\\Messages\\BetaRequestMCPServerURLDefinition;
+```php
+use Anthropic\Beta\Messages\BetaRequestMCPServerURLDefinition;
 
 $response = $client->beta->messages->create(
     model: '{{OPUS_ID}}',
@@ -210,11 +210,11 @@ $response = $client->beta->messages->create(
     betas: ['mcp-client-2025-11-20'],  // only valid on ->beta->messages
     messages: [['role' => 'user', 'content' => 'Use the MCP tools']],
 );
-\`\`\`
+```
 
 ### Task budgets
 
-\`\`\`php
+```php
 $response = $client->beta->messages->create(
     model: '{{OPUS_ID}}',
     maxTokens: 16000,
@@ -223,36 +223,36 @@ $response = $client->beta->messages->create(
     messages: [...],
     betas: ['task-budgets-2026-03-13'],
 );
-\`\`\`
+```
 
 ### Cache diagnostics
 
-Pass the previous response's \`id\` on the next request; print the \`diagnostics\` object on the response:
+Pass the previous response's `id` on the next request; print the `diagnostics` object on the response:
 
-\`\`\`php
+```php
 $r2 = $client->beta->messages->create(
     model: '{{OPUS_ID}}', maxTokens: 1024,
     diagnostics: ['previousMessageId' => $r1->id],
     betas: ['cache-diagnosis-2026-04-07'],
     messages: [...],
 );
-\`\`\`
+```
 
-**Anthropic-defined tools** (bash, web_search, text_editor, code_execution) are GA and work on both paths. Of these, web_search and code_execution are server-executed; bash and text_editor are client-executed (you handle the \`tool_use\` locally) — \`Anthropic\\Messages\\ToolBash20250124\` / \`WebSearchTool20260209\` / \`ToolTextEditor20250728\` / \`CodeExecutionTool20260120\` for non-beta, \`Anthropic\\Beta\\Messages\\BetaToolBash20250124\` / \`BetaWebSearchTool20260209\` / \`BetaToolTextEditor20250728\` / \`BetaCodeExecutionTool20260120\` for beta. No \`betas:\` header needed for these.
+**Anthropic-defined tools** (bash, web_search, text_editor, code_execution) are GA and work on both paths. Of these, web_search and code_execution are server-executed; bash and text_editor are client-executed (you handle the `tool_use` locally) — `Anthropic\Messages\ToolBash20250124` / `WebSearchTool20260209` / `ToolTextEditor20250728` / `CodeExecutionTool20260120` for non-beta, `Anthropic\Beta\Messages\BetaToolBash20250124` / `BetaWebSearchTool20260209` / `BetaToolTextEditor20250728` / `BetaCodeExecutionTool20260120` for beta. No `betas:` header needed for these.
 
 ### Tool search (non-beta, server-side)
 
-\`\`\`php
+```php
 tools: [
     ['type' => 'tool_search_tool_regex_20251119', 'name' => 'tool_search_tool_regex'],
     ['name' => 'get_weather', 'description' => '...', 'inputSchema' => [...], 'deferLoading' => true],
     // ... other user tools with 'deferLoading' => true
 ],
-\`\`\`
+```
 
 ### Memory tool (non-beta, client-executed)
 
-Declare \`['type' => 'memory_20250818', 'name' => 'memory']\`. Handle the \`tool_use\` by reading/writing files under a fixed \`/memories\` directory. **Validate every model-supplied path**: resolve to its canonical form and verify it remains within the memory directory; reject traversal (\`..\`, symlinks) — see \`shared/tool-use-concepts.md\` § Client-Side Tools.
+Declare `['type' => 'memory_20250818', 'name' => 'memory']`. Handle the `tool_use` by reading/writing files under a fixed `/memories` directory. **Validate every model-supplied path**: resolve to its canonical form and verify it remains within the memory directory; reject traversal (`..`, symlinks) — see `shared/tool-use-concepts.md` § Client-Side Tools.
 
 ---
 

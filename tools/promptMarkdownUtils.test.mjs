@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   assertUniquePromptFilenames,
+  decodeSourceEscapes,
   nameToFilename,
   parseYamlString,
   renderPromptFrontmatter,
@@ -28,6 +29,13 @@ test('parseYamlString reads current and legacy generated name scalars', () => {
   assert.equal(parseYamlString('"Agent Prompt: Example"'), 'Agent Prompt: Example');
   assert.equal(parseYamlString("'Agent Prompt: Example'"), 'Agent Prompt: Example');
   assert.equal(parseYamlString("'Agent Prompt: It''s quoted'"), "Agent Prompt: It's quoted");
+});
+
+test('decodeSourceEscapes restores escaped source punctuation', () => {
+  assert.equal(decodeSourceEscapes('Reply \\`go\\`'), 'Reply `go`');
+  assert.equal(decodeSourceEscapes('say \\"yes\\"'), 'say "yes"');
+  assert.equal(decodeSourceEscapes('keep \\n and \\t escapes'), 'keep \\n and \\t escapes');
+  assert.equal(decodeSourceEscapes('escaped \\\\ slash'), 'escaped \\ slash');
 });
 
 test('assertUniquePromptFilenames rejects canonical slug collisions', () => {

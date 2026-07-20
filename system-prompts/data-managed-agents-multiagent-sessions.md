@@ -17,16 +17,16 @@ The SDK sets the `managed-agents-2026-04-01` beta header automatically on all `c
 
 ```python
 orchestrator = client.beta.agents.create(
-    name=\"Engineering Lead\",
-    model=\"{{OPUS_ID}}\",
-    system=\"You coordinate engineering work. Delegate code review to the reviewer and test writing to the test agent.\",
-    tools=[{\"type\": \"agent_toolset_20260401\"}],
+    name="Engineering Lead",
+    model="{{OPUS_ID}}",
+    system="You coordinate engineering work. Delegate code review to the reviewer and test writing to the test agent.",
+    tools=[{"type": "agent_toolset_20260401"}],
     multiagent={
-        \"type\": \"coordinator\",
-        \"agents\": [
+        "type": "coordinator",
+        "agents": [
             reviewer.id,                                            # bare string — latest version
-            {\"type\": \"agent\", \"id\": test_writer.id, \"version\": 4},  # pinned version
-            {\"type\": \"self\"},                                       # the coordinator itself
+            {"type": "agent", "id": test_writer.id, "version": 4},  # pinned version
+            {"type": "self"},                                       # the coordinator itself
         ],
     },
 )
@@ -36,9 +36,9 @@ session = client.beta.sessions.create(agent=orchestrator.id, environment_id=env.
 
 | Roster entry | Shape | Notes |
 |---|---|---|
-| String shorthand | `\"agent_abc123\"` | References the latest version of a stored agent. |
-| Agent reference | `{type: \"agent\", id, version?}` | Omit `version` to pin the latest at coordinator save time. |
-| Self | `{type: \"self\"}` | The coordinator can spawn copies of itself. |
+| String shorthand | `"agent_abc123"` | References the latest version of a stored agent. |
+| Agent reference | `{type: "agent", id, version?}` | Omit `version` to pin the latest at coordinator save time. |
+| Self | `{type: "self"}` | The coordinator can spawn copies of itself. |
 
 If the session was created with `agent_with_overrides` (see `shared/managed-agents-core.md` → Override agent configuration for a session), those overrides apply to the **coordinator and its `self` copies**. Roster agents referenced by ID always use their own as-created configuration — overrides do not propagate to them.
 
@@ -84,12 +84,12 @@ When a subagent needs your client (an `always_ask` confirmation, or a custom too
 for event_id in stop.event_ids:
     pending = events_by_id[event_id]
     confirmation = {
-        \"type\": \"user.tool_confirmation\",
-        \"tool_use_id\": event_id,
-        \"result\": \"allow\",
+        "type": "user.tool_confirmation",
+        "tool_use_id": event_id,
+        "result": "allow",
     }
     if pending.session_thread_id is not None:
-        confirmation[\"session_thread_id\"] = pending.session_thread_id
+        confirmation["session_thread_id"] = pending.session_thread_id
     client.beta.sessions.events.send(session.id, events=[confirmation])
 ```
 

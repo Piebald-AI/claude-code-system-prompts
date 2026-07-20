@@ -18,11 +18,11 @@ A deployment bundles everything a session needs (agent, environment, optional fi
 - `schedule` takes a cron `expression` and an IANA `timezone`. Minute-level granularity is the maximum.
 
 ```bash
-curl -fsSL https://api.anthropic.com/v1/deployments \\
-  -H "x-api-key: $ANTHROPIC_API_KEY" \\
-  -H "anthropic-version: 2023-06-01" \\
-  -H "anthropic-beta: managed-agents-2026-04-01" \\
-  -H "content-type: application/json" \\
+curl -fsSL https://api.anthropic.com/v1/deployments \
+  -H "x-api-key: $ANTHROPIC_API_KEY" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "anthropic-beta: managed-agents-2026-04-01" \
+  -H "content-type: application/json" \
   -d @- <<EOF
 {
   "name": "Weekly compliance scan",
@@ -84,7 +84,7 @@ Deployments may apply up to **10 seconds of jitter** to distribute load. Maximum
 - **Timezone:** IANA identifier (e.g. `"America/Los_Angeles"`).
 - **DST:** literal wall-clock matching — `"0 20 * * *"` in `America/New_York` fires at 8:00 PM local regardless of EST/EDT.
 
-> ⚠️ **DST edge:** wall-clock times that don\'t exist on a spring-forward day (e.g. 2AM) are **skipped**; times that occur twice on a fall-back day **fire twice**. Schedule outside the 1–3AM local window, or use UTC, when missed or duplicate executions are unacceptable.
+> ⚠️ **DST edge:** wall-clock times that don't exist on a spring-forward day (e.g. 2AM) are **skipped**; times that occur twice on a fall-back day **fire twice**. Schedule outside the 1–3AM local window, or use UTC, when missed or duplicate executions are unacceptable.
 
 ## Deployment runs
 

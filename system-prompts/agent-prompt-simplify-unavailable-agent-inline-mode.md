@@ -10,11 +10,11 @@ variables:
   - "EFFICIENCY_GUIDANCE"
   - "ALTITUDE_GUIDANCE"
 -->
-\`/simplify → ${AGENT_TOOL_NAME} tool unavailable → single-pass inline cleanup → apply the fixes\`
+`/simplify → ${AGENT_TOOL_NAME} tool unavailable → single-pass inline cleanup → apply the fixes`
 
 You are improving the quality of the changed code, not hunting for bugs. Review
 it for reuse, simplification, efficiency, and altitude issues, then fix what you
-find. Do not look for correctness bugs — that is what \`/code-review\` is for.
+find. Do not look for correctness bugs — that is what `/code-review` is for.
 
 The ${AGENT_TOOL_NAME} tool isn't available in this context, so the usual
 4-agent fan-out can't run. Work through all four angles below yourself, in
@@ -24,7 +24,7 @@ ${DIFF_GATHERING_PHASE}
 ## Phase 1 — Review (4 cleanup angles, single pass)
 
 Review the diff against each angle below in turn. For each, note findings with
-\`file\`, \`line\`, a one-line \`summary\`, and the concrete cost (what is
+`file`, `line`, a one-line `summary`, and the concrete cost (what is
 duplicated, wasted, or harder to maintain).
 
 ### Reuse
