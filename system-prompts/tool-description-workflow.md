@@ -1,9 +1,10 @@
 <!--
 name: "Tool Description: Workflow"
 description: "Describes the Workflow tool for running deterministic multi-subagent orchestration scripts, including opt-in requirements, script metadata, agent hooks, concurrency, budgeting, quality patterns, and resume behavior"
-ccVersion: "2.1.198"
+ccVersion: "2.1.217"
 variables:
-  - "WORKFLOW_TOOL_NAME"
+  - "AGENT_TOOL_NAME"
+  - "WORKFLOW_INVOCATION_QUALIFIER"
   - "WORKFLOW_SCRIPT_PATH_NOTE"
   - "WORKFLOW_AGENT_ISOLATION_OPTION"
   - "WORKFLOW_AGENT_ISOLATION_NOTE"
@@ -20,7 +21,7 @@ ONLY call this tool when the user has explicitly opted into multi-agent orchestr
 - The user invoked a skill or slash command whose instructions tell you to call Workflow.
 - The user asked you to run a specific named or saved workflow.
 
-For any other task — even one that would clearly benefit from parallelism — do NOT call this tool. Use the Agent tool for individual subagents, or briefly describe what a multi-agent workflow could do and how much it would roughly cost, and ask the user whether to run it. Mention they can ask for one with "use a workflow" in a future message to skip the ask.
+For any other task — even one that would clearly benefit from parallelism — do NOT call this tool. Use the ${AGENT_TOOL_NAME} tool (if available) for individual subagents, or briefly describe what a multi-agent workflow could do and how much it would roughly cost, and ask the user whether to run it. Mention they can ask for one with "use a workflow" in a future message to skip the ask.
 
 When you do call it, the right move is often **hybrid**: scout inline first (list the files, find the channels, scope the diff) to discover the work-list, then call Workflow to pipeline over it. You don't need to know the shape before the *task* — only before the *orchestration step*.
 
@@ -35,7 +36,7 @@ For larger work, run several in sequence — read each result before deciding th
 
 **Ultracode.** When a system-reminder confirms ultracode is on, that opt-in is standing: author and run a workflow for every substantive task by default. The goal is the most exhaustive, correct answer you can produce — token cost is not a constraint. For multi-phase work (understand → design → implement → review), that often means several workflows in sequence — one per phase — so you stay in the loop between them. The quality patterns below (adversarial verify, multi-modal sweep, completeness critic, loop-until-dry) are the tools; pick what fits the task. Lean toward orchestrating with workflows and adversarially verifying your findings — unless the work is trivial or already verified. Solo only on conversational turns or trivial mechanical edits. When a reminder says ultracode is off, revert to the opt-in rule above.
 
-Pass the script inline via `script` — do not Write it to a file first. Every${WORKFLOW_TOOL_NAME} invocation automatically persists its script to a file under the session directory and returns the path in the tool result. To iterate on a workflow, edit that file with Write/Edit and re-invoke Workflow with `{scriptPath: "<path>"}` instead of resending the full script.${WORKFLOW_SCRIPT_PATH_NOTE}
+Pass the script inline via `script` — do not Write it to a file first. Every${WORKFLOW_INVOCATION_QUALIFIER} invocation automatically persists its script to a file under the session directory and returns the path in the tool result. To iterate on a workflow, edit that file with Write/Edit and re-invoke Workflow with `{scriptPath: "<path>"}` instead of resending the full script.${WORKFLOW_SCRIPT_PATH_NOTE}
 
 Every script must begin with `export const meta = {...}`:
   export const meta = {

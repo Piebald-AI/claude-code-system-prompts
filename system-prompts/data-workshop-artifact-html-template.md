@@ -1,7 +1,7 @@
 <!--
 name: "Data: Workshop artifact HTML template"
 description: "Standalone HTML template used for published workshop artifacts, including decision rendering, fill contract, interaction controls, and light/dark styling"
-ccVersion: "2.1.216"
+ccVersion: "2.1.217"
 -->
 <!--
 name: workshop
@@ -15,6 +15,11 @@ fill contract: the automatic publish path (src/frame/planArtifactHtml.ts
   Keep those four slots and the section run, and put nothing after the last
   </section> except </article>; tests in test/frame/decisionBlocks.test.ts
   assert the decision styling and test/frame/planArtifactHtml.test.ts the shape.
+  The second head script wires decision option rows to the runtime self
+  capability (window.claude.self) — it lives in the head region so
+  mechanical re-fills carry it; publishes must declare
+  `capabilities: {self: {}}` or the options stay inert (see the workshop
+  SKILL.md loop).
 style: tokens come from @ant/cds's own vanilla export, embedded verbatim
   (a published artifact is standalone, so the generated tokens.vanilla.css is
   vendored and inlined rather than imported; a drift test keeps it canonical).
@@ -48,6 +53,299 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
         attributeFilter: ['data-theme'],
       });
     }
+  })();
+</script>
+<script>
+  /* Decision-option wiring: clicking an option row on an OPEN call-item
+     publishes a new version of this page with that item rendered
+     resolved, via the runtime self capability (window.claude.self.publish
+     — present only when the publish declared `capabilities.self`; the
+     shell runs its own consent prompt and writer gate per call, so this
+     script holds no authority). The published bytes come from a
+     same-origin GET of this view's own STORED source (the content origin
+     is GET-only under connect-src 'self'), never from serializing the
+     live DOM — so no client runtime's DOM work (theme stamps, mermaid
+     mounts, hljs spans, this script's own notes and affordances) can leak
+     into source; the one serve-time addition, frame-asset's
+     sentinel-wrapped head injection, is excised by its literal markers
+     (KEEP-IN-SYNC with FRAME_RUNTIME_BEGIN/END in src/frame/goCp.ts).
+     The resolved mutation mirrors decisionBlocks.ts renderDecisionHtml
+     EXACTLY (state/choice data attributes, option chosen/dim classes, the
+     badge dropped everywhere, the why-span kept only on the chosen row
+     when it was the lean, the "Decided:" line directly after the
+     question); the DOMParser round-trip is structure-exact, not
+     byte-exact (entity/attribute serialization may differ) — nothing may
+     byte-diff published bytes; the next mechanical republish from
+     markdown is the byte-canonical form. Static, no author bytes.
+     Without JS (or without the capability) the options stay the inert
+     spans the renderer emitted. */
+  (function () {
+    'use strict';
+    var busy = false;
+    function selfApi() {
+      var c = window.claude;
+      return c && c.self && typeof c.self.publish === 'function'
+        ? c.self
+        : null;
+    }
+    function openOptions(scope) {
+      return scope.querySelectorAll(
+        '[data-decision-state="open"] .option[data-choice]'
+      );
+    }
+    /* Affordance only — authorization stays server-side. The kernel mounts
+       a queueing stub synchronously when the capability is declared, so a
+       brief poll covers only script-order skew. */
+    var tries = 0;
+    var timer = setInterval(function () {
+      if (selfApi()) {
+        var rows = openOptions(document);
+        for (var i = 0; i < rows.length; i++) {
+          rows[i].removeAttribute('aria-disabled');
+          rows[i].removeAttribute('title');
+          rows[i].setAttribute('tabindex', '0');
+          rows[i].style.cursor = 'pointer';
+          rows[i].style.opacity = '1';
+        }
+        clearInterval(timer);
+      } else if (++tries > 20) {
+        clearInterval(timer);
+      }
+    }, 250);
+    function note(item, text) {
+      var n = item.querySelector('.note-live');
+      if (!n) {
+        n = document.createElement('p');
+        n.className = 'note-live';
+        var body = item.querySelector('.call-body') || item;
+        body.appendChild(n);
+      }
+      n.textContent = text;
+    }
+    function clearNote(item) {
+      var n = item.querySelector('.note-live');
+      if (n) n.parentNode.removeChild(n);
+    }
+    /* Renderer-exact resolved mutation (see renderDecisionHtml): every
+       option row drops its Recommended badge and inert affordances; the
+       chosen row becomes `option chosen` and keeps its why-span only when
+       it was the lean (data-lean-choice on the item); the rest become
+       `option dim` with the why-span removed; the Decided line lands
+       directly after the question. Works on the live item and on a
+       DOMParser document's item alike — elements are built via
+       item.ownerDocument, so one builder serves both. */
+    function markResolved(item, token) {
+      item.setAttribute('data-decision-state', 'resolved');
+      item.setAttribute('data-resolved-choice', token);
+      var leanToken = item.getAttribute('data-lean-choice');
+      var rows = item.querySelectorAll('.option[data-choice]');
+      var label = '';
+      for (var i = 0; i < rows.length; i++) {
+        var r = rows[i];
+        var chosen = r.getAttribute('data-choice') === token;
+        var labelEl = r.querySelector('.option-label');
+        if (chosen) label = labelEl ? labelEl.textContent : r.textContent;
+        var badge = r.querySelector('.badge');
+        if (badge) badge.parentNode.removeChild(badge);
+        var why = r.querySelector('.why');
+        if (why && !(chosen && leanToken === token)) {
+          why.parentNode.removeChild(why);
+        }
+        r.className = chosen ? 'option chosen' : 'option dim';
+        r.removeAttribute('role');
+        r.removeAttribute('aria-disabled');
+        r.removeAttribute('title');
+        r.removeAttribute('tabindex');
+        r.removeAttribute('style');
+      }
+      var decided = item.ownerDocument.createElement('p');
+      decided.className = 'decided';
+      decided.textContent = 'Decided: ' + label;
+      var body = item.querySelector('.call-body') || item;
+      var before =
+        body.querySelector('.anchor') || body.querySelector('.options');
+      body.insertBefore(decided, before);
+    }
+    /* Publishable source, as a Promise: this view's own stored bytes
+       (same-origin GET of the URL the document loaded from), with
+       frame-asset's per-serve head injection excised and the clicked
+       item resolved. Fetching source — instead of serializing the live
+       DOM — is what keeps every client runtime's DOM work out of
+       published bytes by construction. */
+    function sourceHtml(itemId, token) {
+      /* Bounded read: a hung fetch would otherwise leave `busy` stuck
+         (no reject → no catch → options frozen until reload). 15s is far
+         under the shell's own publish budget. */
+      var signal =
+        typeof AbortSignal !== 'undefined' && AbortSignal.timeout
+          ? AbortSignal.timeout(15000)
+          : undefined;
+      return fetch(location.href, { credentials: 'same-origin', signal: signal })
+        .then(function (r) {
+          if (!r.ok) {
+            throw {
+              code: 'upstream_error',
+              message: 'source read failed (' + r.status + ')',
+            };
+          }
+          return r.text();
+        })
+        .then(function (text) {
+          /* KEEP-IN-SYNC: FRAME_RUNTIME_BEGIN/END + stripStaleInjections
+             guards in src/frame/goCp.ts — frame-asset's serve-time
+             injection markers, ASSEMBLED at runtime: the stored page must
+             never contain the marker byte sequence itself (the workshop
+             render pins that as a security property, and a literal here
+             would also be this script's own first indexOf match). The
+             mechanical render guarantees that invariant, but co-writer
+             publishes and the hand-edit flow can store arbitrary HTML —
+             so, exactly like the CLI-side strip, the excision applies
+             ONLY when the span sits where frame-asset injects (BEGIN in
+             the first 8 KiB, span ≤ 300 KB) and its inner content
+             validates as the real injection shape (a /_f/ base tag then
+             a run of script elements, nothing else). A planted marker
+             pair with author markup between fails validation and is
+             left intact rather than letting a victim's click splice out
+             arbitrary content under their consent. */
+          function isFrameAssetInjection(inner) {
+            var s = inner.replace(/^\s+/, '');
+            var base = s.match(/^<base\s+href="\/_f\/[^">]*"\s*\/?>/);
+            if (!base) return false;
+            s = s.slice(base[0].length).replace(/^\s+/, '');
+            while (s.length) {
+              var open = s.match(/^<script\b[^>]*>/);
+              if (!open) return false;
+              var close = s.indexOf('</scr' + 'ipt>', open[0].length);
+              if (close < 0) return false;
+              s = s.slice(close + 9).replace(/^\s+/, '');
+            }
+            return true;
+          }
+          var MARK = 'frame-' + 'runtime';
+          var BEGIN = '<!-- ' + MARK + ' -->';
+          var END = '<!-- /' + MARK + ' -->';
+          var b = text.indexOf(BEGIN);
+          var e = text.indexOf(END);
+          if (
+            b !== -1 &&
+            e > b &&
+            b < 8192 &&
+            e + END.length - b <= 300000 &&
+            isFrameAssetInjection(text.slice(b + BEGIN.length, e))
+          ) {
+            /* Eat one trailing newline like the CLI strip — byte parity,
+               and repeated clicks must not accrete blank lines. */
+            var after = e + END.length;
+            if (text[after] === '\n') after++;
+            text = text.slice(0, b) + text.slice(after);
+          }
+          var doc = new DOMParser().parseFromString(text, 'text/html');
+          /* Renderer ids are selector-safe by grammar; escape anyway for
+             hand-edited pages. A missing or already-resolved item in the
+             STORED source means this click raced a newer version —
+             return null so the caller reverts. */
+          var sel =
+            '[data-decision-id="' +
+            (window.CSS && CSS.escape ? CSS.escape(itemId) : itemId) +
+            '"]';
+          var item = doc.querySelector(sel);
+          if (!item || item.getAttribute('data-decision-state') !== 'open') {
+            return null;
+          }
+          markResolved(item, token);
+          /* Preserve any top-level comment/doctype nodes outside <html>. */
+          var out = '';
+          var top = doc.childNodes;
+          for (var t = 0; t < top.length; t++) {
+            if (top[t].nodeType === 8) {
+              out += '<!--' + top[t].nodeValue + '-->\n';
+            } else if (top[t].nodeType === 10) {
+              out += '<!doctype html>\n';
+            }
+          }
+          return out + doc.documentElement.outerHTML;
+        });
+    }
+    function friendly(err) {
+      var code = err && err.code;
+      var msg = (err && err.message) || 'request failed';
+      if (code === 'conflict') return null; /* shell reloads to the winner */
+      if (code === 'upstream_error' && /\(409\)/.test(msg)) return null;
+      if (code === 'consent_required')
+        return 'Page updates were not allowed for this artifact — reload and allow self-update to make decisions here.';
+      if (code === 'not_writer')
+        return 'Only someone with edit access can decide from the page.';
+      if (code === 'not_declared')
+        return 'This version cannot update itself — ask the session to republish.';
+      if (code === 'rate_limited') return 'Saving too often — try again in a moment.';
+      return 'Could not save: ' + msg;
+    }
+    function onActivate(e) {
+      var target = e.target;
+      if (!target || !target.closest) return;
+      var row = target.closest('.option[data-choice]');
+      if (!row || busy) return;
+      var item = row.closest('[data-decision-id]');
+      if (!item || item.getAttribute('data-decision-state') !== 'open') return;
+      var api = selfApi();
+      if (!api) return;
+      var token = row.getAttribute('data-choice');
+      var undo = item.innerHTML;
+      var state = item.getAttribute('data-decision-state');
+      function revert() {
+        item.innerHTML = undo;
+        item.setAttribute('data-decision-state', state);
+        item.removeAttribute('data-resolved-choice');
+        busy = false;
+      }
+      busy = true;
+      try {
+        /* Optimistic live-DOM copy of the mutation; the published bytes
+           come from sourceHtml's fetched source, never from this DOM. */
+        markResolved(item, token);
+        note(item, 'Saving…');
+      } catch (err) {
+        /* A throw here (hand-edited markup) must not leave the page
+           looking decided-but-unsaved with busy stuck. */
+        revert();
+        return;
+      }
+      sourceHtml(item.getAttribute('data-decision-id'), token)
+        .then(function (html) {
+          if (html === null) {
+            /* The stored source has no open item for this id — the click
+               raced a newer version. Revert; the live channel (or the
+               next interaction) converges the view. */
+            revert();
+            note(item, 'This item changed under you — reload to see it.');
+            return;
+          }
+          return api.publish(html).then(function () {
+            /* The shell reboots this view to the new version; the note
+               is cosmetic until then. */
+            note(item, 'Saved ✓');
+            busy = false;
+          });
+        })
+        .catch(function (err) {
+          var text = friendly(err);
+          if (text === null) {
+            note(item, 'Someone else updated this page — reloading…');
+            busy = false;
+            return;
+          }
+          revert();
+          note(item, text);
+        });
+    }
+    document.addEventListener('click', onActivate);
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      if (!e.target || !e.target.closest) return;
+      if (!e.target.closest('.option[data-choice]')) return;
+      e.preventDefault();
+      onActivate(e);
+    });
   })();
 </script>
 <style>
@@ -1130,6 +1428,9 @@ style: tokens come from @ant/cds's own vanilla export, embedded verbatim
   .option.chosen { background: var(--fill-accent); color: #fff; opacity: 1; box-shadow: none; }
   .option.chosen .why { color: #fff; opacity: 0.85; }
   .option.dim { opacity: 0.4; }
+  /* Transient status line the option-wiring script manages; never part of
+     published bytes (the script publishes fetched stored source). */
+  .call-body .note-live { color: var(--text-secondary); font-size: 12px; }
 </style>
 
 <article>
