@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "delaySeconds": {
+      "description": "Seconds from now to wake up. Clamped to [60, 3600] by the runtime.",
+      "type": "number"
+    },
+    "prompt": {
+      "description": "The /loop input to fire on wake-up. Pass the same /loop input verbatim each turn so the next firing re-enters the skill and continues the loop. For autonomous /loop (no user prompt), pass the literal sentinel `<<autonomous-loop-dynamic>>` instead (the dynamic-pacing variant, not the CronCreate-mode `<<autonomous-loop>>`).",
+      "type": "string"
+    },
+    "reason": {
+      "description": "One short sentence explaining the chosen delay. Goes to telemetry and is shown to the user. Be specific.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "delaySeconds",
+    "reason",
+    "prompt"
+  ],
+  "type": "object"
+}

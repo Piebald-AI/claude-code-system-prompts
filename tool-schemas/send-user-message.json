@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "attachments": {
+      "description": "Optional attachments for the user to see alongside your message. Each entry is either a file path (absolute or relative to cwd) for a file you can read locally, or a pre-resolved {file_uuid, file_name, size, is_image} object you obtained from a device tool such as attach_file.",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "additionalProperties": false,
+            "description": "A file already uploaded to the filestore (e.g. by the device attach_file tool). Passed through without local stat or upload.",
+            "properties": {
+              "file_name": {
+                "type": "string"
+              },
+              "file_uuid": {
+                "type": "string"
+              },
+              "is_image": {
+                "type": "boolean"
+              },
+              "media_type": {
+                "type": "string"
+              },
+              "size": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "file_uuid",
+              "file_name",
+              "size",
+              "is_image"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "type": "array"
+    },
+    "message": {
+      "description": "The message for the user. Supports markdown formatting.",
+      "type": "string"
+    },
+    "status": {
+      "description": "Use 'proactive' when you're surfacing something the user hasn't asked for and needs to see now — task completion while they're away, a blocker you hit, an unsolicited status update. Use 'normal' when replying to something the user just said.",
+      "enum": [
+        "normal",
+        "proactive"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "message",
+    "status"
+  ],
+  "type": "object"
+}
