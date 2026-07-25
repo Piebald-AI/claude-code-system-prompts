@@ -65,6 +65,16 @@ The result&mdash;500+ strings that are constantly changing and moving within a v
 
 This repository contains the system prompts extracted using a script from the latest npm version of Claude Code.  As they're extracted directly from Claude Code's compiled source code, they're guaranteed to be exactly what Claude Code uses.  If you use [tweakcc](https://github.com/Piebald-AI/tweakcc) to customize the system prompts, it works in a similar way&mdash;it patches the exact same strings in your local installation as are extracted into this repository.
 
+## Prompt Slimming Analysis
+
+The extracted prompt files are reference material and should not be edited directly. To identify prompt weight that could move out of always-on context, run:
+
+```bash
+node tools/suggestPromptSlimming.mjs --limit 30
+```
+
+The analyzer ranks prompts by token footprint and structural signals such as rule-heavy wording, long checklist shape, and example-heavy content. Its suggested cuts favor moving reference material behind retrieval or explicit help commands, keeping skill prompts lazy-loaded, and replacing verbose tool prose with clearer schemas, validation, and concise runtime errors. The current generated snapshot is in [PROMPT_SLIMMING.md](./PROMPT_SLIMMING.md).
+
 ## Prompts
 
 Note that some prompts contain interpolated bits such as builtin tool name references, lists of available sub agents, and various other context-specific variables, so the actual counts in a particular Claude Code session will differ slightly&mdash;likely not beyond ±20 tokens, however.
