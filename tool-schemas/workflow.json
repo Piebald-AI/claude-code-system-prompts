@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "args": {
+      "description": "Optional input value exposed to the script as the global `args`, verbatim. Pass arrays/objects as actual JSON values, NOT as a JSON-encoded string — a stringified list breaks `args.filter`/`args.map` in the script. Use for parameterized named workflows (e.g. a research question)."
+    },
+    "description": {
+      "description": "Ignored — set the workflow description in the script's `meta` block.",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name of a predefined workflow (built-in or from .claude/workflows/). Resolves to a self-contained script.",
+      "type": "string"
+    },
+    "resumeFromRunId": {
+      "description": "Run ID of a prior Workflow invocation to resume from. Completed agent() calls with unchanged (prompt, opts) return their cached results instantly; only edited or new calls re-run. Same-session only. Stop the prior run first (TaskStop) before resuming.",
+      "pattern": "^wf_[a-z0-9-]{6,}$",
+      "type": "string"
+    },
+    "script": {
+      "description": "Self-contained workflow script. Must begin with `export const meta = { name, description, phases }` (pure literal, no computed values) followed by the script body using agent()/parallel()/pipeline()/phase().",
+      "maxLength": 524288,
+      "type": "string"
+    },
+    "scriptPath": {
+      "description": "Path to a workflow script file on disk. Every Workflow invocation persists its script under the session directory and returns the path in the tool result. To iterate, edit that file with Write/Edit and re-invoke Workflow with the same `scriptPath` instead of re-sending the full script. Takes precedence over `script` and `name`.",
+      "type": "string"
+    },
+    "title": {
+      "description": "Ignored — set the workflow title in the script's `meta` block.",
+      "type": "string"
+    }
+  },
+  "type": "object"
+}
