@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "description": "A short (3-5 word) description of the task",
+      "type": "string"
+    },
+    "isolation": {
+      "description": "Isolation mode. \"worktree\" creates a temporary git worktree so the agent works on an isolated copy of the repo.",
+      "enum": [
+        "worktree"
+      ],
+      "type": "string"
+    },
+    "model": {
+      "description": "Optional model override for this agent. Takes precedence over the agent definition's model frontmatter. If omitted, uses the agent definition's model, or inherits from the parent.",
+      "enum": [
+        "sonnet",
+        "opus",
+        "haiku",
+        "fable"
+      ],
+      "type": "string"
+    },
+    "prompt": {
+      "description": "The task for the agent to perform",
+      "type": "string"
+    },
+    "run_in_background": {
+      "description": "Set to true to run this agent in the background. You will be notified when it completes.",
+      "type": "boolean"
+    },
+    "subagent_type": {
+      "description": "The type of specialized agent to use for this task",
+      "type": "string"
+    }
+  },
+  "required": [
+    "description",
+    "prompt"
+  ],
+  "type": "object"
+}
