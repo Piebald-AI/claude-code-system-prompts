@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "cron": {
+      "description": "Standard 5-field cron expression in local time: \"M H DoM Mon DoW\" (e.g. \"*/5 * * * *\" = every 5 minutes, \"30 14 28 2 *\" = Feb 28 at 2:30pm local once).",
+      "type": "string"
+    },
+    "durable": {
+      "description": "true = persist to .claude/scheduled_tasks.json and survive restarts. false (default) = in-memory only, dies when this Claude session ends. Use true only when the user asks the task to survive across sessions.",
+      "type": "boolean"
+    },
+    "prompt": {
+      "description": "The prompt to enqueue at each fire time.",
+      "type": "string"
+    },
+    "recurring": {
+      "description": "true (default) = fire on every cron match until deleted or auto-expired after 7 days. false = fire once at the next match, then auto-delete. Use false for \"remind me at X\" one-shot requests with pinned minute/hour/dom/month.",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "cron",
+    "prompt"
+  ],
+  "type": "object"
+}

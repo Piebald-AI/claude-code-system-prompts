@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": {},
+  "properties": {
+    "allowedPrompts": {
+      "description": "Prompt-based permissions needed to implement the plan. These describe categories of actions rather than specific commands.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "prompt": {
+            "description": "Semantic description of the action, e.g. \"run tests\", \"install dependencies\"",
+            "type": "string"
+          },
+          "tool": {
+            "description": "The tool this prompt applies to",
+            "enum": [
+              "Bash"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "tool",
+          "prompt"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "type": "object"
+}
