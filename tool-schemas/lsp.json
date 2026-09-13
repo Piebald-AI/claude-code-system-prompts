@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "character": {
+      "description": "The character offset (1-based, as shown in editors)",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991,
+      "type": "integer"
+    },
+    "filePath": {
+      "description": "The absolute or relative path to the file",
+      "type": "string"
+    },
+    "line": {
+      "description": "The line number (1-based, as shown in editors)",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991,
+      "type": "integer"
+    },
+    "operation": {
+      "description": "The LSP operation to perform",
+      "enum": [
+        "goToDefinition",
+        "findReferences",
+        "hover",
+        "documentSymbol",
+        "workspaceSymbol",
+        "goToImplementation",
+        "prepareCallHierarchy",
+        "incomingCalls",
+        "outgoingCalls"
+      ],
+      "type": "string"
+    },
+    "query": {
+      "description": "The symbol name or partial name to search for (workspaceSymbol only). Most language servers return no results for an empty query, so always provide it when using workspaceSymbol.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "operation",
+    "filePath",
+    "line",
+    "character"
+  ],
+  "type": "object"
+}
