@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "enum": [
+        "list",
+        "get",
+        "create",
+        "update",
+        "run"
+      ],
+      "type": "string"
+    },
+    "body": {
+      "additionalProperties": {},
+      "description": "Required for create and update; optional for run",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "trigger_id": {
+      "description": "Required for get, update, and run",
+      "pattern": "^[\\w-]+$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "action"
+  ],
+  "type": "object"
+}
