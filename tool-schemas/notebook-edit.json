@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "cell_id": {
+      "description": "The ID of the cell to edit. When inserting a new cell, the new cell will be inserted after the cell with this ID, or at the beginning if not specified.",
+      "type": "string"
+    },
+    "cell_type": {
+      "description": "The type of the cell (code or markdown). If not specified, it defaults to the current cell type. If using edit_mode=insert, this is required.",
+      "enum": [
+        "code",
+        "markdown"
+      ],
+      "type": "string"
+    },
+    "edit_mode": {
+      "description": "The type of edit to make (replace, insert, delete). Defaults to replace.",
+      "enum": [
+        "replace",
+        "insert",
+        "delete"
+      ],
+      "type": "string"
+    },
+    "new_source": {
+      "description": "The new source for the cell",
+      "type": "string"
+    },
+    "notebook_path": {
+      "description": "The absolute path to the Jupyter notebook file to edit (must be absolute, not relative)",
+      "type": "string"
+    }
+  },
+  "required": [
+    "notebook_path",
+    "new_source"
+  ],
+  "type": "object"
+}

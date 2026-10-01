@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "file_path": {
+      "description": "The absolute path to the file to read",
+      "type": "string"
+    },
+    "limit": {
+      "description": "The number of lines to read. Only provide if the file is too large to read at once.",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991,
+      "type": "integer"
+    },
+    "offset": {
+      "description": "The line number to start reading from. Only provide if the file is too large to read at once",
+      "maximum": 9007199254740991,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "pages": {
+      "description": "Page range for PDF files (e.g., \"1-5\", \"3\", \"10-20\"). Only applicable to PDF files. Maximum 20 pages per request.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "file_path"
+  ],
+  "type": "object"
+}
