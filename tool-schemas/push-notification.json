@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "description": "The notification body. Keep it under 200 characters; mobile OSes truncate.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "status": {
+      "const": "proactive",
+      "type": "string"
+    }
+  },
+  "required": [
+    "message",
+    "status"
+  ],
+  "type": "object"
+}
