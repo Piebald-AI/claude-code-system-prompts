@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "shell_id": {
+      "description": "Deprecated: use task_id instead",
+      "type": "string"
+    },
+    "task_id": {
+      "description": "The ID of the background task to stop",
+      "type": "string"
+    }
+  },
+  "type": "object"
+}
