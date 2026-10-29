@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "block": {
+      "default": true,
+      "description": "Whether to wait for completion",
+      "type": "boolean"
+    },
+    "task_id": {
+      "description": "The task ID to get output from",
+      "type": "string"
+    },
+    "timeout": {
+      "default": 30000,
+      "description": "Max wait time in ms",
+      "maximum": 600000,
+      "minimum": 0,
+      "type": "number"
+    }
+  },
+  "required": [
+    "task_id",
+    "block",
+    "timeout"
+  ],
+  "type": "object"
+}
