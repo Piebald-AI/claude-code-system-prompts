@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "args": {
+      "description": "Optional arguments for the skill",
+      "type": "string"
+    },
+    "skill": {
+      "description": "The name of a skill from the available-skills list. Do not guess names.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "skill"
+  ],
+  "type": "object"
+}

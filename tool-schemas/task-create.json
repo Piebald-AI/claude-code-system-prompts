@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "activeForm": {
+      "description": "Present continuous form shown in spinner when in_progress (e.g., \"Running tests\")",
+      "type": "string"
+    },
+    "description": {
+      "description": "What needs to be done",
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": {},
+      "description": "Arbitrary metadata to attach to the task",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "subject": {
+      "description": "A brief title for the task",
+      "type": "string"
+    }
+  },
+  "required": [
+    "subject",
+    "description"
+  ],
+  "type": "object"
+}

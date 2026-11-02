@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "anyOf": [
+        {
+          "description": "Plain text message content",
+          "type": "string"
+        },
+        {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "type": "string"
+                },
+                "type": {
+                  "const": "shutdown_request",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "approve": {
+                  "type": "boolean"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "request_id": {
+                  "pattern": "^[^\\n\\r]{1,200}$",
+                  "type": "string"
+                },
+                "type": {
+                  "const": "shutdown_response",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "request_id",
+                "approve"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "approve": {
+                  "type": "boolean"
+                },
+                "feedback": {
+                  "type": "string"
+                },
+                "request_id": {
+                  "pattern": "^[^\\n\\r]{1,200}$",
+                  "type": "string"
+                },
+                "type": {
+                  "const": "plan_approval_response",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "request_id",
+                "approve"
+              ],
+              "type": "object"
+            }
+          ]
+        }
+      ]
+    },
+    "summary": {
+      "description": "A 5-10 word summary shown as a preview in the UI (required when message is a string)",
+      "maxLength": 200,
+      "type": "string"
+    },
+    "to": {
+      "description": "Recipient: teammate name",
+      "type": "string"
+    }
+  },
+  "required": [
+    "to",
+    "message"
+  ],
+  "type": "object"
+}
