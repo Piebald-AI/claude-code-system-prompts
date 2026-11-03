@@ -4,6 +4,47 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.317](https://github.com/Piebald-AI/claude-code-system-prompts/commit/6682244)
+
+_+13,702 tokens_
+
+- **NEW:** System Reminders: Hidden image after chat file deletion and Hidden images after chat file deletion — Forbid recovering hidden images or adding new visual details after chat-file deletion, explaining uncertainty and requesting replacement images when needed.
+- **NEW:** Data: MCP server status urlHost field — Documents settings-file host display on eligible Anthropic-hosted workers with configuration withheld, excluding proxied servers and potentially sensitive or unavailable values.
+- **NEW:** Data: SDK user message ultrathink_typed and system init ultrathink_typed_raises fields — Document capability-gated `ultrathink` effort increases based on a typing claim, not proof, with paste checks and invalidation after effort changes.
+- **NEW:** Data: SDK startup failure reason codes — Defines startup refusal reasons so hosts can distinguish retryable failures from sign-in, managed-policy, environment, worktree, and initialization problems requiring intervention.
+- **NEW:** Data: SDK result process_turn_states field — Documents mutually exclusive turn states for CPU and wall-time measurements, explaining precedence, entry counts, scope, and conditions that suppress reporting.
+- **NEW:** Data: SDK result tool_schema_build_detail, message_normalization_detail, and request_build_detail fields — Break down time before a turn's first request dispatch into tool-schema construction, message normalization, and request assembly, with measurement caveats.
+- **NEW:** Data: SDK warning model_restriction field — Documents structured refused and effective model names, their sanitization and plain-text handling, and whether restrictions occurred at startup or later.
+- **NEW:** Data: SDK model fallback api_refusal_cyber_verification field — Documents account cyber-verification status on session-level fallback notices, preserving unknown-status handling and attribution limits when a switch spans several models.
+- **NEW:** Data: SDK ui_invalidate instances and UI attach draws fields — Describe per-client backdrop rendering declarations and targeted refreshes of stale plugin UI instances, with safe behavior for older clients.
+- **NEW:** Data: SDK initialize response hook_on_failure_supported field — Documents capability checks for blocking hook failures, including TypeScript SDK refusal when support is absent or requested hooks were not applied.
+- **NEW:** Data: SDK get_settings policy_origins field — Documents managed-policy sources in precedence order, including missing remote settings, unreadable administrator files, and forward-compatible handling of unknown source codes.
+- **NEW:** Data: SDK read_file lossy field — Distinguishes invalid UTF-8 replacement from literal replacement characters, while explaining when base64 output or absent fields affect certainty about file contents.
+- **NEW:** System Reminder: Sandbox hard-linked guarded file refusal — Refuses sandboxed commands and unsandboxed retries while guarded files have extra hard links, requiring external removal and treating unexplained links as untrusted.
+- **NEW:** Tool Description: WrapUp — Requires a recap and pending-decision actions before closing substantive or question-ending turns, while preserving a separate, complete final reply.
+- **NEW:** Tool Description: ExitPlanMode (Claude Doc session) and System Reminder: Plan mode is active (diskless session) — Define read-only planning through an editable Claude Doc or inline plan, allowing only plan-document writes until the user approves.
+- **NEW:** System Reminder: Approved Claude Doc plan readback — Requires rereading the approved document, including user edits, before implementation; repeated read failures require permission to proceed from memory.
+- **NEW:** System Reminder: Bash version command refusal — Explains commands refused by older Bash versions and suggests simpler syntax, script or stdin alternatives, or restarting with a newer shell.
+- **NEW:** Tool Description: ReadWidgetContext — Reads current MCP App view state and images when relevant, explicitly treating app-supplied content and tool names as untrusted data.
+- **NEW:** System Reminders: Email file reference unsafe subject refusal and Email file reference unnamed recipients refusal — Require safe, short subjects and explicit recipient addresses before attaching files by reference, so approval shows who receives them.
+- **NEW:** System Reminder: Malformed attachment file reference — Rejects malformed attachment references and explains valid hash-and-path syntax, path restrictions, and using base64 content when references cannot be corrected.
+- **NEW:** System Prompt: Coordinator artifact delegation (MCP tools) — Directs coordinators to delegate readable deliverables as published HTML, while discovering suitable Artifact types first for presentations, designs, and dashboards.
+- **REMOVED:** System Reminder: File already in context — Removes the standalone instruction to reuse unchanged file content already present in the conversation rather than reading the file again.
+- Agent Prompt: /schedule slash command and Tool Description: RemoteTrigger prompt — Explain inherited connectors and why empty connector updates change nothing; clear stored connections only on request, without promising to exclude organization-managed connectors.
+- Data: Artifact ask-first intake form instructions — Caps intake at four questions and three custom looks, using accessible color-preview cards whose selected palette must match the resulting artifact.
+- Data: Claude Code agent proxy troubleshooting guide — Adds troubleshooting for proxy connection or request overload, recommending lower concurrency and distinguishing useful load indicators from misleading busy-tunnel counts.
+- Data: Claude Code gateway protocol — Requires preserving Bedrock's specific input-too-long error message so existing client recovery can remove older images and compact the conversation.
+- Data: MCP read resource control request and MCP server status error_code field — Document sanitized resource-read and connection error messages on transports that store frames, replacing sensitive server text with fixed failure wording.
+- Data: MCP status control request liveReply field — Documents capability-based configuration withholding and reduced metadata in oversized replies, with live size-limit errors only when reduced replies still exceed limits.
+- Data: SDK API error kind field — Documents terminal retry exhaustion for replies missing tool calls, network-location firewall refusals, and additional retry requirements before declaring an empty completion.
+- Data: SDK read_file anchor as_written kind — Documents a fallback search in some Linux sessions when known paths do not match, excluding symbolic links, `.git`, and `node_modules`.
+- Data: Tool result display metadata field — Documents built-in tool provenance for selected completed results, excluding rewritten, imported, client-supplied, and subagent results while retaining same-process historical messages.
+- Data: Tool use display metadata field — Clarifies server display-name precedence, preferring claude.ai connector names, then configured names, server-reported names, and finally the server's key.
+- System Prompt: Artifact comment thread triage — Keeps third-party authorship marked during comment classification even when no separate authorship warning was generated for the thread.
+- System Reminder: Remote machine separate project copies — Changes the primary project location's wording from “checkout” to “copy,” retaining the requirement to keep local and remote work separate.
+- Tool Description: claude.ai Project — Requires original read-or-write paths rather than shell-created copies in some sessions, while keeping home-directory exclusions in the alternative upload guidance.
+- Tool Description: DesignSync — Requires fetching migration notices before stopping and explains normalized stored filenames for plans, listings, and approval, without changing local source paths.
+
 #### [2.1.316](https://github.com/Piebald-AI/claude-code-system-prompts/commit/1f13485)
 
 <sub>_No changes to the system prompts in v2.1.316._</sub>
