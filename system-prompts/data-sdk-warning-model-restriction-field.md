@@ -1,0 +1,6 @@
+<!--
+name: "Data: SDK warning model_restriction field"
+description: "Documents structured requested and effective model names on model-restriction warnings, their sanitization and trust rules, and startup versus later-switch provenance"
+ccVersion: "2.1.317"
+-->
+@internal Present on the warning that says a requested model was refused and the session uses another, so a host can word the notice itself instead of reading `content`. Both names are cleaned as they are in `content`: model-id characters only, cut to 128 with a trailing …, or '(unrecognized model name)' when none are left. They are still untrusted text: render them as plain text. requested_model: the refused model as it was asked for, or the id that a refused Default pick stood for. effective_model: the model in use when the line was built; a later switch can outdate it. at: 'start' for the model the process chose when it started (from --model, the environment, settings or --agent's frontmatter), 'switch' for anything later: a pick, an agent seated by initialize or when a pre-warmed process is claimed, a model kept at a turn's end. 'resume' is never on the wire: it marks a saved row alone, the notice that a resumed session's model could not be restored. An unknown value reads as absent.

@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code gateway protocol"
 description: "Markdown reference documenting the Claude Code gateway wire contract, including OAuth 2.0 device flow, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Bedrock, Vertex, and Foundry"
-ccVersion: "2.1.315"
+ccVersion: "2.1.317"
 -->
 # Claude Code gateway protocol
 
@@ -375,6 +375,9 @@ provider's Claude endpoint needs translation:
   message, keeping `error.type`. The exception is a 400/413 in Anthropic's
   own error envelope (e.g. `prompt is too long: …`): relay that
   `error.message`, the client's recovery (auto-compact etc.) keys on it.
+  A second exception is Bedrock's 400 whose whole message is
+  `Input is too long.`: send exactly that as `error.message`; the client's
+  recovery (drop older images, then compact) matches the whole message.
 
 ## References
 

@@ -1,15 +1,15 @@
 <!--
 name: "Tool Description: RemoteTrigger prompt"
 description: "Tool prompt for calling the claude.ai RemoteTrigger API to list, get, create, update, or run scheduled remote agent routines"
-ccVersion: "2.1.227"
+ccVersion: "2.1.317"
 -->
 Call the claude.ai remote-trigger API. Use this instead of curl — the OAuth token is added automatically in-process and never exposed.
 
 Actions:
 - list: GET /v1/code/triggers
 - get: GET /v1/code/triggers/{trigger_id}
-- create: POST /v1/code/triggers (requires body)
-- update: POST /v1/code/triggers/{trigger_id} (requires body, partial update)
+- create: POST /v1/code/triggers (requires body). If the body has no connectors in mcp_connections, the server normally attaches the user's connected connectors; send clear_mcp_connections: true only if the user asked for none
+- update: POST /v1/code/triggers/{trigger_id} (requires body, partial update). An empty mcp_connections changes nothing; clear_mcp_connections: true empties the routine's stored connector list, though connectors an organization admin set up can still reach its runs
 - run: POST /v1/code/triggers/{trigger_id}/run (optional body)
 - create_webhook_trigger: POST /v1/code/webhook-triggers (requires body) — attaches an event source to an existing routine, e.g. a GitHub event that fires it. The body names the source and scope (such as a repository), the event list, a structured filter, and the routine_trigger_id to fire; the server validates the shape and rejects worker credentials.
 - list_runs: GET /v1/code/sessions?trigger_id={trigger_id} — the routine's recent run sessions, most recently active first, each trimmed to id, title, status, timestamps and its claude.ai link (pass cursor for more)

@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code agent proxy troubleshooting guide"
 description: "Troubleshooting guide for Claude Code's policy-enforcing HTTPS agent proxy, covering TLS trust setup, status checks, git, docker, and unsupported traffic"
-ccVersion: "2.1.300"
+ccVersion: "2.1.317"
 variables:
   - "AGENT_PROXY_URL"
   - "AGENT_PROXY_CA_BUNDLE_PATH"
@@ -67,6 +67,16 @@ Most often the destination host is not allowed for this session. Do not retry
 or route around it — report the blocked host.
 Note: curl hides response bodies on failed CONNECTs; the status endpoint
 records the reason.
+
+### 429 / 503 from the proxy
+
+Too many connections or requests went through the proxy, or the egress proxy
+was busy. The proxy can hold a connection for about a minute before it refuses
+it, so a tool with a short timeout of its own may report only a timeout. Run
+fewer downloads or requests at once, then retry. connectsWaitingForTunnel and
+openTunnels in the status output show the load. busyTunnels includes idle
+connections until one has to wait, so alone it does not show load, and it can
+pass maxBusyTunnels.
 
 ### "connection reset" / "unexpected disconnect" / "RPC failed" mid-transfer
 
