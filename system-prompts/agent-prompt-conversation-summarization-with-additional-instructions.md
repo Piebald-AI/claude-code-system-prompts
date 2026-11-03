@@ -1,21 +1,15 @@
 <!--
 name: "Agent Prompt: Conversation summarization with additional instructions"
 description: "Extended summarization prompt with support for custom additional instructions"
-ccVersion: "2.1.301"
+ccVersion: "2.1.318"
 variables:
-  - "IS_SUMMARY_CAPPED"
-  - "SHOULD_KEEP_EARLIER_USER_REQUESTS"
-  - "EARLIER_USER_REQUESTS_PRESERVATION_NOTE"
-  - "SHOULD_INCLUDE_ANALYSIS"
   - "SUMMARY_ANALYSIS_INSTRUCTIONS"
-  - "SECURITY_INSTRUCTIONS_PRESERVATION_NOTE"
   - "USER_MESSAGE_ATTRIBUTION_GUARD"
-  - "SUMMARY_ANALYSIS_EXAMPLE"
 -->
-Your task is to create a detailed summary of the conversation so far,${IS_SUMMARY_CAPPED?" in 2000 words or fewer,":""} paying close attention to the user's explicit requests and your previous actions.
-This summary should be thorough in capturing technical details, code patterns, and architectural decisions that would be essential for continuing development work without losing context.${SHOULD_KEEP_EARLIER_USER_REQUESTS?EARLIER_USER_REQUESTS_PRESERVATION_NOTE:""}
+Your task is to create a detailed summary of the conversation so far, paying close attention to the user's explicit requests and your previous actions.
+This summary should be thorough in capturing technical details, code patterns, and architectural decisions that would be essential for continuing development work without losing context.
 
-${SHOULD_INCLUDE_ANALYSIS?SUMMARY_ANALYSIS_INSTRUCTIONS:SECURITY_INSTRUCTIONS_PRESERVATION_NOTE}
+${SUMMARY_ANALYSIS_INSTRUCTIONS}
 
 Your summary should include the following sections:
 
@@ -33,7 +27,11 @@ Your summary should include the following sections:
 Here's an example of how your output should be structured:
 
 <example>
-${SHOULD_INCLUDE_ANALYSIS?SUMMARY_ANALYSIS_EXAMPLE:""}<summary>
+<analysis>
+[Your thought process, ensuring all points are covered thoroughly and accurately]
+</analysis>
+
+<summary>
 1. Primary Request and Intent:
    [Detailed description]
 

@@ -1,7 +1,7 @@
 <!--
 name: "Skill: Update config settings file locations"
 description: "Where Claude Code stores settings.json across scopes"
-ccVersion: "2.1.281"
+ccVersion: "2.1.318"
 -->
 ## Settings File Locations
 
@@ -87,7 +87,7 @@ Plugin syntax: `plugin-name@source` where source is `claude-code-marketplace`, `
 
 ### Other Settings
 - `language`: Preferred response language (e.g., "japanese")
-- `cleanupPeriodDays`: Days to keep transcripts before automatic cleanup (default: 30; minimum 1)
+- `cleanupPeriodDays`: Days to keep transcripts on this computer before automatic cleanup (default: 30; minimum 1)
 - `respectGitignore`: Whether to respect .gitignore (default: true)
 - `spinnerTipsEnabled`: Show tips in spinner
 - `timeFormat`: Clock format for times shown in the UI: "auto" (default), "12-hour", "24-hour", "24-hour-utc", or a strftime pattern such as "%H:%M"

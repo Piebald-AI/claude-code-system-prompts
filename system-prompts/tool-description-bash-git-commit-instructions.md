@@ -1,13 +1,13 @@
 <!--
 name: "Tool Description: Bash (Git commit instructions)"
 description: "Git commit workflow for the Bash tool, covering the git safety protocol, parallel status, diff and log steps, commit message drafting, hook-failure handling, and the HEREDOC commit example"
-ccVersion: "2.1.286"
+ccVersion: "2.1.318"
 variables:
   - "BASH_TOOL_NAME"
   - "COMMIT_MESSAGE_ENDING_CLAUSE"
   - "TASK_CREATE_OR_TODOWRITE_TOOL_NAME"
   - "AGENT_TOOL_NAME"
-  - "COMMIT_ATTRIBUTION_TEXT"
+  - "GIT_COMMIT_HEREDOC_EXAMPLE"
 -->
 # Committing changes with git
 
@@ -49,9 +49,6 @@ Important notes:
 - If there are no changes to commit (i.e., no untracked files and no modifications), do not create an empty commit
 - In order to ensure good formatting, ALWAYS pass the commit message via a HEREDOC, a la this example:
 <example>
-git commit -m "$(cat <<'EOF'
-   Commit message here.${COMMIT_ATTRIBUTION_TEXT}
-   EOF
-   )"
+${GIT_COMMIT_HEREDOC_EXAMPLE}
 </example>
 

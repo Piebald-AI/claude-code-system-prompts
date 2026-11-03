@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code gateway protocol"
 description: "Markdown reference documenting the Claude Code gateway wire contract, including OAuth 2.0 device flow, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Bedrock, Vertex, and Foundry"
-ccVersion: "2.1.317"
+ccVersion: "2.1.318"
 -->
 # Claude Code gateway protocol
 
@@ -362,9 +362,15 @@ provider's Claude endpoint needs translation:
   `tools`, and of the betas only those Claude Code sends Bedrock on a count,
   such as `claude-code-20250219`) as `{"input_tokens": N}`. If that fails,
   or the model is an application inference profile (`CountTokens` takes
-  foundation-model ids only), return `501 not_supported`; the client counts
-  with a one-token request (the session's model unless
-  `ANTHROPIC_SMALL_FAST_MODEL` or `ANTHROPIC_DEFAULT_HAIKU_MODEL` is set).
+  foundation-model ids only), return `501 not_supported`. A Claude Code session
+  that holds a gateway credential (signed in with `/login`, or started with
+  `CLAUDE_CODE_USE_GATEWAY`, as Claude Desktop does under your `code` policy)
+  then counts by sending the prompt as a normal, billed model request with
+  minimal output. That request goes to Haiku, or, in a session that reads your
+  `/managed/settings`, to the session's model when `availableModels` there
+  leaves Haiku out. `ANTHROPIC_SMALL_FAST_MODEL` or
+  `ANTHROPIC_DEFAULT_HAIKU_MODEL` on the client picks another model. A client
+  that only points `ANTHROPIC_BASE_URL` at the gateway estimates locally.
 - **Headers.** Forward `content-type`, `accept`, `accept-encoding`,
   `anthropic-version`, `anthropic-beta`, `user-agent`, and `x-stainless-*`;
   strip the client's `Authorization` and apply the upstream's own
