@@ -1,7 +1,7 @@
 <!--
 name: "Data: Managed Agents quickstart — Sprint retro facilitator"
 description: "Bundled Managed Agents quickstart template for a sprint retro facilitator agent that pulls a closed Linear sprint, reads Slack sentiment and writes a retro doc, with its agent.md definition and a twice-monthly cron deployment"
-ccVersion: "2.1.290"
+ccVersion: "2.1.319"
 -->
 ---
 title: Sprint retro facilitator
@@ -32,6 +32,11 @@ mcp_servers:
     url: https://mcp.slack.com/mcp
 tools:
   - type: agent_toolset_20260401
+    configs:
+      - name: web_search
+        enabled: false
+      - name: web_fetch
+        enabled: false
   - type: mcp_toolset
     mcp_server_name: linear
   - type: mcp_toolset

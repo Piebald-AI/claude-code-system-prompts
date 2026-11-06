@@ -1,7 +1,7 @@
 <!--
 name: "Data: Managed Agents quickstart — Structured extractor"
 description: "Bundled Managed Agents quickstart template for a structured extractor agent that parses unstructured text into JSON that validates against a target schema, with its agent.md definition and system prompt"
-ccVersion: "2.1.290"
+ccVersion: "2.1.319"
 -->
 ---
 title: Structured extractor
@@ -25,6 +25,11 @@ model:
   effort: low
 tools:
   - type: agent_toolset_20260401
+    configs:
+      - name: web_search
+        enabled: false
+      - name: web_fetch
+        enabled: false
 metadata:
   template: structured-extractor
 ---

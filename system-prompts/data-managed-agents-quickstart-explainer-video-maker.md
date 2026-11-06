@@ -1,25 +1,25 @@
 <!--
 name: "Data: Managed Agents quickstart — Explainer video maker"
 description: "Bundled Managed Agents quickstart template for an explainer video maker agent that storyboards a topic, builds one scene per agent plus generated music, and joins them with ffmpeg into a captioned video, with its agent.md definition, environment.yaml and session.yaml"
-ccVersion: "2.1.296"
+ccVersion: "2.1.319"
 -->
 ---
-title: Explainer video maker
-description: Turns a topic and your source material into a short captioned video with music, with an agent per scene.
+title: Video explainer maker
+description: Turns a topic into a short captioned video with music.
 console_key: explainer-video
 order: 12
 ---
 
-# Explainer video maker
+# Video explainer maker
 
-Turns a topic and your source material into a short captioned video with music, with an agent per scene.
+Turns a topic into a short captioned video with music.
 
 ## agent.md
 
 ````markdown
 ---
-name: Explainer video maker
-description: Turns a topic and your source material into a short captioned video with music, with an agent per scene.
+name: Video explainer maker
+description: Turns a topic into a short captioned video with music.
 model:
   id: {{OPUS_ID}}
   effort: low

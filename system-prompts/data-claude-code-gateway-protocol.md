@@ -1,7 +1,9 @@
 <!--
 name: "Data: Claude Code gateway protocol"
 description: "Markdown reference documenting the Claude Code gateway wire contract, including OAuth 2.0 device flow, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Bedrock, Vertex, and Foundry"
-ccVersion: "2.1.318"
+ccVersion: "2.1.319"
+variables:
+  - "REQUEST_TAGS_BETA"
 -->
 # Claude Code gateway protocol
 
@@ -42,8 +44,8 @@ machines update on their own, so a server that rejects unknown input can stop
 working for its users from one day to the next. On the sign-in endpoints
 ignore them (RFC 6749 §3.2 and RFC 8628 §3.1 require that for request
 parameters). On `/v1/messages` pass body fields and `anthropic-beta` values
-to your upstream unchanged, and forward or drop other headers, but never fail
-the request over them.
+to your upstream unchanged (except request tags, below), and forward or drop
+other headers, but never fail the request over them.
 
 ## Discovery — required
 
@@ -93,6 +95,9 @@ browser and polls `token_endpoint` every `interval` seconds.
 
 `device_code` should be >=256 bits, opaque, single-use. `user_code` should
 use a base-20 charset (RFC 8628 §6.1).
+
+The response may carry one optional extension, `login_notice`: a plain-text
+string (≤500 chars) the client shows next to the code on its sign-in screen.
 
 The request body is form-encoded and may carry one extension parameter next
 to RFC 8628 §3.1's: `surface`, a stable identifier of the client application
@@ -263,13 +268,13 @@ When the cap is reached, reject `POST /v1/messages` before proxying:
     anthropic-ratelimit-unified-overage-period: daily
     anthropic-ratelimit-unified-overage-disabled-reason: org_spend_cap_reached
 
-    {"type":"error","error":{"type":"billing_error","message":"spend limit reached (daily; resets 2026-08-08 00:00 UTC) — request an increase at https://go.corp.example.com/claude-limits"}}
+    {"type":"error","error":{"type":"billing_error","message":"spend limit reached · resets Aug 8 · request an increase at https://go.corp.example.com/claude-limits"}}
 
 Leave `representative-claim` and `overage-status` off the 429. With them the
 client composes its own "You've hit your limit" line and drops your message;
 without them it prints `error.message` as-is (older clients too, behind a
-generic "API Error" prefix), so put the period, the reset time, and what the
-user should do next in that one sentence. `retry-after` is seconds until the
+generic "API Error" prefix), so put when the cap resets and what the user
+should do next in that one sentence. `retry-after` is seconds until the
 reset; `x-should-retry: false` keeps the SDK from retrying into the block. If
 you can't read your counter and choose to fail closed, send the 429 with
 `x-should-retry: false`,
@@ -295,8 +300,12 @@ are whole percents from 0 to 100 (above 100 once over), not the fraction the
 headers use; `resets_at` is an ISO 8601 UTC time, the same instant as that
 cap's `anthropic-ratelimit-unified-overage-reset` header, since clients pair
 the dollars with the percent only when the two agree to the second. A user
-with no cap gets
-`{"limits": []}`.
+with no cap gets `"limits": []` and, in `extra_usage`, their spend in cents
+for the current UTC month (`used_credits`), day (`daily`) and week from Monday
+(`weekly`). `monthly_limit` and `utilization` are null: 0 would be a $0 cap.
+`daily` is `{"limit": null, "used_credits": 1240, "utilization": null}`, and
+`weekly` the same. Clients show all three amounts, or none if `daily` or
+`weekly` is missing; older clients read this as `{"limits": []}`.
 
     GET /api/oauth/usage
     Authorization: Bearer <access_token>
@@ -306,6 +315,16 @@ with no cap gets
 
     {"extra_usage": {"is_enabled": true, "monthly_limit": 50000, "used_credits": 27140, "utilization": 54, "currency": "USD"},
      "limits": [{"kind": "spend", "group": "monthly", "percent": 54, "resets_at": "2026-10-01T00:00:00.000Z", "severity": "normal", "is_active": true}]}
+
+## Billing group — optional
+
+A request may say which of the developer's groups it is for, in the Anthropic
+API's request tags: `"tags": {"<name>": "<group>"}` in the body of
+`POST /v1/messages`. `<name>` is what the gateway's admin set as
+`admin.billing_group_tag`. With it set, this gateway writes the group in its
+audit log if the bearer token lists it, and takes a signed-in developer's tags
+and their `anthropic-beta` value out before any upstream. The tag changes
+nothing else about the request.
 
 ## Bearer token
 
@@ -352,6 +371,10 @@ provider's Claude endpoint needs translation:
 - **`anthropic-beta`.** Bedrock rejects some betas in the *header*; move them
   into the request body as `"anthropic_beta": [...]`. Vertex and Foundry
   accept the header.
+- **Request tags.** Bedrock, Bedrock Mantle and Vertex reject the Anthropic
+  API's top-level `tags` body field and its beta value,
+  `${REQUEST_TAGS_BETA}`. Leave both out before those upstreams: they label
+  usage and do not change the reply.
 - **Streaming.** Bedrock's native stream is AWS binary event-stream, not SSE;
   decode and re-emit Anthropic-shaped `text/event-stream`. The provider SDKs
   handle this, but their stream iterators drop the upstream's `ping` events

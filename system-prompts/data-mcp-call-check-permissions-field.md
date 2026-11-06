@@ -1,0 +1,6 @@
+<!--
+name: "Data: MCP call check_permissions field"
+description: "Documents the mcp_call check_permissions flag that applies normal permission checks and hooks to host-originated calls, its capability and transport restrictions, and its model-context exclusion"
+ccVersion: "2.1.319"
+-->
+The call is someone else's (a page a host renders), so it is decided as the model's own call to this tool is: permission rules under every spelling, the permission mode, requiresUserInteraction, managed settings, and PreToolUse and PostToolUse hooks, which see the arguments and the result. An ask reaches the host as a can_use_tool control request; where no host can answer, and in dontAsk or plan mode, it is refused. A refused call never reaches the server: on a plain call the error subtype, on a staged call staging error_code=tool_error, each with text starting 'The tool did not run: '. The other refusals of mcp_call come first and keep their own words. A PostToolUse hook's rewrite replaces content and drops structuredContent and _meta. The result stays out of the model's context. Only a CLI that says mcp_call_check_permissions_v1 honours this member: an older one ignores it and runs the tool with no check. Honoured only on the pipes of the host that spawned the process; elsewhere the call is refused. A value that is not a boolean is refused.

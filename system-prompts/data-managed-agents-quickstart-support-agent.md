@@ -1,7 +1,7 @@
 <!--
 name: "Data: Managed Agents quickstart — Support agent"
 description: "Bundled Managed Agents quickstart template for a support agent that answers from Notion docs with quoted sources and escalates low-confidence questions to Slack, with its agent.md definition and system prompt"
-ccVersion: "2.1.290"
+ccVersion: "2.1.319"
 -->
 ---
 title: Support agent
@@ -32,6 +32,11 @@ mcp_servers:
     url: https://mcp.slack.com/mcp
 tools:
   - type: agent_toolset_20260401
+    configs:
+      - name: web_search
+        enabled: false
+      - name: web_fetch
+        enabled: false
   - type: mcp_toolset
     mcp_server_name: notion
   - type: mcp_toolset

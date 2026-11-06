@@ -1,8 +1,8 @@
 <!--
 name: "System Reminder: Read truncation retry guidance"
-description: "Instructs Claude to reduce chunk size after file-read truncation warnings and notes the Bash output character limit"
-ccVersion: "2.1.173"
-variables:
-  - "MAX_OUTPUT_CHARS"
+description: "Instructs Claude to reduce read chunks after truncation, disclose what content was read, and stop retrying after a few unsuccessful attempts"
+ccVersion: "2.1.319"
 -->
-- If you receive truncation warnings when reading the file ("[N lines truncated]"), reduce the chunk size until you have read 100% of the content without truncation ***DO NOT PROCEED UNTIL YOU HAVE DONE THIS***. Bash output is limited to ${MAX_OUTPUT_CHARS.toLocaleString()} chars.
+- If you receive truncation warnings when reading the file, reduce the chunk size until you have read 100% of the content without truncation.
+- Before producing ANY summary or analysis, you MUST explicitly describe what portion of the content you have read. ***If you did not read the entire content, you MUST explicitly state this.***
+- If after a few attempts you cannot read the file (file not found, lines too long for Read's offset/limit, no shell access), STOP retrying. Summarize what you were able to read, explicitly state which portion you could not read and why, and proceed.

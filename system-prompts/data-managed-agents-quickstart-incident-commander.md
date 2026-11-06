@@ -1,7 +1,7 @@
 <!--
 name: "Data: Managed Agents quickstart — Incident commander"
 description: "Bundled Managed Agents quickstart template for an incident commander agent that triages a Sentry alert, opens a Linear ticket and runs the Slack war room, with its agent.md definition and system prompt"
-ccVersion: "2.1.290"
+ccVersion: "2.1.319"
 -->
 ---
 title: Incident commander
@@ -36,6 +36,11 @@ mcp_servers:
     url: https://api.githubcopilot.com/mcp/
 tools:
   - type: agent_toolset_20260401
+    configs:
+      - name: web_search
+        enabled: false
+      - name: web_fetch
+        enabled: false
   - type: mcp_toolset
     mcp_server_name: sentry
   - type: mcp_toolset

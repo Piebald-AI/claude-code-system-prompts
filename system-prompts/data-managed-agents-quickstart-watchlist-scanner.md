@@ -1,25 +1,25 @@
 <!--
 name: "Data: Managed Agents quickstart — Watchlist scanner"
 description: "Bundled Managed Agents quickstart template for a watchlist scanner agent that scans each ticker for changes since the last close, has a second agent review every ticker before the report, and avoids investment advice, with its agent.md definition, environment.yaml and session.yaml"
-ccVersion: "2.1.296"
+ccVersion: "2.1.319"
 -->
 ---
-title: Watchlist scanner
-description: Scans a stock watchlist for what changed since the last close. A second agent reviews every ticker before it reaches the report.
+title: Stock watchlist scanner
+description: Reports what changed for each stock since the last close.
 console_key: watchlist-scanner
-order: 13
+order: 11
 ---
 
-# Watchlist scanner
+# Stock watchlist scanner
 
-Scans a stock watchlist for what changed since the last close. A second agent reviews every ticker before it reaches the report.
+Reports what changed for each stock since the last close.
 
 ## agent.md
 
 ````markdown
 ---
-name: Watchlist scanner
-description: Scans a stock watchlist for what changed since the last close. A second agent reviews every ticker before it reaches the report.
+name: Stock watchlist scanner
+description: Reports what changed for each stock since the last close.
 model:
   id: {{OPUS_ID}}
   effort: medium

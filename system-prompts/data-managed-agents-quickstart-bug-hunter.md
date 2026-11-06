@@ -1,25 +1,25 @@
 <!--
 name: "Data: Managed Agents quickstart — Bug hunter"
 description: "Bundled Managed Agents quickstart template for a bug hunter agent that splits a codebase into slices, has parallel readers and second-look reviewers find suspicions, and reports only bugs a separate prover agent demonstrated, with its agent.md definition, environment.yaml and session.yaml"
-ccVersion: "2.1.296"
+ccVersion: "2.1.319"
 -->
 ---
 title: Bug hunter
-description: Reads a codebase in parallel, takes a second look at every part, and reports only bugs a separate agent proved.
+description: Scans a codebase and reports only the bugs it can prove.
 console_key: bug-hunter
 order: 10
 ---
 
 # Bug hunter
 
-Reads a codebase in parallel, takes a second look at every part, and reports only bugs a separate agent proved.
+Scans a codebase and reports only the bugs it can prove.
 
 ## agent.md
 
 ````markdown
 ---
 name: Bug hunter
-description: Reads a codebase in parallel, takes a second look at every part, and reports only bugs a separate agent proved.
+description: Scans a codebase and reports only the bugs it can prove.
 model:
   id: {{OPUS_ID}}
   effort: low
