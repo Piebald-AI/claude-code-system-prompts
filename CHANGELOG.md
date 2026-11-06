@@ -4,6 +4,73 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.319](https://github.com/Piebald-AI/claude-code-system-prompts/commit/27f6201)
+
+_+15,836 tokens_
+
+- **NEW:** Data: denyInsteadOfPrompting setting — Denies calls that would prompt without granting access; trusted settings also withhold questions and plan-mode tools.
+- **NEW:** Data: SDK MCP server connectorId field — Checks connector identity; aliases affect deny rules, ask rules, hooks, and disallowed tools, never allow rules.
+- **NEW:** Data: SDK voice-call message origin schema — Documents host voice transcripts as strictly shaped background, never starting turns, requesting actions, or granting consent.
+- **NEW:** Data: SDK result process_turn_threads field — Documents sampled CPU use by thread group without thread names; requires service sampling and omits unreliable readings.
+- **NEW:** Data: SDK can_use_tool decision_reason_code field — Documents request reasons, including organization ask ceilings; preserves reason-type policy and denial-only auto-mode codes.
+- **NEW:** Data: MCP call check_permissions field — Documents optional local host permission and hook checks; detect support first because older versions run unchecked.
+- **NEW:** Data: SDK set_has_subscribers control request — Documents configured subscriber buffering without discarded lines; resend after respawn. Cloud-session drivers refuse it.
+- **NEW:** Data: Worktree isolation symlinked host layout refusal, Worktree isolation unverified host repository refusal, Worktree isolation unreadable host registry refusal, and Worktree isolation redirected git directory refusal — Refuse linked paths, unverified repositories, unreadable registries, or redirected pointers; avoid git and recreate after unexplained tampering.
+- **NEW:** Data: Worktree registry inspection and cleanup guidance — Inspect and unlink planted links, remove duplicate registrations, then prune; clear stale registrations before recreating.
+- **NEW:** System Reminders: Voice-call record background framing and Voice-call record synthetic tool notice, and System Prompt: Auto mode voice-call consent rule — Treat unverified speech as background, not consent or scope; indirect references cannot authorize targets, but warnings matter.
+- **NEW:** Tool Description: Browser unlinked chat cloud fallback guidance — Defaults to cloud browsing when unlinked; fallback from requests for the user's own browser needs explanation and consent.
+- **NEW:** Skills: Claude API authentication status check and Claude API sign-in guidance — Put `ant` sign-in before keys; users run login unless asked otherwise. Verify a call and explain billing and fallback.
+- **NEW:** Skill: Claude API CLI installation guidance — Keeps sign-in first even without `ant`; uses documented installs and full paths to avoid Apache Ant conflicts.
+- **NEW:** Data: Claude API local sign-in guide — Covers sign-in, installation, recovery, and billing fallback; excludes secrets from chat and uses separate keys or federation for deployments.
+- **NEW:** Data: Artifact built-in connector guidance — Requires viewer consent and `listTools()` checks; absent or policy-blocked features are unavailable, not retryable.
+- **NEW:** Data: Gateway model policy overlap warning — Warns overlapping aliases or prefixes can expose models across policies; use group-restricted upstreams or unambiguous names.
+- **NEW:** Data: Gateway GovCloud upstream isolation warning — Warns shared access can silently send whole chats outside GovCloud; requires separate upstream groups and memberships.
+- **NEW:** Tool Description: EndConversation (two-call confirmation) — Revises abuse guidance; user-requested endings need permanent-closure consent, all endings need two calls, and crisis and fork exclusions remain.
+- **NEW:** Data: Artifact ask-first intake without listed design systems — Fetches up to three Design Systems before asking about new decks or designs; failures still permit custom looks.
+- **NEW:** Skill: /loop external wakeup handover — Allows one pending user-requested external wakeup; cancels timers only after acceptance, preserving stop, expiry, and fallback rules.
+- **NEW:** System Reminders: Artifact database not-found write refusal, Artifact database batch blocked for repeated refused writes, and Artifact database batch not-found refusal — Refused writes change nothing; reread expected documents before recreation and fix refused operations before atomic batch retries.
+- **NEW:** Skill: Mod plugin packaging on request — Packages requested mods as scanned plugins with save cards, only in the main session; no scan means no handover.
+- **NEW:** System Reminder: MCP connector call outside session refusal — Refuses out-of-session calls without file-argument records; argument changes cannot fix this host fault.
+- **NEW:** System Reminders: MCP connector unreadable saved tool definitions refusal and MCP connector missing conversation messages refusal — Refuse text-bearing or undeclared arguments when saved definitions cannot be checked; new chats may help, but missing history needs host repair.
+- **NEW:** System Reminder: MCP connector name too long for file approval — Refuses uploads if the full connector name cannot fit approval; rename it or call without files.
+- **NEW:** System Reminders: MCP task monitoring continues after a failure and MCP task monitoring stopped — Report unknown outcomes, not cancellation, when monitoring fails or stops; repeated calls need user direction.
+- **NEW:** System Reminder: Project document file rewrite without current text refusal — Requires complete current text before file-based Project rewrites; read back to recover, never delete and recreate.
+- **NEW:** System Reminder: MCP connector file path refusal — Requires readable current-session files, checks links, rejects remembered grants and Claude's private files, and explains pasted-image recovery.
+- **NEW:** System Reminder: Code Mode auto mode agent message refusal — Refuses unchecked messages without judging them unsafe; retry with separate checks where supported or user-selected permission modes.
+- **REMOVED:** Agent Prompts: PR follow-up cron and PR follow-up cron (PR Steward label check) — Remove templates, not necessarily follow-up support; PR Steward handoff guidance remains.
+- **REMOVED:** System Prompt: Artifact patch turn edit composer — Removes the standalone no-tools JSON edit-or-hand-back composer, not necessarily artifact editing.
+- **REMOVED:** System Reminder: File summary completeness disclosure — Moves the complete disclosure into Read truncation retry guidance, preserving its requirements.
+- **REMOVED:** Tool Description: Claude in Chrome shortcuts execute — Removes the standalone description; shipped code still references `shortcuts_execute`, so shortcut removal is not established.
+- **REMOVED:** System Reminder: Auto mode dynamically constructed command refusal — Removes standalone dynamic shell command retry guidance; this does not show that auto mode permits those commands.
+- Agent Prompt: Security monitor for autonomous agent actions (first part) — Treats actions based on voice transcripts as autonomous; indirect references cannot authorize targets or scope.
+- Agent Prompt: Web reading specialist — Restricts redirects and sets quote limits by source; distinguishes verbatim text, summaries, and unread sections.
+- Data: Claude Code gateway protocol — Adds optional sign-in notices, simpler spend-limit messages, and daily, weekly, and monthly spend reports for uncapped users.
+- Data: Claude Code gateway protocol — Documents authorized audit-only billing-group tags; strips tags and their beta value for unsupported upstreams.
+- Data: Managed Agents quickstarts — Bug hunter, Explainer video maker, and Watchlist scanner — Shorten summaries, dropping delegation and independent-review claims; rename video and stock templates and list stocks earlier.
+- Data: Managed Agents quickstarts — Contract tracker, Incident commander, Sprint retro facilitator, Structured extractor, and Support agent — Disable web search and fetch in five bundled examples; instructions and connector tools remain unchanged.
+- Data: Managed Agents quickstart — Contract tracker — Replaces Asana's SSE URL with `/v2/mcp` in the bundled Contract tracker setup.
+- Data: SDK api_error_params field — Documents `dailyCapPaused` on usage-limit refusals during organization pauses; recorded state is not current status.
+- Data: SDK result process_turn_states field — Clarifies the service omits the whole breakdown if any state's entries count is missing or zero.
+- Data: SDK UI attach draws field and SDK ui_invalidate instances field — Replace `$.ui.backdrop` references with `$.theme.set` and `$.theme.clear`; rendering and targeted invalidation remain unchanged.
+- Data: Server classifier beta rejection warning — Drops the claim that HTTP 400 disables the afk-mode beta header; server checks still stop until restart.
+- Data: Tool result display metadata field — Documents auto-mode rule matches using sanitized settings names, not model output; classifier claims are not proof.
+- Data: sshHostCommands setting — Covers connection creation; single-quoted executable paths and Windows need Claude Desktop v4.16336.0 or later.
+- System Reminder: Approved Claude Doc plan readback — Reads revision diffs after approval, keeping intentionally deleted plan steps out of implementation.
+- System Reminder: Code Mode auto mode subagent creation refusal — Allows checked retries where supported, otherwise direct work or permission-mode changes; refusal does not mean unsafe.
+- Skill: Generate permission allowlist from transcripts — Requires safe-flag checks for `which` instead of treating every invocation as automatically allowed.
+- Skills: /loop slash command (dynamic mode) and Schedule recurring cron and run immediately — Require disclosing that cloud timers end with their container; explicit-prompt loops may offer external wakeups only on request.
+- Skill: Plugin eval authoring interview — Requires operator grants, not skill-frontmatter grants; timed-out or turn-capped runs may still receive grades.
+- System Prompt: Hook evaluator truncated transcript note — Preserves provenance markers for third-party artifacts and remote-device reports when truncating hook-evaluation history.
+- System Reminder: Lines selected in IDE — Truncates large IDE selections, then neutralizes instruction-like delimiters for selections linked to downloaded content.
+- System Reminder: Read truncation retry guidance — Merges completeness disclosure and read retries; drops unconditional stopping, allowing partial summaries after a few failures.
+- Tool Description: claude.ai Project — Only whole-document reads return versions for guarded replacement; writes still return versions.
+- Tool Description: Project local_file read-only workflow — Drops long-line and byte-offset read recipes; retains read-only copies and separate-file editing for project changes.
+- Tool Description: ReadWidgetContext — Uses `widget_id` for MCP App views, returned separately from tool-call ids; state stays untrusted.
+- Tool Description: RemoteTrigger prompt — Requires unchanged same-run cursors for newest-to-oldest, one-page log traversal; explains `next_cursor` reuse for run listings.
+- Tool Description: Skill proposal rendering — Allows incremental edits where supported; cards show the whole skill, otherwise requiring full replacement before saving.
+- Tool Description: Skill-scoped git push refusal — Drops “raw” from “raw command text”; warnings about matching ref-name fragments remain.
+- Tool Parameter: matched ask rule — Extends prompt attribution to MCP ask rules matching other server names, so `tool_name` checks do not miss consent.
+
 # [2.1.318](https://github.com/Piebald-AI/claude-code-system-prompts/commit/eda0c66)
 
 _+10,091 tokens_
