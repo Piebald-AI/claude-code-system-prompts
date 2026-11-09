@@ -4,6 +4,41 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.321](https://github.com/Piebald-AI/claude-code-system-prompts/commit/e67f1a9)
+
+_+3,199 tokens_
+
+- **NEW:** Data: SDK initialize response other_hook_ask_outranks_host field — Documents other hooks' precedence over host ask reasons on local connections, warning that matching wording does not identify the asking hook.
+- **NEW:** Data: SDK interrupt spare_background_tasks field — Documents stopping only the turn while sparing background tasks; observers still stop, and server tenants ignore this request-level exception.
+- **NEW:** Data: SDK can_use_tool plugin field — Identifies the plugin behind a permission question, requires escaped display text, and provides a generic label when names cannot be shown.
+- **NEW:** System Reminder: Unsaved tool output truncation — Explains lost oversized results and shared preview limits; recommends paging, filtering, or safely repeating fewer calls rather than assuming output was saved.
+- **NEW:** System Prompt: Artifact deck and design intake — Asks once before new decks or designs, offers color previews and optional design-system lookup, and honors opt-outs and failed-question fallbacks.
+- **NEW:** System Prompt: AI development training limits — Recommends documentation checks for select AI-development tasks after Fable and Mythos 5.2 training changes, without changing traditional ML assistance or suggesting another model.
+- **NEW:** System Prompt: Memory notes and feedback rules — Saves lasting guidance instead of task logs, weighs feedback cautiously, avoids unrequested planning documents, and revisits cautions without weakening risky-action confirmation.
+- **NEW:** Tool Description: Computer use selection card guidance — Explains computer-selection cards, resumes once tools arrive, respects declined linking, and renews the card only when later messages still require that computer.
+- **NEW:** System Prompt: Work completion and direct editing — Requires continuing through ordinary obstacles while respecting deliberate barriers and risky-action confirmation; permits known-text edits inside the working directory without a prior Read call.
+- **NEW:** System Reminder: File-backed artifact database write refusal — Redirects database writes to project files; when no index exists, requires carrying over all earlier content before publishing.
+- **NEW:** System Prompt: Claude Fable 5.2 model identity — Introduces Fable 5.2 as the latest generally available model, sharing Mythos 5.2's base with additional dual-use safety measures.
+- **REMOVED:** System Reminder: Auto mode no verdict after another hook rewrite — Removes the standalone cross-call hook-rewrite retry message; this does not establish that auto mode now permits those calls.
+- **REMOVED:** Tool Description: EndConversation — Removes the older conversation-ending description; the two-call confirmation variant and separate background-fork warning remain in the extraction.
+- Data: Message Batches API references (Python, TypeScript) — Corrects the all-features claim: batches do not accept streaming, fast mode, fallbacks, or zero-output-token requests.
+- Data: Claude API references (PHP, Ruby) — Extend guidance on adaptive thinking and removed manual budgets through Fable and Mythos 5.2; PHP also documents 5.2's default omission of thinking text.
+- Data: Claude API references (PHP, Ruby) — Update the fallback beta header to `server-side-fallback-2026-07-01` and point migration guidance at the previous Fable version.
+- Data: Data visualization choosing a form — Adds aligned meter lists for named ratios against separate limits, using responsive bars instead of one donut or gauge per row.
+- Data: Interrupt receipt cancelled field — Documents flagged remote-session interrupts reporting cancelled, deferred redeliveries without queue-cancellation parameters, only when no service wrote the interrupt.
+- Data: SDK api_error_params field — Adds `cut` to distinguish output-token exhaustion from context-window exhaustion; separate tool-use-block cutoffs continue to rely on the error code.
+- Data: SDK thinking_duration_ms field — Counts interrupted thinking blocks through the interruption, rather than only through their normal streaming end; response-start waiting remains excluded.
+- Data: SDK ui_invalidate instances field — Updates theme terminology and targets both Theme and Backdrop instances after theme changes or relevant client joins, instead of Backdrop alone.
+- Data: SDK voice-call message origin schema — Clarifies that optional voice-call origin fields come only from local hosts, survive storage and replay, and never enter model or classifier requests.
+- Data: Tool use display metadata field — Documents artifact-publishing markers and result URL and title hints for main-loop calls, while warning that worker-provided metadata does not prove artifact identity.
+- Skill: Claude API deprecated or retired models notice — Replaces Google Cloud with Vertex AI when explaining that provider model-retirement schedules may differ from the Claude API's dates.
+- System Prompt: Claude Fable 5.1 model identity — Drops newest-model and most-capable claims from the Fable 5.1 identity, while preserving its shared-model and safety distinctions.
+- System Prompt: Self-hosted runner doctor — Documents zero exit status when a runner is no longer needed, versus status one for used, expired, or otherwise invalid work orders.
+- System Reminder: Browser extension not connected (mobile app) — Adds cloud browsing as a fallback when mobile users cannot reach Claude in Chrome, alongside the existing web-search option.
+- System Reminder: Project document version conflict recovery — Requires stopping after partial document reads return no version, explaining that safe replacement is unavailable and offering the new content separately.
+- System Reminders: Voice-call record background framing and Voice-call record synthetic tool notice — Describe voice-call records as one or more blocks in supplied order, while preserving their background-only status and lack of approval.
+- Tool Description: claude.ai Project — Drops the original-path instruction, makes the upload-size limit configurable, and consistently excludes home-directory working folders from this upload route.
+
 # [2.1.319](https://github.com/Piebald-AI/claude-code-system-prompts/commit/27f6201)
 
 _+15,836 tokens_
