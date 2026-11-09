@@ -1,7 +1,7 @@
 <!--
 name: "Data: Message Batches API — TypeScript"
 description: "TypeScript usage guide for Claude's asynchronous Message Batches endpoint"
-ccVersion: "2.1.246"
+ccVersion: "2.1.321"
 -->
 # Message Batches API - TypeScript
 
@@ -13,7 +13,7 @@ The Batches API (`POST /v1/messages/batches`) processes Messages API requests as
 - Most batches complete within 1 hour; maximum 24 hours
 - Results available for 29 days after creation
 - 50% cost reduction on all token usage
-- All Messages API features supported (vision, tools, caching, etc.)
+- Most Messages API features supported (vision, tools, caching, etc.); a batch request can't set `stream`, `speed`, `fallbacks` or `max_tokens: 0`
 
 ---
 

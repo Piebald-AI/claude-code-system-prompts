@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: REPL persistent helper interface"
 description: "Describes the persistent JavaScript helper interface, batching costs, returned and logged output, asynchronous execution and generated helper and tool declarations"
-ccVersion: "2.1.319"
+ccVersion: "2.1.321"
 variables:
   - "REPL_TOOL_ACCESS_GUIDANCE_BLOCK"
   - "REPL_OUTPUT_TRUNCATION_NOTE"
@@ -29,7 +29,7 @@ To keep a long output out of your context, return `preview(out)` or `preview(out
 ${REPL_OUTPUT_DELIVERY_GUIDANCE_BLOCK}${REPL_PERMISSION_MODE_TIMEOUT_NOTE}
 ${REPL_BATCHED_OPERATIONS_EXAMPLE}
 ## Declarations
-${await BUILD_REPL_HELPER_DECLARATIONS_FN({agent:H,isBash:c,asyncLane:T,mcpThrows:s,tools:FORMAT_REPL_TOOL_TYPE_DECLARATIONS_FN(await GET_REPL_TOOL_SCHEMAS_FN(AVAILABLE_TOOLS,TOOL_PERMISSION_CONTEXT))})}
+${await BUILD_REPL_HELPER_DECLARATIONS_FN({agent:j,isBash:c,asyncLane:R,mcpThrows:s,tools:FORMAT_REPL_TOOL_TYPE_DECLARATIONS_FN(await GET_REPL_TOOL_SCHEMAS_FN(AVAILABLE_TOOLS,TOOL_PERMISSION_CONTEXT))})}
 ${MCP_SERVER_DISCOVERY_GUIDANCE_BLOCK}${GIT_WORKFLOW_GUIDANCE_BLOCK?`
 ${GIT_WORKFLOW_GUIDANCE_BLOCK}
 `:""}
