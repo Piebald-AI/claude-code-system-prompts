@@ -4,6 +4,46 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.324](https://github.com/Piebald-AI/claude-code-system-prompts/commit/3aacc43)
+
+_+6,605 tokens_
+
+- **NEW:** Data: disableClaudeAiConnectors setting — Documents a setting that keeps claude.ai cloud connectors from connecting; a true value in any settings source wins over a project-level false.
+- **NEW:** Data: Sandbox failIfUnavailable setting — Documents exiting at startup when the sandbox cannot start, except in Anthropic's cloud containers, which start anyway with a warning.
+- **NEW:** Data: Sandbox linked worktree write denial warning and Sandbox unchecked protected paths warning — Warn when a path could not be checked without following a possibly remote link, and say which writes or project-supplied grants were withheld as a result.
+- **NEW:** Data: Sandbox project false value ignored under higher-priority policy — Notes that a project-level `false` is ignored once managed, `--settings` or user settings set `true`.
+- **NEW:** Data: SDK api_error_type field — Passes the API response's own error type to hosts, noting that the value is unchecked and alone does not say whether a retry can help.
+- **NEW:** Data: SDK oauth_token_refresh refused_call field — Tells a host whether the refused call was to the model, a connector or something else, so it can check and keep a token that is still good.
+- **NEW:** Data: SDK reload_plugins refuse_if_busy field — Lets a host have a plugin reload refused with `reload_plugins_busy` while the session is busy, instead of reloading under a running turn.
+- **NEW:** Data: SDK warning hook_no_verdict field — Adds structured details for the warning that a PreToolUse hook gave no verdict and its failure did not refuse the call.
+- **NEW:** Data: Teleport stash MERGE_AUTOSTASH refusal, ref without entries refusal, and unexpected entry refusal — Explain why `/teleport` stashed nothing or stopped, and how to inspect a possibly planted stash entry before any `git stash pop`.
+- **NEW:** Skill: Artifact design page contract and Artifact design direction cards — Add the page contract that opens the artifact-design skill and the pool of type, colour and layout directions from which three are dealt into its guide.
+- **NEW:** System Prompt: Saving skills via review proposals — Directs skill creation and changes through the `propose_skills` review card, with changes to an existing skill sent as `edits`, instead of handing over skill files.
+- **NEW:** System Reminder: Memory listing additions — Lists memory files saved after the latest listing was taken, to be read before editing and not created anew.
+- **NEW:** System Reminder: Post-compaction conversation reread guidance — Tells Claude to read pre-compaction text again with the conversation-reading tool before quoting or showing it, and to say so plainly when it cannot be read yet.
+- **NEW:** System Reminder: Staged files disk-space recovery — Split out of Staged files failed to arrive; now says connector downloads can be fetched again by reading them, while other files must be attached or made again.
+- **NEW:** System Reminder: Teammate spawned metadata — Reports a spawned teammate's ID and name as internal metadata never to be quoted, and notes when it started outside the shell's current folder.
+- **REMOVED:** Skill: Data Visualization — The skill's main instructions no longer ship as extractable text; Claude Code now bundles them as a compressed skill document.
+- Data: Data visualization choosing a form and Data visualization marks and anatomy — Keep naturally ordered parts in order in ranked bars, and name a tall segmented bar's parts in its legend instead of on the blocks.
+- Data: MCP call check_permissions field — Adds that a slash command's allowed-tools and connector card answers never allow the call, even during a turn.
+- Data: MCP server status error_code field — Adds `CLAUDEAI_CONNECTORS_DISABLED` for a desktop-supplied claude.ai connector left out because `disableClaudeAiConnectors` is set.
+- Data: Remote tools reannounce control request — Adds that a desktop-hosted worker also asks the app to announce, and documents the session service's `device_announce_refused` and `device_stream_closed` error replies.
+- Data: Sandbox filesystem disabled setting — Now says `sandbox.autoAllowBashIfSandboxed` defaults to false, so sandboxed commands keep going through the permission flow unless it is set to true.
+- Data: SDK API error kind field — Rewords `empty_completion`: the turn, its one retry and a repeat of that retry all ended with no visible text.
+- Data: SDK startup failure reason codes — Adds that, for `config_file_invalid`, `invalid_config_file` carries the file paths as fields.
+- Data: SDK stream event owed_rows field — Now lists rows that change what Claude holds of the chat's claude.ai Project: document reads that name a document and session-context rows with a different attached Project.
+- Data: SDK ui_render component field — Adds `image:<id>:<n>` requests, which the engine answers itself with one piece of an image.
+- Data: SDK voice-call message origin schema — Says the model reads a voice-call note as a record with a notice, and that a note sent during a turn waits for the turn's end.
+- Data: Tool result display metadata field — Drops `built_in_tool` where a hook or permission answer changed the call's input, and adds `run_input`, marking runs whose messages a person typed in an app.
+- Data: WrapUp tool result nextStep field — Says a result whose input was changed by a permission answer or hook carries no `built_in_tool`, so the box is not trusted there.
+- Skill: /doctor slash command and Generate permission allowlist from transcripts — Stop proposing allow rules for read-only `git` commands, which ask in some repositories such as untrusted ones; examples now use `gh` and `brew`.
+- Skill: Mod look reference — Adds guidance for scenes that fit any screen shape, and a still `image` backdrop from a JPEG or PNG in the mod's folder.
+- System Prompt: Session scratchpad temporary-file guidance — Adds that a reboot or routine cleanup can clear the scratchpad, so files the user will want to keep belong elsewhere.
+- System Prompt: Windows sandbox profile tool retry guidance and Windows sandbox profile tool user guidance — Say only the profile's tool directories and package-manager configuration are readable by default; the rest, including Documents, Desktop and Downloads, is unreadable unless the user adds it.
+- System Reminder: MCP connector file path refusal — Replaces the detailed eligibility rules with a short refusal that deliberately does not say which reason applies, and keeps the `/add-dir` remedy.
+- System Reminder: Plan approved — Adds a note, when the user's edit could not be saved to the plan file, to work from the plan text included below.
+- Tool Description: Skill proposal rendering — Always tells Claude to send only its changes as `edits` when improving a skill, dropping the whole-SKILL.md replacement variant.
+
 # [2.1.323](https://github.com/Piebald-AI/claude-code-system-prompts/commit/82073b5)
 
 _+14,310 tokens_
