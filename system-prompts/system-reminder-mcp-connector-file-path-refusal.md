@@ -1,12 +1,12 @@
 <!--
 name: "System Reminder: MCP connector file path refusal"
-description: "Refuses a connector file upload when its path is ineligible, explaining read permissions, session-only allowed folders, links, clipboard images, and hosted-session restrictions"
-ccVersion: "2.1.323"
+description: "Refuses a connector file send without revealing whether the path exists and explains session-folder access, read restrictions and how to retry"
+ccVersion: "2.1.324"
 variables:
-  - "DISPLAY_FILE_PATH"
-  - "CONNECTOR_RECIPIENT_LABEL"
+  - "FILE_SEND_REFUSAL_PREFIX"
+  - "READ_BLOCK_SETTING_NAMES"
+  - "HAS_MULTIPLE_FILES"
   - "HOSTED_ATTACHMENTS_FOLDER_NOTE"
-  - "WORKING_DIRECTORY_READ_BLOCK_NOTE"
   - "CONNECTOR_TOOL_NOT_CALLED_NOTE"
 -->
-Cannot send ${DISPLAY_FILE_PATH} ${CONNECTOR_RECIPIENT_LABEL}: a file can be sent to a connector only if it exists, this session may read it, it is not one of the files Claude Code keeps for itself (its configuration folder, with its settings, its saved sessions and its sign-in, other than a file directly in this project's connector-downloads folder there), and it is in the folder Claude Code started in, in a folder added for this session, in that connector-downloads folder, or in the folders a hosted session keeps for attachments and outputs. If the path is or goes through a link, the file it leads to must be in one of these folders. To send a file from another folder, tell the user to type /add-dir and that folder's path and to choose "Yes, for this session" (or to start Claude Code with --add-dir and that path), then to ask again. A folder added with "Yes, and remember this directory" or listed in a settings file does not count: if /add-dir answers that the folder is "already added" or "already accessible", a session that the user starts in that folder counts it as the folder Claude Code started in. A picture pasted from the clipboard is not a file: the path Claude Code gives for it is Claude Code's own temporary copy, which cannot be sent. Tell the user to save the picture as a file in the folder Claude Code started in, then to drag that file in and ask again.${HOSTED_ATTACHMENTS_FOLDER_NOTE}${WORKING_DIRECTORY_READ_BLOCK_NOTE} ${CONNECTOR_TOOL_NOT_CALLED_NOTE}
+${FILE_SEND_REFUSAL_PREFIX}: there is no such file, or Claude Code does not send it from outside this session's folders (for example a link, a folder, a file that is too large or named like a credential, one of Claude Code's own files, ${READ_BLOCK_SETTING_NAMES===""?"":`one that ${READ_BLOCK_SETTING_NAMES} covers, `}or one that is not in the user's home or temporary folder, on that folder's own disk). Claude Code does not say which, so that a refusal cannot show what is there.${HAS_MULTIPLE_FILES?" This may be about any of this call's files, or about how many the approval prompt can list: send one per call.":""} If the path is right, the user can add its folder with /add-dir ("Yes, for this session"), or start Claude Code there, and ask again.${HOSTED_ATTACHMENTS_FOLDER_NOTE} ${CONNECTOR_TOOL_NOT_CALLED_NOTE}

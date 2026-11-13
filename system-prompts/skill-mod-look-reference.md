@@ -1,7 +1,7 @@
 <!--
 name: "Skill: Mod look reference"
 description: "Reference for the mod skill on giving a session a look in the desktop and mobile apps: building theme colors with makeColors, anchors and roles, moving scenes and still backdrops, what good looks like, and what fails without an error"
-ccVersion: "2.1.323"
+ccVersion: "2.1.324"
 -->
 # A look
 
@@ -78,9 +78,15 @@ on('ui.render', { component: 'Backdrop' }, ($, e, next) => {
 
 Give the Svg a `viewBox` and `preserveAspectRatio="xMidYMid slice"` so it fills any screen, keep it under 131,072 characters, and animate with CSS inside its own `<style>`. It runs no script and loads nothing. `glass` is `{ blur, tint, opacity }`, a raw-colored veil over it, or `false`.
 
+### Any screen
+
+A scene's box changes with the device, from a tall phone to a wide window, and on a phone on its side the bars leave little room. One SVG can fit them all. Give the root `preserveAspectRatio="xMidYMid slice"` for loose art that can be cropped. For a subject that has to stay in view, pin it with a nested `<svg>` with its own `preserveAspectRatio`, such as `xMaxYMax meet` for a corner, or move it with `@media` rules in the scene's `<style>`. A media rule reads the scene's own box, not the device, so a wide column on a tablet counts as landscape too. Keep the subject away from the middle, where the words sit, and the foot, where the message box sits.
+
 ## A still ground
 
-`backdrop` can also be still, with no hook: `{ color }`, `{ gradient }` or `{ vector }`. For any other pattern, draw a scene. A color in one is raw, or a palette name such as `surface-0`, which follows the mode. A surface counts it in the look, so `isDrawn` answers for it the same way.
+`backdrop` can also be still, with no hook: `{ color }`, `{ gradient }`, `{ vector }` or `{ image }`. For any other pattern, draw a scene. A color in one is raw, or a palette name such as `surface-0`, which follows the mode. A surface counts it in the look, so `isDrawn` answers for it the same way.
+
+`image` is a JPEG or PNG in the mod's folder, such as `{ image: { source: 'harbour.jpg' } }`, at most 1 MiB and 4096 on a side. Save a photo about 2560 wide as a JPEG: a camera's original is too big. A surface fills the screen with it, centred, so keep what matters in the middle. To tile one instead: `{ image: { source: 'tile.png', size: [64, 64], repeat: true } }`.
 
 ## What good looks like
 

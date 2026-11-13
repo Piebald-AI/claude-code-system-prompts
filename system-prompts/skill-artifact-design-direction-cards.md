@@ -1,0 +1,30 @@
+<!--
+name: "Skill: Artifact design direction cards"
+description: "Lists the pool of typography, colour and layout directions from which three are dealt into the artifact-design skill guide for a new Artifact page"
+ccVersion: "2.1.324"
+-->
+- Swiss timetable. Type: Archivo width 112 wt 800 + Archivo. Colour: white #fff, black, signal red #e4002b, one grey; night #0e0e0e. Layout: strict left edge, huge numerals hanging in a wide left column, thick top rule.
+- Survey map. Type: Overpass 800 + Overpass. Colour: sea #bfe3ee, land #fbfbf2, contour brown #a8551b, ink #13242e, route magenta #d6127e; night #0d1c24. Layout: picture full bleed, text in a margin panel like a map legend.
+- Annual report cover. Type: Sofia Sans Condensed 800 + Instrument Sans. Colour: white, black, vermilion #ff4a1c as one solid chart mass; night vermilion on #120d0b. Layout: the chart is a giant flat shape bleeding off two edges, headline sits in its empty corner.
+- Scientific plate. Type: Literata 600 display size + Literata. Colour: white, ink #10131a, two inks: carmine #c1121f and prussian #0b4f8a; night #0f1217. Layout: large figure with leader-line callouts, narrow text column at right.
+- Newspaper graphics desk. Type: Libre Franklin 800 + Libre Franklin. Colour: pale pink #ffe3dc ground, ink #1a1817, teal #0d7680, claret #990f3d; night #1c1512. Layout: headline finding top left, one wide annotated chart, small multiples beneath.
+- Pharmacy label. Type: Schibsted Grotesk 800 + Schibsted Grotesk. Colour: white, one flat block each of emerald #00a86b and pale pink #ffd6e0, black; night #04140d. Layout: page cut into two or three rectangles like a medicine box.
+- Metro diagram. Type: Hammersmith One + Cabin. Colour: white, line colours red #e6261f blue #0a5cff amber #ffb400 green #00a05a, black; night #0e1116. Layout: one thick line with 45-degree bends organises the whole page.
+- Control room. Type: Saira Semi Condensed 600 + Saira. Colour: steel #d5dbe0 panel, black, white, alarm red #e8251a; night #16191c. Layout: one dominant readout at 40% width, long thin strips stacked beside it.
+- Architect monograph. Type: Hanken Grotesk 500 + Hanken Grotesk. Colour: white, black, concrete #d8d8d4 planes, safety yellow #ffe600 on one element; night #1a1a19. Layout: title modest in a corner, wide margins, one big exact drawing.
+- Weather chart. Type: Red Hat Display 800 + Red Hat Text. Colour: navy #0b1433 ground in both themes; scale from #3b4fd8 through #4fc1c6, #f7e463 to #e8452c. Layout: full-bleed field of colour-coded cells or isobars, legend as a long bar.
+- Product changelog. Type: Space Grotesk 500 + Inter. Colour: white, ink #0b0b10, signal green #00a862 as a full band behind the main figure, mist #eafaf2; night #07130d. Layout: headline across the full width, chart beneath at full bleed, figures in one ruled row.
+- Night desk. Type: Inter Tight 300 very large + Inter. Colour: plum-black #1a0f1f ground in both themes, white, rose #ff8fa3, dusk #8f7aa8. Layout: chart fills the screen, figures float in its empty corner.
+- Monochrome plus one. Type: Space Grotesk 700 + Inter. Colour: black and white only, plus one field of mint #b8f5d0; night black, mint as ink. Layout: half the screen is the colour field holding the number, half is white holding the chart.
+- Weekly leader page. Type: Source Serif 4 600 display + Inter. Colour: white, ink #121212, red #e3120b, slate #2e6f8e, panels of pale #e3ecf0; night #10191e. Layout: red tab at top left, headline full width, panels divided by rules on one baseline.
+- Atlas plate. Type: Hanken Grotesk 300 very large + Hanken Grotesk. Colour: deep sea #0a2540 ground in both themes, sky #8fd3ff, white, signal pink #ff5c8a. Layout: three horizontal strips on one shared axis, top one tallest.
+- Precision instrument. Type: Geist 500 + Geist. Colour: aluminium #e9eaec, black, orange #ff4f00 pointer; night #141517. Layout: one long horizontal scale across the screen, readout above it, controls below.
+- Sports federation report. Type: Outfit 600 + Inter. Colour: one field of sky #4fb3e8, white, ink #10223a, orange #ff7a1a for the point that matters; night #0b1726. Layout: colour band on top with finding and figures, small multiples in a row beneath.
+- Central bank bulletin. Type: Libre Caslon Text 400 large + Inter. Colour: white, ink #14161a, one deep teal #0b5d63, rule grey; night #0d1416. Layout: title across the top, two-thirds chart, one-third ruled column of figures.
+- Engineering datasheet. Type: Space Grotesk 600 + Inter. Colour: cobalt #1240e0 title strip, white, black, pale #eef2ff zones; night #0a0d18. Layout: narrow title strip, dense grid of exact panels sharing one baseline.
+- Journal article. Type: Spectral 500 + Inter. Colour: white, ink #14110f, ultramarine #1d2bd8, cool grey; night #0d0e18. Layout: one reading column with wide figures breaking out to the right, notes in the margin.
+- Transit authority. Type: Inter Tight 700 + Inter. Colour: deep green #00463c ground for the first screen, white, signal lime-white #e6f5c8, coral #ff6f59 for trouble; white below. Layout: finding across the top, wide chart, ruled figure row at the foot.
+- Audit report. Type: Manrope 700 + Manrope. Colour: white, ink #101418, one slab of warm yellow #ffd84a behind the key figure only, slate; night #101418. Layout: figure-first: chart at the very top, finding set beneath it, table follows.
+- Lab poster. Type: Red Hat Display 700 + Red Hat Text. Colour: oxford blue #0b1f4b band, white panels, magenta #e0115f for the result; night #070f26. Layout: small multiples in a row sharing one scale, title band above.
+- Planning office. Type: Schibsted Grotesk 700 + Schibsted Grotesk. Colour: stone #e7e4df, black, brick #c8371e, white panels; night #171513. Layout: table-led: a large, beautifully ruled table is the picture, verdict in the margin.
+- Ice and ink. Type: Space Grotesk 500 + Inter. Colour: ice #dff1f7 ground, ink #06222e, one hot pink #ff2e7e; night #06222e. Layout: chart left bleeding off the edge, finding right, figures below.
