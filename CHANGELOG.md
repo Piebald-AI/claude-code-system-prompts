@@ -4,6 +4,80 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.323](https://github.com/Piebald-AI/claude-code-system-prompts/commit/82073b5)
+
+_+14,310 tokens_
+
+- **NEW:** Agent Prompt: Background agent state classifier other-thread ask rule and Project thread status card classifier other-thread ask rule — Treat an ask the person is to answer in another thread of the project as a wait, not a blocker.
+- **NEW:** Data: askUserQuestionTimeout setting — Documents the idle time before Claude's terminal questions auto-continue with the answers selected so far.
+- **NEW:** Data: blockFileToolReadsOutsideWorkingDirectories setting — Documents a launch-only host setting refusing file-tool reads outside the working directories, shell commands aside.
+- **NEW:** Data: SDK can_use_tool server_policy_ask_only field — Tells a host whether only the default prompt and its own always-ask policy asked for a person.
+- **NEW:** Data: SDK get_workspace_diff omitted field — Counts changed files with no per-file stats row and says whether the count is whole or a floor.
+- **NEW:** Data: SDK initialize managedSettings parameter, sdkMcpServerManifestsOrigin field, and response managed_settings_applied field — Document managed settings delivered in initialize, a marker for freshly composed MCP manifests, and confirmation of the stored settings.
+- **NEW:** Data: SDK MCP server dataFlowServer field — Lets a host say where an MCP server came from for data flow records.
+- **NEW:** Data: SDK plugin_install system message — Documents headless plugin installation progress frames and that their error text is untrusted.
+- **NEW:** Data: SDK read_file offset, for_upload, requested_path, and liveReply fields — Document byte-offset reads, a credential-file test for files to be handed on, the echoed request path, and unstored live-only replies.
+- **NEW:** Data: SDK stream event owed_rows field — Lists rows a turn wrote before its first model request that carry an added claude.ai Project document's text.
+- **NEW:** Data: SDK ui_render component field — Documents the component to draw, including `Theme`, answered by the engine, and `Backdrop`, drawn by a mod's hook.
+- **NEW:** Data: SDK user message retracted_message_uuids field — Lists dropped response messages a client should remove after an unparseable tool call is re-asked.
+- **NEW:** Data: SSL cross-certificate missing root error and SSL name constraint unsupported type explanation — Explain two certificate-verification failures and how to fix the chain.
+- **NEW:** Data: Teleport stash index update failure error, unsafe object store or ref table refusal, and unsafe ref file refusal — Explain /teleport stash failures from links or non-plain files in the git folder, with safe repairs.
+- **NEW:** Data: Worktree creation partial clone too many missing objects error, partial clone promisor fetch failure error, and outside-repository write refusal — Explain worktree failures in partial clones and when git could write outside the repository.
+- **NEW:** Data: WrapUp tool result nextStep field — Describes the next-step box a client draws from a WrapUp result and how its text is cleaned and redacted.
+- **NEW:** Skill: Claude API sign-in errors guidance — Says a 401 or `invalid_grant` means signing in again, while a low credit balance needs credits for that organization.
+- **NEW:** Skill: Mod look reference — Adds a reference for session looks: theme colors via `makeColors`, backdrops, moving scenes, and silent failure cases.
+- **NEW:** System Reminder: Artifact publish unreadable existing files refusal — Tells Claude not to replace or remove files it cannot read unless the user explicitly asks for `force:true`.
+- **NEW:** System Reminder: Attached machine folder released (call result) and Attached machine folder released notice — Tell Claude the person at the computer disconnected the session's folder.
+- **NEW:** System Reminder: BrowserBatch outside auto mode refusal — Says a batch outside auto mode may hold only same-tab read and interaction actions.
+- **NEW:** System Reminder: Cron one-time job refused on self-hosted runner — Redirects one-time cron jobs to the send-later tool, since the runner may stop the idle process.
+- **NEW:** System Reminder: Deleted attached file notice (single file) and Deleted attached files notice (multiple files) — Tell Claude attached files were deleted, so it gives no new detail of them and recovers no saved copy.
+- **NEW:** System Reminder: Linked computer plugin server copy guidance — Tells a cloud session that calls go by default to the linked computer's copy of a plugin server.
+- **NEW:** System Reminder: Memory sync delete not sent — Warns that a memory delete has probably not gone out, so Claude must not say the content is gone.
+- **NEW:** System Reminder: Output token limit tool call cutoff — Says a response cut off inside a tool call did not run it; retry with smaller calls.
+- **NEW:** Tool Description: Artifact preflight.js reserved file and its app wording — Reserve `preflight.js` at the artifact root as a small module run against open pages on publish.
+- **NEW:** Tool Description: Bash (sandbox — macOS process visibility, override available) and its no-override variant — Explain that sandboxed macOS commands see only their own processes, so `lsof` and `kill` can silently miss others.
+- **NEW:** Tool Description: Computer use selection card gone guidance — Tells Claude an earlier computer-selection card is gone and to answer in words.
+- **NEW:** Tool Description: ToolSearch (opening, system message wording) — Adds an opening variant saying deferred tools appear by name in a message from the system.
+- **NEW:** Tool Description: Yield — Adds a tool that pauses until an asynchronous tool reports, for when no other work remains.
+- **NEW:** Tool Parameter: Artifact supporting files (local sources only) — Adds a supporting-files variant without cross-artifact sources.
+- **NEW:** Tool Parameter: set_cwd needs_trust trust root and set_cwd rejection reasons unsafe_path and remote_origin — Name the repository root a trust grant covers and explain two rejection reasons.
+- **REMOVED:** Data: Claude API local sign-in guide — The local `ant` sign-in guide no longer ships as extractable text; Claude Code now bundles it as a compressed skill document.
+- Agent Prompt: Artifact type creation slash command (first-party type) and (MCP connector tools, first-party type) — When no matching type is offered, Claude can now state a specific reason.
+- Agent Prompt: Quick git commit, Agent Prompt: Quick PR creation, and Tool Description: Bash (Git commit instructions) — Add `.claude/settings.local.json` to the example secret files not to commit.
+- Data: allowManagedPermissionRulesOnly allowed-tools frontmatter scope — Drops registry-pinned npm-direct plugins from those keeping their allowed-tools frontmatter.
+- Data: blockWritesOutsideWorkingDirectories setting — Notes that a launching-program setting can narrow the working directories and keep the worktree tools.
+- Data: Interrupt receipt still queued field — Adds that a cloud session worker may treat a plain interrupt differently before its first turn.
+- Data: MCP read resource control request — Adds an error cause: in a cloud session, a server on the user's own computer or browser.
+- Data: Sandbox worktrees directory listing failure warning — Drops the protection-switched-off case, leaving the Windows explanation.
+- Data: SDK can_use_tool decision_reason_code field — Adds the case where the connector's limit is `ask` or could not be read.
+- Data: SDK initialize response sdk_mcp_manifests_parked field — Updates `not_honoured` reasons: manifests are declined outside interactive Cowork chats started from claude.ai.
+- Data: SDK read_file lossy field — Clarifies a read can cut a character at its end when truncated or its start when `offset` is set.
+- Data: SDK result runtime tuning environment bitmask field and startup garbage collection counts field — Reword the exception as sessions running in claude-code-server.
+- Data: SDK set model system prompt field — Renames the referenced variable to `CLAUDE_CODE_SYSTEM_PROMPT_FEATURE_FLAG`.
+- Data: SDK startup failure reason codes — Adds `managed_settings_not_delivered` for launches that could not use managed settings from initialize.
+- Data: SDK system init plugin_errors field — Covers plugins enabled by managed settings that fail to load, with a CI caveat for fresh runners.
+- Data: SDK turn handoff required rewind request ID field — Adds that a later worker holding the stored cut record answers a repeated rewind as done.
+- Data: SDK UI attach draws field, ui_invalidate event, and ui_invalidate instances field — Replace `Backdrop` with `Theme` as the drawn theme component and add `Progress` for mobile clients.
+- Data: SDK voice-call message origin schema — Adds that a note goes only to a process advertising `voice_call_talk_line_v1`.
+- Data: Tool result display metadata field — Subagent entries now carry `non_execution_kind` beside a reject; its absence does not prove the call ran.
+- Skill: Claude API sign-in guidance — Clarifies that sign-in needs a Console account separate from claude.ai, billed to the Console organization.
+- Skill: /doctor slash command, Skill: Workflow authoring reference, Tool Description: Agent (when to launch subagents), Tool Description: Invoke skill, and Tool Description: Workflow — Acknowledge that listings and confirmations can arrive as a message from the system.
+- System Prompt: Avoiding Unnecessary Sleep Commands (part of PowerShell tool description), Tool Description: Agent (usage notes), and Tool Description: Background monitor (streaming events) — Point to the new Yield tool for waiting on background work, where available.
+- System Prompt: Compaction omitted tool result handling — Drops the separate marker and rule for refused or stopped calls.
+- System Prompt: Non-fork subagent delegation examples and Subagent delegation examples — Replace "GrowthBook gate" with "feature flag" in the audit example.
+- System Prompt: Self-hosted runner doctor — A superseded work order now exits 1 instead of 0.
+- System Reminder: Attached machine idle disconnect notice and Attached machine signed-off notice — The run-commands-here instruction now adapts where every tool runs here.
+- System Reminder: Large file full-content reading guidance — The example instruction can now begin with a warning about Artifact content written by others.
+- System Reminder: MCP connector file path refusal — Exempts files directly in the project's connector-downloads folder.
+- System Reminder: Resumed command approval directory verification failure — Drops the approved-before-restart opening; the shell's directory may be given as last reported.
+- System Reminder: Subagent write blocked pending worktree isolation — Rewords the worktree option, dropping the `git worktree add` instruction.
+- Tool Description: Artifact action reference — Removes the conditional live-files sync bullet.
+- Tool Description: Artifact quickstart type guidance, Artifact type discovery guidance, and their app wordings — Add spreadsheet requests and `.xlsx` to the file formats a listed type is preferred over.
+- Tool Description: ListConnectors and SearchMcpRegistry — No longer tell users a connector is unavailable here; Claude must not name a per-chat setting.
+- Tool Description: REPL persistent helper interface — Adds an optional note that `&`, `<` and `>` appear HTML-escaped in output.
+- Tool Description: SendUserFile — Adds a `status` variant saying neither status notifies, so Claude also calls PushNotification.
+- Tool Parameter: set_cwd needs_trust directory — The unsafe-character rejection now also covers the repository root and lone surrogates.
+
 #### [2.1.322](https://github.com/Piebald-AI/claude-code-system-prompts/commit/8d1fed5)
 
 <sub>_No changes to the system prompts in v2.1.322._</sub>
