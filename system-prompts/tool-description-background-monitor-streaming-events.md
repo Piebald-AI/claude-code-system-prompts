@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: Background monitor (streaming events)"
 description: "Describes the background monitor tool that streams stdout events from long-running scripts as chat notifications, with guidelines on script quality, output volume, and selective filtering"
-ccVersion: "2.1.314"
+ccVersion: "2.1.323"
 variables:
   - "IS_DISKLESS_SESSION_FN"
   - "DISKLESS_MONITOR_LIFETIME_NOTE"
@@ -12,6 +12,8 @@ variables:
   - "SINGLE_NOTIFICATION_GUIDANCE_BLOCK"
   - "MONITOR_TOOL_NAME"
   - "IS_MONITOR_EXPIRY_ENABLED_FN"
+  - "CAN_YIELD"
+  - "YIELD_TOOL_NAME"
   - "SINGLE_NOTIFICATION_COMMAND_NOTE"
   - "MONITOR_TIMEOUT_GUIDANCE_FN"
 -->
@@ -23,7 +25,7 @@ ${IS_DISKLESS_SESSION_FN()||DOES_SESSION_STOP_AFTER_REPLY_FN()?`- **One per occu
 - **One per occurrence, until a known end, while you work on this turn** ("show each test file's result as the suite you just started runs, stop when it ends") → ${MONITOR_TOOL_NAME} with a command that emits lines and then exits.`:`- **One per occurrence, ${IS_MONITOR_EXPIRY_ENABLED_FN()?"until the monitor expires (re-arm to continue)":"indefinitely"}** ("tell me every time an ERROR line appears") → Monitor with an unbounded command (`tail -f`, `inotifywait -m`, `while true`).
 - **One per occurrence, until a known end** ("emit each CI step result, stop when the run completes") → Monitor with a command that emits lines and then exits.`}
 
-Your script's stdout is the event stream. Each line becomes a notification. Exit ends the watch.
+Your script's stdout is the event stream. Each line becomes a notification. Exit ends the watch.${CAN_YIELD?` ${MONITOR_TOOL_NAME} tells you when something happens; ${YIELD_TOOL_NAME} is how you wait for it.`:""}
 
   # Each matching log line is an event
   tail -f /var/log/app.log | grep --line-buffered "ERROR"

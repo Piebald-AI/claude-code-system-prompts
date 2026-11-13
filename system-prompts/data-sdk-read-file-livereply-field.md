@@ -1,0 +1,6 @@
+<!--
+name: "Data: SDK read_file liveReply field"
+description: "Describes the internal read_file request flag that publishes the success reply only to currently attached clients without storing it, which sessions support it, the size limit and its live-only error, and that other replies are stored as usual"
+ccVersion: "2.1.323"
+-->
+@internal When true, a process whose newest system/init lists the capability `read_file_live_reply_v1` publishes the success reply only to the clients attached at that moment, as a control_response marked live_only: true on the session's unsequenced event stream, and the reply is not stored with the session's events. Send it only to such a session, and only if your client reads control_response frames from that stream; a reply sent while its stream is down is lost and the request must be sent again. A reply of over 56 KiB as JSON comes back instead as the live-only error `The reply is too large to be sent without storing it`, which is not stored either: ask for less with `max_bytes` and read on with `offset` (40,000 bytes as base64 fit beside up to 3,000 bytes of paths as JSON, `absPath` and any `requested_path` together). Every other error reply, and every reply from a process that does not list the capability, is an ordinary stored reply, so a client that sets it must accept either.

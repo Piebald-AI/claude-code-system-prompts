@@ -1,0 +1,6 @@
+<!--
+name: "Data: SDK read_file offset field"
+description: "Describes the internal read_file request field for the byte a read starts at, counted from the file's start or back from its end, including clamping, how to read on with the response's offset and read_bytes, refused values, and responders that ignore it"
+ccVersion: "2.1.323"
+-->
+@internal The byte the read starts at, counted from the file's start or, when negative, back from its end, which is the response's `total_bytes`. It is held within the file: further back than the start counts as the start, and past the end as the end. The response's `offset` says where the read started. Up to `max_bytes` bytes (1,000,000 by default, 10,000,000 at most) are read from there, through the same gates as any other read_file, and `truncated` says that more lie past them. To read on, send the response's `offset` plus its `read_bytes`; an answer whose `offset` is less than the one sent did not start there, because the file ends sooner or is one that is only read from its start. Anything but a whole number from -(2^53 - 1) to 2^53 - 1, null included, is refused with the error `read denied: <path>`. A CLI that predates this field, and a session that reads through a tool container, ignore it, refusing no value of it, and read from the file's start: only an answer that has `offset` used it.

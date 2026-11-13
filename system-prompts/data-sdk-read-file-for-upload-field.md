@@ -1,0 +1,6 @@
+<!--
+name: "Data: SDK read_file for_upload field"
+description: "Describes the internal read_file request flag saying the caller means to hand the file on, which adds Claude Code's credential-file test, the refusals that result, and that only an answer carrying upload_screened used it"
+ccVersion: "2.1.323"
+-->
+@internal When true, the caller means to hand the file on, for example into an artifact that other people can open, so a file that every other gate has passed also goes through Claude Code's test for credential files (takenByPathRefusal). One whose path has a credential's name or place, as sent or as it resolves, or is too dressed or too deep for the test to judge, is refused with the error_code credential_name (read_denied with the anchor as_written); one of Claude Code's own files, or a kernel or device path, is refused with no error_code. A file with more than one hard link is served: a caller that minds looks for itself. Only an answer that has `upload_screened` used the member. A CLI that predates it, the Remote Control bridge that a session itself runs, the engine's readFile and a session that reads through a tool container ignore it and answer as for a plain read_file, so a caller must take a success without `upload_screened` as a file whose name was not tested.

@@ -1,7 +1,7 @@
 <!--
 name: "Skill: Workflow authoring reference"
 description: "Skill reference for authoring Workflow scripts, covering script persistence, metadata, agent hooks, isolation, concurrency, budgeting, quality patterns, and resume behavior"
-ccVersion: "2.1.315"
+ccVersion: "2.1.323"
 variables:
   - "WORKFLOW_INVOCATION_QUALIFIER"
   - "WORKFLOW_SCRIPT_PATH_NOTE"
@@ -27,7 +27,7 @@ Common single-phase workflows you can chain across turns:
 
 For larger work, run several in sequence — read each result before deciding the next phase. You stay in the loop; each workflow is one well-scoped fan-out.
 
-**Ultracode.** When a system-reminder confirms ultracode is on, that opt-in is standing: author and run a workflow for every substantive task by default. The goal is the most exhaustive, correct answer you can produce — token cost is not a constraint. For multi-phase work (understand → design → implement → review), that often means several workflows in sequence — one per phase — so you stay in the loop between them. The quality patterns below (adversarial verify, multi-modal sweep, completeness critic, loop-until-dry) are the tools; pick what fits the task. Lean toward orchestrating with workflows and adversarially verifying your findings — unless the work is trivial or already verified. Solo only on conversational turns or trivial mechanical edits. When a reminder says ultracode is off, revert to the opt-in rule in the Workflow tool description.
+**Ultracode.** When a system-reminder or a message from the system confirms ultracode is on, that opt-in is standing: author and run a workflow for every substantive task by default. The goal is the most exhaustive, correct answer you can produce — token cost is not a constraint. For multi-phase work (understand → design → implement → review), that often means several workflows in sequence — one per phase — so you stay in the loop between them. The quality patterns below (adversarial verify, multi-modal sweep, completeness critic, loop-until-dry) are the tools; pick what fits the task. Lean toward orchestrating with workflows and adversarially verifying your findings — unless the work is trivial or already verified. Solo only on conversational turns or trivial mechanical edits. When a reminder says ultracode is off, revert to the opt-in rule in the Workflow tool description.
 
 Pass the script inline via `script` — do not Write it to a file first. Every${WORKFLOW_INVOCATION_QUALIFIER} invocation automatically persists its script to a file under the session directory and returns the path in the tool result. To iterate on a workflow, edit that file with Write/Edit and re-invoke Workflow with `{scriptPath: "<path>"}` instead of resending the full script.${WORKFLOW_SCRIPT_PATH_NOTE}
 
