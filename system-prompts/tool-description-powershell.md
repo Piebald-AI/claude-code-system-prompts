@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: PowerShell"
 description: "Describes the PowerShell command execution tool with syntax guidance, timeout settings, and instructions to prefer specialized tools over PowerShell for file operations"
-ccVersion: "2.1.285"
+ccVersion: "2.1.326"
 variables:
   - "RENDER_POWERSHELL_EDITION_GUIDANCE_FN"
   - "POWERSHELL_EDITION"
@@ -38,6 +38,7 @@ PowerShell Syntax Notes:
    - Escape character is backtick (`), not backslash
    - Use Verb-Noun cmdlet naming: Get-ChildItem, Set-Location, New-Item, Remove-Item
    - Common aliases: ls (Get-ChildItem), cd (Set-Location), cat (Get-Content), rm (Remove-Item)
+   - Give helper functions a new Verb-Noun name such as Read-Doc, also in script files. A built-in alias (rd, rm, del, ri, sc, mv and others) runs instead of a function with the same name, with no warning.
    - Pipe operator | works similarly to bash but passes objects, not text
    - Use Select-Object, Where-Object, ForEach-Object for filtering and transformation
    - String interpolation: "Hello $name" or "Hello $($obj.Property)"

@@ -1,7 +1,7 @@
 <!--
 name: "Data: Files API reference — TypeScript"
 description: "TypeScript Files API reference including file upload, listing, deletion, and usage in messages"
-ccVersion: "2.1.251"
+ccVersion: "2.1.326"
 -->
 # Files API - TypeScript
 
@@ -65,7 +65,9 @@ const response = await client.beta.messages.create({
   betas: ["files-api-2025-04-14"],
 });
 
-console.log(response.content[0].text);
+for (const block of response.content) {
+  if (block.type === "text") console.log(block.text);
+}
 ```
 
 ---

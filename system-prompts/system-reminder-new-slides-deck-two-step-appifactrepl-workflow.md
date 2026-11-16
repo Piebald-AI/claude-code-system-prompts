@@ -1,25 +1,29 @@
 <!--
 name: "System Reminder: New Slides deck two-step AppifactRepl workflow"
 description: "Directs a new Slides deck through a first step that reads prefetched instructions and a second step that builds ordered slides with AppifactRepl"
-ccVersion: "2.1.273"
+ccVersion: "2.1.326"
 -->
 [This deck in two steps] Everything this deck needs is already on disk, in the files listed with this note. Two steps make the deck.
 
 Step 1, one message: the Bash call or calls the notes give, if any, copied as they are. In that same message, read this artifact's url with the Artifact tool (the read call given below, the url alone, no path): it returns the type's instructions (SKILL.md) and records that you have seen this version. Unless the user says they have written in it, the deck is new and empty: the read is for the instructions and the version, not for content. You do not need the ArtifactData tool, Read, Skill or ToolSearch for any of this, nor a second read step: everything else is already printed. Where the printed instructions tell you to read one of the type's reference pages, that reading is this step: those pages are on disk, and the ones you need are the ones you have just printed.
 
-Step 2, one message: for this NEW deck, where the section below says "Create: one call", send instead one AppifactRepl call per slide, each called as `{artifact: <this Artifact's url>, code}`, ALL in this one message (parallel tool calls), in deck order, after ONE first call that writes only the deck's frame. The deck is kept as files under `project/`, nothing in the store: the index is `project/deck.json` and each slide is `project/slides/<id>.html`. The FIRST call, the frame alone:
+Step 2, one message: for this NEW deck, where the section below says "Create: one call", send instead one AppifactRepl call per slide, each called as `{artifact: <this Artifact's url>, code}`, ALL in this one message (parallel tool calls), in deck order, after ONE first call that writes only the deck's frame. The deck is kept as files under `project/`, nothing in the store: the index is `project/deck.json`, the rules and `--variables` every slide shares are in `project/deck.css`, and each slide is `project/slides/<id>.html`. The FIRST call, the frame alone:
 ```js
 const files = await claude.use("files");
 const fs = require("fs"), path = require("path");
-// the index: read it when it is listed, else start it with its createdOnFiles key; name EVERY planned slide in order, keep every other key, publish that one file
-const listed = (await files.list()).some(f => f.path === "project/deck.json");
-const deck = listed ? JSON.parse(await files.read("project/deck.json")) : { v:4, order:[], sections:{}, faces:{}, designSystems:[], attachments:{}, createdOnFiles:{ v:1, at:new Date().toISOString() } };
+// the index: read it when it is listed, else start it with its createdOnFiles key; name EVERY planned slide in order, keep every other key, publish it with the stylesheet it lists, which no slide shows without
+const paths = (await files.list()).map(f => f.path), css = "project/deck.css";
+const deck = paths.includes("project/deck.json") ? JSON.parse(await files.read("project/deck.json")) : { order:[], sections:{}, faces:{}, designSystems:[], attachments:{}, createdOnFiles:{ v:1, at:new Date().toISOString() } };
+if (!deck.format && !deck.order?.length) Object.assign(deck, { v:5, lists:"css", format:{ v:1, shared:[css] } });   // a deck with slides keeps what it has
 deck.title = title;
 deck.order = ["cover","plan","risks"];
 deck.sections = { s1:{ description:"<one line>", start:"cover" } };
 fs.mkdirSync(path.join(files.dir(), "project"), { recursive: true });
 fs.writeFileSync(path.join(files.dir(), "project/deck.json"), JSON.stringify(deck, null, 2) + "\n");
-await files.publish({ file_path: "project/deck.json" });
+const newCss = deck.format?.shared?.includes(css) && !paths.includes(css);
+if (!newCss) console.log("project/deck.css was not sent: this deck keeps inline styles or already has one, so give new slides what it needs.");
+if (newCss) fs.writeFileSync(path.join(files.dir(), css), deckCss);   // deckCss: the rules and --variables every slide shares; a comment alone when there are none
+await files.publish({ file_path: "project/deck.json", files: newCss ? { [css]: css } : undefined });
 ```
 Then one call per slide, each a complete small program of its own, with the `html` typed inline once; speaker notes, if any, are the `<aside>` that is the last child of the `<section>`, plain text:
 ```js

@@ -1,9 +1,11 @@
 <!--
 name: "Tool Description: TaskCreate"
 description: "Tool description for TaskCreate tool"
-ccVersion: "2.1.84"
+ccVersion: "2.1.326"
 variables:
   - "CONDITIONAL_TEAMMATES_NOTE"
+  - "DESCRIPTION_FIELD_GUIDANCE"
+  - "ACTIVE_FORM_FIELD_GUIDANCE"
   - "CONDITIONAL_TASK_NOTES"
 -->
 Use this tool to create a structured task list for your current coding session. This helps you track progress, organize complex tasks, and demonstrate thoroughness to the user.
@@ -35,8 +37,8 @@ NOTE that you should not use this tool if there is only one trivial task to do. 
 ## Task Fields
 
 - **subject**: A brief, actionable title in imperative form (e.g., "Fix authentication bug in login flow")
-- **description**: What needs to be done
-- **activeForm** (optional): Present continuous form shown in the spinner when the task is in_progress (e.g., "Fixing authentication bug"). If omitted, the spinner shows the subject instead.
+- ${DESCRIPTION_FIELD_GUIDANCE}
+- **activeForm** (optional): ${ACTIVE_FORM_FIELD_GUIDANCE}
 
 All tasks are created with status `pending`.
 

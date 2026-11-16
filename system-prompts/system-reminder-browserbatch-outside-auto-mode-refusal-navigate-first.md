@@ -1,0 +1,6 @@
+<!--
+name: "System Reminder: BrowserBatch outside auto mode refusal (navigate first)"
+description: "Variant of the browser_batch refusal outside auto mode that also allows a leading navigate to an allowed site, and explains how to split other actions into separate calls"
+ccVersion: "2.1.326"
+-->
+Nothing in this call ran. Outside auto mode a browser_batch runs only if every action is a computer, find, form_input, get_page_text, read_page, read_console_messages, read_network_requests or javascript_tool call with the same tabId, and that tab shows a site that the user has allowed for this chat. The first action may also be a navigate with that tabId to a page of such a site, if at least one of these actions follows it. The tab may then show any site before the navigate. If this batch holds another action, such as a second navigate or a navigate to a site that the user has not allowed, make that action its own call, and batch the actions before it and the actions after it separately. You can send these calls together in one reply: they run in order. But a later call still runs if an earlier one fails, so after a navigate that is its own call, send a click, typing or a script only when you have its result. If the actions name no tabId or different ones, correct that. If every action already fits, this batch can't run here: make each action its own call.

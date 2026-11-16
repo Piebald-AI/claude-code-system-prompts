@@ -1,13 +1,13 @@
 <!--
 name: "Skill: Generate permission allowlist from transcripts"
 description: "Analyzes session transcripts to extract frequently used read-only tool-call patterns and adds them to the project's .claude/settings.json permission allowlist to reduce permission prompts"
-ccVersion: "2.1.324"
+ccVersion: "2.1.326"
 -->
 # Fewer Permission Prompts
 
 Look through my transcripts' MCP and bash tool calls, and based on those, make a prioritized list of patterns that I should add to my permission allowlist to reduce permission prompts. Focus on read-only commands.
 
-The format for permissions is: `Bash(foo*)`, `Bash(foo)`, `Bash(foo bar *)`, `mcp__slack__slack_read_thread`, etc.
+The format for permissions is: `Bash(foo *)`, `Bash(foo)`, `Bash(foo bar *)`, `mcp__slack__slack_read_thread`, etc.
 
 Then, add these to the project `.claude/settings.json` under `permissions.allow`.
 

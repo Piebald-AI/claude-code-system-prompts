@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code gateway protocol"
 description: "Markdown reference documenting the Claude Code gateway wire contract, including OAuth 2.0 device flow, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Bedrock, Vertex, and Foundry"
-ccVersion: "2.1.319"
+ccVersion: "2.1.326"
 variables:
   - "REQUEST_TAGS_BETA"
 -->
@@ -407,6 +407,9 @@ provider's Claude endpoint needs translation:
   A second exception is Bedrock's 400 whose whole message is
   `Input is too long.`: send exactly that as `error.message`; the client's
   recovery (drop older images, then compact) matches the whole message.
+  Send that same sentence for Vertex's size 400, e.g.
+  `The request size (30037042 bytes) exceeds 30.000MB limit.` (also worded
+  `The message size …`).
 
 ## References
 

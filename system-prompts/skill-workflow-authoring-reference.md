@@ -1,7 +1,7 @@
 <!--
 name: "Skill: Workflow authoring reference"
 description: "Skill reference for authoring Workflow scripts, covering script persistence, metadata, agent hooks, isolation, concurrency, budgeting, quality patterns, and resume behavior"
-ccVersion: "2.1.323"
+ccVersion: "2.1.326"
 variables:
   - "WORKFLOW_INVOCATION_QUALIFIER"
   - "WORKFLOW_SCRIPT_PATH_NOTE"
@@ -145,4 +145,4 @@ Use this tool for multi-step orchestration where control flow should be determin
 
 ## Resume
 
-The tool result includes a runId. To resume after a pause, kill, or script edit, relaunch with Workflow({scriptPath, resumeFromRunId}) — the longest unchanged prefix of agent() calls returns cached results instantly; the first edited/new call and everything after it runs live. Same script + same args → 100% cache hit. Before diagnosing why a completed workflow returned an empty or unexpected result, Read <transcriptDir>/journal.jsonl — it records each agent's actual return value; do not assume cached results are non-empty. Date.now()/Math.random()/new Date() are unavailable in scripts (they would break this) — stamp results after the workflow returns, or pass timestamps via args. Fallback when no journal is available: Read agent-<id>.jsonl files in the transcript directory and hand-author a continuation script.
+The tool result includes a runId. To resume after a pause, kill, or script edit, relaunch with Workflow({scriptPath, resumeFromRunId}) — the longest unchanged prefix of agent() calls returns cached results instantly; the first edited, new, failed or never-started call and everything after it runs live. Same script + same args → 100% cache hit unless a call failed or never finished. Before diagnosing why a completed workflow returned an empty or unexpected result, Read <transcriptDir>/journal.jsonl — it records each agent's actual return value; do not assume cached results are non-empty. Date.now()/Math.random()/new Date() are unavailable in scripts (they would break this) — stamp results after the workflow returns, or pass timestamps via args. Fallback when no journal is available: Read agent-<id>.jsonl files in the transcript directory and hand-author a continuation script.
