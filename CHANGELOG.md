@@ -4,6 +4,63 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.326](https://github.com/Piebald-AI/claude-code-system-prompts/commit/5086ce6)
+
+_-2,897 tokens_
+
+- **NEW:** Data: Sandbox Windows backend setting — Documents choosing between the sandbox account and a Microsoft eXecution Container on Windows, when Claude Code falls back from MXC, and that project settings can't set it.
+- **NEW:** Data: SDK initialize mcpServers parameter and SDK initialize response mcp_servers_applied field — Let hosts pass MCP server configs over stdin at launch, keeping credentials off the command line, and report whether that set was applied.
+- **NEW:** Data: SDK MCP server errors field — Lists MCP server config entries skipped for failing validation on the init frame, so hosts and CI can detect skipped servers.
+- **NEW:** Data: SDK result memory_check_detail field — Reports how a cloud turn's memory-change check went: whether the turn was held, how the hold ended, and whether the answer arrived.
+- **NEW:** Data: SDK set_message_waiting control request — Lets a Claude Desktop host say it is holding a person's message, so the turn ends without waiting for the post-turn summary model call.
+- **NEW:** Data: SDK UI Shader backdrop component, SDK ui_render props field, and SDK ui_message control request — Add GPU shader backdrops for themes, document component props including context menus, and route desktop Client posts and backdrop clicks to plugins.
+- **NEW:** Tool Description: PauseGoal — Lets Claude stop for a blocker that needs the user, so the goal stops sending it back to work until their next message while completion checks still run.
+- **NEW:** System Reminder: Oversized user message (ends only) and Oversized user message (saved to file) — Stand in for a too-long user message with its two ends, plus a saved file when available; Claude must not guess the missing middle.
+- **NEW:** System Prompt: Linux sandbox private network retry guidance and Linux sandbox private network user alternatives — Explain that each sandboxed Linux command has its own network, so servers must be tested within one command or run outside the sandbox.
+- **NEW:** System Prompt: Windows MXC sandbox environment and System Reminder: Bash refused on MXC sandbox backend — Describe the Windows container sandbox's file, network and temp-folder limits, and redirect refused Bash commands to PowerShell.
+- **NEW:** System Reminder: MCP servers require authentication — Lists servers needing authorization, to be mentioned only when the request depends on them, never asking for tokens, and retrying servers whose sign-in may still work.
+- **NEW:** System Reminder: Claude in Chrome MCP servers disabled by policy — Says organization policy disabled Claude in Chrome, so retrying won't help and the browser must not be controlled another way unless asked.
+- **NEW:** System Reminder: Deferred tools available (shortened list) — Collapses each MCP server's deferred tools into one wildcard row and explains loading them with `+server` ToolSearch queries.
+- **NEW:** Skill: Update config all settings index — Adds an index of every settings.json key and points Claude to per-key schema files before writing an unfamiliar key.
+- **NEW:** System Reminder: Project document rewrite refusal with current text — Refuses a blind `project_write` but attaches the doc's current text, treated as data, so the change can be made in it.
+- **NEW:** Tool Parameter: Workflow resume run ID — Explains resuming a prior Workflow run from cache: calls replay until the first changed, failed or unstarted one, and the prior run must be stopped first.
+- **NEW:** System Reminder: BrowserBatch outside auto mode refusal (navigate first) — Adds a feature-gated variant that lets a batch open with one navigate to an allowed site before the tab actions.
+- **REMOVED:** Agent Prompt, System Prompt and Tool Description lean rewrite variants (23 prompts) — Removes the whole feature-gated alternate prompt set, from harness instructions to the Agent, AskUserQuestion, Grep, Skill, ToolSearch and Workflow descriptions; standard prompts remain.
+- **REMOVED:** Skill: Mod look reference — The reference no longer ships as extractable text; Claude Code now bundles it as a compressed skill document.
+- **REMOVED:** System Reminder: Post-compaction conversation reread guidance — Drops the instruction to reread pre-compaction text with the conversation-reading tool before quoting it.
+- **REMOVED:** System Reminder: Hook stopped continuation prefix — Drops the standalone prefix fragment; the full Hook stopped continuation reminder is unchanged.
+- Data: Claude Code gateway protocol — Tells gateways to return the same request-too-large sentence for Vertex's size-limit 400 errors.
+- Data: Files API reference — TypeScript — Prints every text block in the response instead of assuming the first content block is text.
+- Data: Rewind files skippedLinks field — Also counts files skipped because they sit behind a link in a folder sandboxed commands can write.
+- Data: SDK API error kind field — Adds `tls_cert_signature_failure` and `message_over_context_limit`, and clarifies that `empty_completion` covers person- and host-sent messages but not synthetic or scheduled-task ones.
+- Data: SDK MCP server dataFlowServer field — Accepts Anthropic registry servers in VS Code extension sessions too, but only the claude-vscode server.
+- Data: SDK read_file for_upload field — Also refuses paths containing a `..namedfork` part.
+- Data: SDK startup failure reason codes — `managed_settings_not_delivered` now also covers a malformed `mcpServers` field in the initialize request.
+- Data: SDK UI attach draws field and SDK ui_invalidate event — Add `Shader` as a client capability, sending the Svg fallback to clients that lack it and re-rendering when a client starts drawing it.
+- Data: Tool result display metadata field — Adds the `plugin_cut` label for a plugin that cancelled its own call while it waited.
+- Data: Tool use display metadata field — Drops the Remote Control exclusion, marks only calls from the sending process's own model replies, and explains saved-session URLs and titles.
+- Data: Tool use reference (C#, Ruby) — Says the large-job batch offer isn't for agents, where SKILL.md's surface guidance decides and defaults to Managed Agents.
+- Skill: Artifact design direction cards — Swaps the Metro diagram fonts to Figtree and the Control room fonts to Inter Tight and Inter.
+- Skill: Claude API sign-in guidance — Requires warning that Claude Code may switch to the Console sign-in without asking, sending the conversation and billing that organization, and skips test calls when network use is forbidden.
+- Skill: /doctor slash command — Asks for fast checks with findings shared as they come, never printing lines around settings parse errors, and runs `--version` only on the managed install.
+- Skill: Generate permission allowlist from transcripts — Corrects the prefix-rule example to `Bash(foo *)`, with a space before the wildcard.
+- Skill: /insights report output — Makes the facets directory line optional and adds an optional line about sessions left out of the analysis to the shareable reply.
+- Skill: Workflow authoring reference — Notes that failed or unfinished `agent()` calls also end cache reuse and run again.
+- System Prompt: Memory instructions — Drops the alternate memory hygiene branch; the save exclusions and recall verification guidance now always apply.
+- System Prompt: Minimal mode — Notes that hooks from the organization's managed plugins still run, and spells out "Third-party" providers.
+- System Prompt: PR Steward handoff guidance — Describes Steward as fixing CI and working through review comments instead of merging pull requests.
+- System Reminder: AppifactRepl Slides deck workflow, New Slides deck parallel AppifactRepl workflow, and New Slides deck two-step AppifactRepl workflow — Move rules and CSS variables shared by every slide into a `project/deck.css` stylesheet that new decks list and publish.
+- System Reminder: Background MCP call stopping session warning — For a call moved to the background so a message could arrive, says it is cut off soon after the reply and to check its work before calling again.
+- System Reminder: File truncated — Says when the rest of a truncated file can't be read in this session, instead of offering to read more.
+- System Reminder: MCP connector name too long for file approval — Counts each of two or more consecutive apostrophes or backticks as six characters.
+- System Reminder: MCP server connection retry guidance — Replaces the fixed reconnect interval with waits between tries.
+- System Reminder: Oversized mentioned file reading guidance — Adds a note, when a mentioned path was shortened, that the user's message has the whole path.
+- Tool Description: Background monitor (streaming events) — Adds lifetime guidance for sessions where monitors outlive the reply but only a few can start, and adds `-q` to the inotifywait example.
+- Tool Description: ExitWorktree — Keeps the branch when a hook made the worktree or git refuses deletion, and refuses while a task may still be running there.
+- Tool Description: PowerShell — Tells Claude to give helper functions new Verb-Noun names because built-in aliases silently run instead of same-named functions.
+- Tool Description: ProposeGoal — Reframes it as setting a stop-check goal, always asking while a goal is active, never calling a proposal pending, and not suggesting /goal clear after success.
+- Tool Description: TaskCreate — Lets the description and activeForm field guidance vary, optionally making description optional or telling Claude to leave activeForm out.
+
 #### [2.1.325](https://github.com/Piebald-AI/claude-code-system-prompts/commit/d545d41)
 
 <sub>_No changes to the system prompts in v2.1.325._</sub>
