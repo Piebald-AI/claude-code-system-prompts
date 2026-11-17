@@ -4,6 +4,46 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.327](https://github.com/Piebald-AI/claude-code-system-prompts/commit/f212301)
+
+_+971 tokens_
+
+- **NEW:** Data: SDK initialize settings parameter, SDK initialize disallowedTools parameter, and SDK initialize response settings_applied field — Document sending startup settings and deny rules over stdin, and checking that the host's settings were used before sending a prompt.
+- **NEW:** Data: SDK initialize host_dropped_env field — Lists the names, never the values, of managed provider or gateway variables Claude Desktop dropped for a direct Anthropic session.
+- **NEW:** Data: SDK plugin requiredByOrganization field — Documents a marker for organization-required or auto-installed plugins without granting them permissions.
+- **NEW:** Data: SDK read_file diff rootId field — Documents sending back the workspace diff's root ID so a read can reject an old path after a root change or restart.
+- **NEW:** Data: Server classifier instruction file retry warning — Explains the retry without full instruction files after a 400 or 413, and when the permission check reads only their opening text.
+- **NEW:** System Prompt: Cross-session message attribution during compaction — Tells Claude to credit another session's request separately from the user's own words and carry forward its limits and doubts.
+- **NEW:** System Prompt: Git workflow guidance — Collects Git and GitHub instructions for the shell, including how to avoid unintended mentions, protect secrets, and commit or push only on request.
+- **NEW:** System Prompt: Untrusted external input guidance — Tells Claude to validate outside inputs before giving them to tools, check redirects in the downloader, and inspect downloaded files before using project tools.
+- **NEW:** System Reminder: Auto mode safety check unavailable — Explains why the tool didn't run and leaves any permission mode or connector changes to the user.
+- **NEW:** System Reminder: Oversized non-user message (ends only) — Shows the first and last parts and tells Claude not to act on their incomplete request or guess what went missing.
+- **NEW:** System Reminder: Preview browser executable refusal — Explains why preview won't run a browser the session can modify and how to choose an installation outside those locations.
+- **NEW:** System Reminder: Project document size limit refusal — Explains that a write over 1.9 MB leaves the old document untouched and offers to save the new text across smaller documents.
+- **NEW:** System Reminder: Unsupported connector file reference refusal — Tells Claude to name the unsent file and ask before sending a connector request without it.
+- **NEW:** Tool Description: Gmail attachment file references — Tells Claude to attach local files by reference in new drafts and sends, and to recreate a draft when its attachments still belong there.
+- **REMOVED:** Agent Prompt: Claude Test author and Claude Test explorer, Data: Claude Test spec file format, and Skill: Claude Test sign-in — These four Claude Test entries no longer appear in the extracted prompt set.
+- **REMOVED:** Tool Description: Edit minimal old_string guidance — Drops the standalone guidance about using a small replacement target.
+- Agent Prompt: Quick git commit and Quick PR creation — Add the `--` separator to the `git diff HEAD` command that gathers change context.
+- Agent Prompt: Status line setup — Uses the active configuration directory for `settings.json` instead of assuming `~/.claude`.
+- Agent Prompt: Web fetch agent usage guidance — In first-party proxy mode, tells Claude to pass only URLs seen in the conversation, search results, or earlier fetch reports.
+- Data: attributionProject setting — Explains that a gateway can use the setting to report usage by billing group, independently of the Claude attribution-header toggle.
+- Data: Claude Code agent proxy troubleshooting guide — Explains immediate 429s when too many connections are open and 408s when a request isn't complete within 30 seconds.
+- Data: Claude Code gateway protocol — Documents opt-in policy checksums for troubleshooting, with interactive approval, and notes that Claude Code reads JWT claims without verifying them, including the billing tag.
+- Data: SDK api_error_type field — Adds `permission_error` to the documented response types that Claude Code's server can generate itself.
+- Data: SDK read_file anchor field — Points clients to the new optional `rootId` on a `diff_root` anchor.
+- Data: SDK result memory_check_detail field — Reports the age of the startup memory check and distinguishes turns that waited because it was older than the startup grace period.
+- Data: SDK result request_build_detail field — Clarifies that cloud server workers prepare the prompt-state record during request building but write it after dispatch.
+- Data: SDK startup failure reason codes — Covers missing or conflicting initialize fields and clarifies how a non-UTF-8 working-directory name can prevent startup outside Windows.
+- Data: Tool result display metadata field — Documents whether a plugin permission hook's approval was used or refused during `claude plugin eval`.
+- Data: Turn handoff available event schema — Adds `comparison_fork` to the capabilities a cloud worker can announce to its session client.
+- System Reminder: Deferred tools available (shortened list) — Tells Claude to search relevant connectors before answering from memory or saying that a capability isn't available.
+- Tool Description: Claude in Chrome switched-off chat guidance and Claude in Chrome switched-off and unlinked chat guidance — Point to Connectors or Plugins under the chat's plus menu.
+- Tool Description: ListAgents and ListAgents (no SendMessage tool) — Explain how to use the cursor to fetch the next page of a long session list.
+- Tool Description: PowerShell and PowerShell (git guidance) — Tell Claude to leave likely secret files out of commits and warn if the user specifically requests one.
+- Tool Description: TaskCreate — Adds a shorter task-title style and makes descriptions and progress labels optional in the compact variant.
+- Tool Description: WebSearch and WebSearch (concise) — Can add a 125-character per-page quoting limit and a ban on reproducing song lyrics when citations are off.
+
 # [2.1.326](https://github.com/Piebald-AI/claude-code-system-prompts/commit/5086ce6)
 
 _-2,897 tokens_
