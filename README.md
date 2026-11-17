@@ -1,3 +1,11 @@
+> [!tip]
+> **NEW! :tada:**
+> [**Real Claude Code Changelog**](https://github.com/Piebald-AI/real-claude-code-changelog)
+>
+> Claude Code's release notes only describe what Anthropic chooses to announce, not everything they actually change. Bug fixes sometimes ship in one version but get announced in another, and even significant features can go unmentioned entirely.
+>
+> **[Read the changelog →](https://github.com/Piebald-AI/real-claude-code-changelog#changelog)**
+
 <div>
 <div align="right">
 <a href="https://piebald.ai"><img width="200" top="20" align="right" src="https://github.com/Piebald-AI/.github/raw/main/Wordmark.svg"></a>
