@@ -1,15 +1,6 @@
 <!--
 name: "System Reminder: Session context"
-description: "Provides selected session context values, marks replacement updates, and notes that Claude Code attached the context automatically and it need not be reported back to the user"
-ccVersion: "2.1.285"
-variables:
-  - "HAS_SESSION_CONTEXT_CHANGED"
-  - "SESSION_CONTEXT_REFRESH_REASON"
-  - "FORMAT_SESSION_CONTEXT_REFRESH_REASON_FN"
-  - "SESSION_CONTEXT_ENTRIES"
+description: "Introduces the session context that Claude Code adds to the conversation"
+ccVersion: "2.1.327"
 -->
-${HAS_SESSION_CONTEXT_CHANGED?SESSION_CONTEXT_REFRESH_REASON?`The session context was re-read ${FORMAT_SESSION_CONTEXT_REFRESH_REASON_FN(SESSION_CONTEXT_REFRESH_REASON)}; these values replace the earlier ones:`:"The session context has changed; these values replace the earlier ones:":"As you answer the user's questions, you can use the following context:"}
-${SESSION_CONTEXT_ENTRIES.join(`
-`)}
-
-Claude Code attached this context automatically; it isn't part of the user's message. It describes the user's own account and workspace, so they don't need it reported back.
+As you answer the user's questions, you can use the following context:

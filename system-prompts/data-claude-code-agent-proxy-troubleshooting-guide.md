@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code agent proxy troubleshooting guide"
 description: "Troubleshooting guide for Claude Code's policy-enforcing HTTPS agent proxy, covering TLS trust setup, status checks, git, docker, and unsupported traffic"
-ccVersion: "2.1.317"
+ccVersion: "2.1.327"
 variables:
   - "AGENT_PROXY_URL"
   - "AGENT_PROXY_CA_BUNDLE_PATH"
@@ -77,6 +77,19 @@ fewer downloads or requests at once, then retry. connectsWaitingForTunnel and
 openTunnels in the status output show the load. busyTunnels includes idle
 connections until one has to wait, so alone it does not show load, and it can
 pass maxBusyTunnels.
+
+The proxy also answers 429 immediately when too many connections to it are open,
+idle ones included (too_many_connections in the [agent-proxy] lines under a
+failed command). Look for a program that opens connections and never closes
+them. New connections work again once some have closed.
+
+### 408 from the proxy
+
+The tool opened a connection to the proxy and sent no complete request within 30
+seconds, so the proxy closed it. Retry once. If it happens again, the tool opens
+connections before it has a request to send, it is paused or short of CPU, or its
+request never ends with an empty line in CRLF form (bare LF line ends, or another
+protocol such as SOCKS).
 
 ### "connection reset" / "unexpected disconnect" / "RPC failed" mid-transfer
 

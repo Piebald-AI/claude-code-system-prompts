@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: PowerShell"
 description: "Describes the PowerShell command execution tool with syntax guidance, timeout settings, and instructions to prefer specialized tools over PowerShell for file operations"
-ccVersion: "2.1.326"
+ccVersion: "2.1.327"
 variables:
   - "RENDER_POWERSHELL_EDITION_GUIDANCE_FN"
   - "POWERSHELL_EDITION"
@@ -101,3 +101,4 @@ ${BACKGROUND_EXECUTION_NOTE?BACKGROUND_EXECUTION_NOTE+`
     - Prefer to create a new commit rather than amending an existing commit.
     - Before running destructive operations (e.g., git reset --hard, git push --force, git checkout --), consider whether there is a safer alternative that achieves the same goal. Only use destructive operations when they are truly the best approach.
     - Never skip hooks (--no-verify) or bypass signing (--no-gpg-sign, -c commit.gpgsign=false) unless the user has explicitly asked for it. If a hook fails, investigate and fix the underlying issue.
+    - Do not commit files that likely contain secrets (.env, credentials.json, .claude/settings.local.json, etc). Warn the user if they specifically request to commit those files.

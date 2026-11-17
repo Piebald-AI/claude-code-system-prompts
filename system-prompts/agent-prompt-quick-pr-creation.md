@@ -1,7 +1,7 @@
 <!--
 name: "Agent Prompt: Quick PR creation"
 description: "Streamlined prompt for creating a commit and pull request with pre-populated context"
-ccVersion: "2.1.323"
+ccVersion: "2.1.327"
 variables:
   - "SAFE_USER_VALUE"
   - "WHOAMI_VALUE"
@@ -24,7 +24,7 @@ variables:
 - `SAFEUSER`: ${SAFE_USER_VALUE}
 - `whoami`: ${WHOAMI_VALUE}
 - `git status`: !`git status`
-- `git diff HEAD`: !`git diff HEAD`
+- `git diff HEAD --`: !`git diff HEAD --`
 - `git branch --show-current`: !`git branch --show-current`
 - `git diff ${DEFAULT_BRANCH}...HEAD`: !`git diff ${DEFAULT_BRANCH}...HEAD`
 - `gh pr view --json number`: !`${IS_BASH_ENV_FN()?"gh pr view --json number 2>/dev/null || true":'gh pr view --json number 2>$null; if (-not $?) { "" }'}`${REPO_PR_TEMPLATE_CONTEXT_BLOCK}

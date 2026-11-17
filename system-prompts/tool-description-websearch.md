@@ -1,9 +1,10 @@
 <!--
 name: "Tool Description: WebSearch"
 description: "Full WebSearch tool description: searching beyond the knowledge cutoff, US-only with domain filters, current-month year guidance, and either a mandatory Sources list or, when web-search citations are enabled, a note that result text is untrusted"
-ccVersion: "2.1.295"
+ccVersion: "2.1.327"
 variables:
   - "IS_WEBSEARCH_CITATIONS_ENABLED"
+  - "WEB_SEARCH_QUOTING_GUIDANCE_BLOCK"
   - "UNTRUSTED_SEARCH_RESULT_CONTENT_NOTE"
   - "CURRENT_MONTH_YEAR"
 -->
@@ -12,7 +13,7 @@ variables:
 - Provides up-to-date information for current events and recent data
 - Returns search result information formatted as search result blocks${IS_WEBSEARCH_CITATIONS_ENABLED?"":", including links as markdown hyperlinks"}
 - Use this tool for accessing information beyond Claude's knowledge cutoff
-- Searches are performed automatically within a single API call
+- Searches are performed automatically within a single API call${WEB_SEARCH_QUOTING_GUIDANCE_BLOCK}
 ${IS_WEBSEARCH_CITATIONS_ENABLED?`- ${UNTRUSTED_SEARCH_RESULT_CONTENT_NOTE}
 `:`
 CRITICAL REQUIREMENT - You MUST follow this:

@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code gateway protocol"
 description: "Markdown reference documenting the Claude Code gateway wire contract, including OAuth 2.0 device flow, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Bedrock, Vertex, and Foundry"
-ccVersion: "2.1.326"
+ccVersion: "2.1.327"
 variables:
   - "REQUEST_TAGS_BETA"
 -->
@@ -189,6 +189,65 @@ closely: such a `404` says "nothing for this session", so no warning is shown,
 and such a `304` says "there are settings that must not be missing", so the
 session doesn't start. Send the two together only if you mean that.
 
+Serve `"CLAUDE_CODE_GATEWAY_HINT_HEADERS": "1"` in the `env` block to learn,
+on each model request, which managed settings the session runs under, so you can
+find machines whose settings are out of date, edited or missing (an older client
+may send no checksum). The client then sends the hint headers listed at
+https://code.claude.com/docs/en/llm-gateway-protocol#gateway-hint-headers and
+`x-claude-code-managed-settings-checksum`, computed the same way as the
+`If-None-Match` value above, over the managed settings as the client loaded
+them. In an interactive session the developer is asked to approve the variable
+before it takes effect (if they decline, Claude Code exits); `claude -p` and
+Agent SDK runs apply it without asking.
+
+To use it, record the values that correctly set-up machines send and accept only
+those. Expect more than one value per policy:
+
+- It can differ from the `checksum` you serve: the client changes some values
+  as it loads them, a managed settings file or MDM profile on the machine can
+  add `env` entries, and Claude Desktop can add restrictions and drop model
+  settings.
+- After you edit your settings, keep accepting the previous value for at least
+  an hour, until every session has polled again. A session whose sign-in has
+  expired stops polling: once a `/login` in another terminal lets it carry on,
+  its first requests still send the value from before the expiry.
+
+A session that sends its requests through `ANTHROPIC_UNIX_SOCKET`, as
+`claude ssh` does, sends no checksum. Treat a missing checksum like an unknown
+one.
+
+The checksum doesn't prove what a machine runs. The client computes it itself,
+anyone with a bearer token can send any value (with curl or an
+`ANTHROPIC_CUSTOM_HEADERS` line), and some environment variables meant for an
+app that starts Claude Code, such as Claude Desktop, let the environment Claude
+Code starts in override your `env` block, or set aside its address and model,
+without the checksum showing it. A developer can set them in their own shell,
+with no administrator rights. Use it to find stale or unmanaged machines, not as
+a security control; the model and headers you enforce are on the request itself.
+If you serve `ANTHROPIC_CUSTOM_HEADERS` in `env`, a repository can't add a
+line of its own, nor can a developer's shell unless it sets those variables, but
+your value also replaces any custom headers developers set themselves.
+
+Treat the header as sensitive, for example in access logs. It is a plain SHA-256
+with no secret key, and it also covers `env` entries added by a managed
+settings file or MDM profile on the machine, so anyone who sees it and knows the
+rest of the policy can test guesses at a short or human-chosen value there, such
+as a password in a proxy URL. A long random secret can't be found that way.
+
+A client that reaches you through `ANTHROPIC_BASE_URL` instead of `/login`
+(other than Claude Desktop in gateway mode) never reads your
+`/managed/settings`. For those machines, set
+`CLAUDE_CODE_GATEWAY_HINT_HEADERS` and `ANTHROPIC_BASE_URL` together in the
+managed settings they do take, such as a managed settings file or MDM profile.
+Otherwise the developer's own settings, or those of a repository they have
+trusted, decide which host receives the checksum. Even with both set there, a
+developer's shell that sets the variables above can send it elsewhere. If
+those machines take server-managed settings from Anthropic, a session that
+starts from its saved copy leaves out `managedMcpServers` and `env` entries
+such as proxy, certificate, endpoint, credential and custom-header variables
+until its first fetch answers, and its checksum covers only what is left: accept
+that value too.
+
 ## Models — optional
 
 `GET /v1/models` (bearer)
@@ -326,10 +385,16 @@ audit log if the bearer token lists it, and takes a signed-in developer's tags
 and their `anthropic-beta` value out before any upstream. The tag changes
 nothing else about the request.
 
+If your token is a JWT whose payload has `"billing_group_tag": "<name>"`,
+Claude Code puts the developer's `attributionProject` setting under that key
+in `tags` on each Messages request. Add the claim only if your gateway
+removes `tags` before any upstream.
+
 ## Bearer token
 
-Your `access_token` is opaque to the client — it stores it, sends it, and
-refreshes it before `expires_in`, but never inspects the payload. Encode the
+The client stores your `access_token`, sends it, and refreshes it before
+`expires_in`. If it is a JWT, the client also reads some of its claims without
+verifying them, such as `exp`, `sub` and `billing_group_tag`. Encode the
 user's identity and groups in the token (or in server-side state keyed by it)
 so you can apply per-user RBAC at `/v1/messages` and per-group policy at
 `/managed/settings`. The same token must work across every
