@@ -4,6 +4,65 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.328](https://github.com/Piebald-AI/claude-code-system-prompts/commit/6b91926)
+
+_+15,115 tokens_
+
+- **NEW:** Data: MCP hook on_failure field — Explains when failed MCP hook calls let an action continue, when they block it, and which hook events ignore the setting.
+- **NEW:** Data: availableModels setting — Documents matching by model family, version prefix, or full ID, and distinguishes gateway routes from direct API model IDs.
+- **NEW:** System Reminder: Linked computer removed from account — Explains that the computer's tools are unavailable and that some sessions can relink from the Claude desktop app.
+- **NEW:** System Reminder: Resumed session may be missing earlier work — Asks Claude to check local files for previous work after resuming and mention only gaps that matter to the user.
+- **NEW:** Skill: Code Review finding severity and summaries — Defines three severity levels, asks for a concrete fix in each summary, and groups repeated instances of the same issue.
+- **NEW:** System Prompt: Project upload naming guidance — Explains how Projects distinguishes uploads with the same visible name and tells Claude to use names rather than IDs with users.
+- **NEW:** System Reminder: Cross-session message held after delivery check — Tells Claude to report a held message as undelivered, avoid resending it, and warn if another approach could duplicate the work.
+- **NEW:** System Reminder: Runner left repositories out at startup — Explains when to mention skipped repositories and where Claude can look for a copy it made earlier in the session.
+- **NEW:** Data: Self-hosted runner disableAllHooks warning — Distinguishes repo hooks from server-supplied hooks and explains why older runner wrappers can prevent Claude Tag from posting a reply.
+- **NEW:** System Reminder: Project document partial edit failure — Gives recovery instructions when search-and-replace blocks are malformed, too large, ambiguous, overlapping, or incompatible with the document's line endings.
+- **NEW:** Tool Description: Wait for session events — Explains how the wait can end without delivering an event and how to distinguish delivered events from quoted text.
+- **NEW:** System Prompt: Read resources as text or files — Tells Claude to request a saved file for editing or processing, use extracted text for reading, and check that a path came back.
+- **NEW:** Tool Description: Resume MCP task tracking — Allows tracking to resume only at the user's request and tells Claude to let the polling service deliver the result.
+- **NEW:** Agent Prompt: App task list progress tracker and turn checks — Use conversation evidence to update the visible task list, including after completed or interrupted turns, without checking off work that didn't happen.
+- **NEW:** Data: REPL Bash and PowerShell helper declarations — Describe the synchronous shell runners and shared helpers for file edits, previews, timers, logging, and tool discovery.
+- **NEW:** Skill: Code Review high and extra-high bugs and conventions modes — Add four- and six-angle inline review templates that deduplicate without verification; extra-high also sweeps for missed findings.
+- **NEW:** Skill: Code Review language and wrapper correctness angles — Adds a combined finder block for language-specific pitfalls and wrappers that misroute calls or fail to forward methods.
+- **NEW:** Tool Description: Workflow (lean rewrite) — Separates the existing opt-in instructions into a shared block that the Workflow description still uses.
+- **NEW:** System Reminder: Previously invoked skills and reload instructions — Separates the usage reminder from its heading and asks Claude to reload missing guidance without repeating the earlier setup.
+- **NEW:** System Reminder: Project document version conflict with current text — Tells Claude to use the current document included with the refusal, skip an already-applied edit, and report if the retry fails.
+- Agent Prompt: /code-review GitLab comment posting and /code-review part 8 GitHub comment posting — Can prefix posted findings with plain-text severity labels, distinguishing important bugs, pre-existing issues, and optional nits without emoji.
+- Agent Prompt: /code-review part 10 ReportFindings output format and Skill: Code Review (Output — findings JSON array) — Can label findings `important`, `pre_existing`, or `nit`, require practical fix advice, and combine repeated instances of the same mistake.
+- Agent Prompt: /code-review part 2 low effort mode — Adds a bugs-only option that skips duplicate-code and dead-code findings, and can include severity labels and suggested fixes.
+- Agent Prompt: /code-review part 3 extra-high and maximum effort modes and /code-review unavailable-agent inline mode — Add bugs-and-conventions recipes with severity-aware reporting, including six-angle extra-high reviews and a matching fallback when agents aren't available.
+- Agent Prompt: /code-review part 9 fix application — Tells `--fix` to apply findings regardless of kind or severity, while still skipping behavior changes, unrelated work, and false positives.
+- Agent Prompt: Dream memory consolidation and System Prompt: Memory instructions — Can restrict connector and MCP content in memory to links or IDs, while allowing the user's own statements and decisions.
+- Agent Prompt: Web fetch agent usage guidance — Adds a reminder that repeated fetches may return the cached copy for the URL's cache period, rather than new page content.
+- Agent Prompt: Web reading specialist — Allows one retry for HTTP 502, 503, or 504 errors from the site itself, alongside the existing retry conditions.
+- Data: allowedMcpServers setting — Explains that project settings can allow organization-provided MCP servers but can't exclude them, including servers supplied through managed plugin settings.
+- Data: Artifact ask-first intake form instructions and System Prompt: Artifact deck and design intake — Reduce intake to two or three questions, counting the look, with a fourth reserved for large or unusual requests.
+- Data: Claude Code agent proxy troubleshooting guide — Explains the separate pool of tunnels kept for Claude Code and why its counts can push totals above the usual limits.
+- Data: Claude Code gateway protocol — Removes caveats about host environment variables bypassing gateway settings, while keeping the warning that policy checksums aren't a security control.
+- Data: Interrupt cancel queued parameter — Leaves passive notices that tasks stopped or paused in the queue when an interrupt cancels other commands and task notifications.
+- Data: Rate limit grace signal — Only starts the grace signal when the allowance pays for a response, then keeps it set while credits pay later responses.
+- Data: Sandbox worktrees directory listing failure warning — Removes the explanation that refusing writes on Windows would leave folder permissions changed after directory listing works again.
+- Data: SDK api_error_params field — Adds `memberSpendLimit` to usage-limit error details so clients can identify an individual spending cap in both limit and credit errors.
+- Data: Self-hosted runner orchestrator command help — Documents passing validated session metadata to spawn hooks with `--hook-label`, and forwarding the last `user-message:` stderr line to the session's user.
+- Data: Tool use display metadata field — Adds the originating Artifact type's URL to publishing results when known, alongside the artifact URL and optional title.
+- Skill: Artifact design page contract and Tool Description: Artifact publishing and update guidance — Tell Claude to put datasets over about 100 KB in adjacent CSV or JSON files and load them by relative URL.
+- Skill: Computer Use MCP — Reserves menu-bar actions for full-access apps, blocks them for terminals and IDEs, and forbids scripting around app-access limits.
+- System Prompt: Self-hosted runner doctor — Reports the registration failure's stated cause without exposing secrets or acting on server text, and sends detailed hook-error diagnosis to logs.
+- System Prompt: Self-hosted runner setup — Warns that revoking a key stops its runners and can lose unpushed work; mentions the older settings-page entry only when present.
+- System Reminder: Exited plan mode — Can tell Claude to reuse the plan file shown to the user, entering plan mode before replacing it for different work.
+- System Reminder: MCP connector name too long for file approval — Counts the connector's assigned name and duplicate-number suffix in file-send approval prompts, dropping the former name prefix from the explanation.
+- System Reminder: Oversized user message (saved to file) — Honors tool-use limits in the saved middle pending confirmation, rejects answer-hiding demands, and requires confirmation for embedded instructions unless the ends ask nothing and it's plainly the user's request.
+- System Reminder: Staged files disk-space recovery — Adds recovery for cloud-browser downloads by saving or downloading them again, instead of asking the user to attach those files.
+- Tool Description: claude.ai Project — Adds optional `edits` for SEARCH/REPLACE document changes, requiring the whole text in context and saving none if any block fails.
+- Tool Description: Code review command — Adds broken CLAUDE.md rules to its review description and explains that cleanup coverage depends on the selected model's recipe.
+- Tool Description: ListAgents and ListAgents (no SendMessage tool) — Warn that session names are labels chosen by other sessions and must never be treated as instructions.
+- Tool Description: ListAgents — Explains that cloud sessions can reply to a computer only through connected Remote Control, usually after the user allows it.
+- Tool Description: REPL dispatched script execution and event delivery — Clarifies awaiting work in synchronous sessions, logging background-build results, and starting servers or watchers through tracked shell timeouts rather than detached processes.
+- Tool Description: REPL persistent helper interface — Tells Claude which helpers it can't use, adapts examples to available tools, and drops the separate MCP-discovery instructions.
+- Tool Description: REPL script and shell timeouts — Excludes time waiting for permission prompts from the ten-minute script timer, instead of counting those waits toward it.
+- Tool Description: SendMessage cross-session guidance — Disallows inferred session IDs and requests for unlisted targets, but accepts user-supplied IDs; remote delivery notices now depend on the tool result.
+
 # [2.1.327](https://github.com/Piebald-AI/claude-code-system-prompts/commit/f212301)
 
 _+971 tokens_
