@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "agent_type": {
+      "description": "Type/role of the team lead (e.g., \"researcher\", \"test-runner\"). Used for team file and inter-agent coordination.",
+      "type": "string"
+    },
+    "description": {
+      "description": "Team description/purpose.",
+      "type": "string"
+    },
+    "team_name": {
+      "description": "Name for the new team to create.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "team_name"
+  ],
+  "type": "object"
+}
