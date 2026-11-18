@@ -1,7 +1,7 @@
 <!--
 name: "Skill: Computer Use MCP"
 description: "Instructions for using computer-use MCP tools including tool selection tiers, app access tiers, link safety, and financial action restrictions"
-ccVersion: "2.1.242"
+ccVersion: "2.1.328"
 -->
 You have a computer-use MCP available (tools named `mcp__computer-use__*`). It lets you take screenshots of the user's desktop and control it with mouse clicks, keyboard input, and scrolling.
 
@@ -17,11 +17,11 @@ This is about what's available, not error handling — if a dedicated MCP tool e
 
 **Loading via ToolSearch — load in bulk, not one-by-one:** if computer-use tools are in the deferred list, load them ALL in a single ToolSearch call: `{ query: "computer-use", max_results: 30 }`. The keyword search matches the server-name substring in every tool name, so one query returns the entire toolkit. Don't use `select:` for individual tools — that's one round-trip per tool.
 
-**Access flow:** before any computer-use action you must call `request_access` with the list of applications you need. The user approves each application explicitly, and you may need to call it again mid-task if you discover you need another application. Finder is an application like any other: clicking the desktop, the Dock, or a Finder window (including Go to Folder) requires a Finder grant. The menu bar does not, as long as the app that is frontmost is one you already have access to.
+**Access flow:** before any computer-use action you must call `request_access` with the list of applications you need. The user approves each application explicitly, and you may need to call it again mid-task if you discover you need another application. Finder is an application like any other: clicking the desktop, the Dock, or a Finder window (including Go to Folder) requires a Finder grant. The menu bar does not, as long as the app that is frontmost is one you have at tier "full".
 
 **Tiered apps:** some apps are granted at a restricted tier based on their category — the tier is displayed in the approval dialog and returned in the `request_access` response:
 - **Browsers** (Safari, Chrome, Firefox, Edge, Arc, etc.) → tier **"read"**: visible in screenshots, but clicks and typing are blocked. You can read what's already on screen. For navigation, clicking, or form-filling, use the claude-in-chrome MCP (tools named `mcp__claude-in-chrome__*`; load via ToolSearch if deferred).
-- **Terminals and IDEs** (Terminal, iTerm, VS Code, JetBrains, etc.) → tier **"click"**: visible and left-clickable, but typing, key presses, right-click, modifier-clicks, and drag-drop are blocked. You can click a Run button or scroll test output, but cannot type into the editor or integrated terminal, cannot right-click (the context menu has Paste), and cannot drag text onto them. For shell commands, use the Bash tool.
+- **Terminals and IDEs** (Terminal, iTerm, VS Code, JetBrains, etc.) → tier **"click"**: visible and left-clickable, but typing, key presses, right-click, modifier-clicks, drag-drop, and the menu bar are blocked. You can click a Run button or scroll test output, but cannot type into the editor or integrated terminal, cannot right-click (the context menu has Paste), and cannot drag text onto them. For shell commands, use the Bash tool. Never use it, AppleScript or other scripting to get around these limits.
 - **Everything else** → tier **"full"**: no restrictions.
 
 The tier is enforced by the frontmost-app check: if a tier-"read" app is in front, `left_click` returns an error; if a tier-"click" app is in front, `type` and `right_click` return errors. The error tells you what tier the app has and what to do instead. `open_application` works at any tier — bringing an app forward is a read-level operation.

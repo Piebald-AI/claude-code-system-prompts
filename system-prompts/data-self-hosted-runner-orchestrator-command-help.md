@@ -1,7 +1,7 @@
 <!--
 name: "Data: Self-hosted runner orchestrator command help"
 description: "Documents self-hosted runner orchestrator connection, hook, SCM connector, runtime, health, and debug command-line options"
-ccVersion: "2.1.307"
+ccVersion: "2.1.328"
 variables:
   - "DEFAULT_SELF_HOSTED_RUNNER_API_URL"
   - "DEFAULT_HOOK_CONCURRENCY"
@@ -15,7 +15,8 @@ Polls the spawn-hints queue (server returns immediately) and runs ${hooks-dir}/s
 hint. The hook must submit work asynchronously (kubectl create job, EC2
 RunInstances, ...) and exit within --hook-timeout. Exit-code contract (session
 spawns): 0 = success (no-op); 1 = retryable failure (backoff); >=2 = non-retryable
-(circuit-break); stderr tail is forwarded as the nack error. Standby (--min-idle)
+(circuit-break); stderr tail is forwarded as the nack error. The last stderr line that
+starts with "user-message: " is also sent, for the session's user. Standby (--min-idle)
 spawns: any non-zero exit is logged locally and re-requested after the lease.
 
 Connection:
@@ -30,6 +31,12 @@ Hook:
   --hook-concurrency <n>      Max spawn-runner hooks running in parallel (default: ${DEFAULT_HOOK_CONCURRENCY}).
                               Also caps how many hints are claimed per poll.
   --hook-timeout <sec>        SIGTERM the hook after <sec> seconds (default: ${DEFAULT_HOOK_TIMEOUT_MS/1000}).
+  --hook-label <label>=<values>
+                              Hand this entry of a session's metadata to the hook as
+                              CLAUDE_RUNNER_META_<LABEL>. <values>: words (size=small,large) or a
+                              range of whole numbers (cpus=1..64). For a session with another value
+                              the hook does not run. Repeatable, once for each label; --min-idle
+                              must be 0.
   --expected-spawn-seconds <n>  p99 boot time for runners this orchestrator spawns
                               (default: ${DEFAULT_EXPECTED_SPAWN_SECONDS}). Sent on every Poll as the
                               server-side lease; if the runner doesn't register before then, the

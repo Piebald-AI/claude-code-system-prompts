@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code gateway protocol"
 description: "Markdown reference documenting the Claude Code gateway wire contract, including OAuth 2.0 device flow, RFC 8414 discovery, Messages API inference, managed settings, model discovery, OTLP telemetry, error envelopes, TLS certificate pinning, and proxying to Bedrock, Vertex, and Foundry"
-ccVersion: "2.1.327"
+ccVersion: "2.1.328"
 variables:
   - "REQUEST_TAGS_BETA"
 -->
@@ -217,16 +217,12 @@ A session that sends its requests through `ANTHROPIC_UNIX_SOCKET`, as
 one.
 
 The checksum doesn't prove what a machine runs. The client computes it itself,
-anyone with a bearer token can send any value (with curl or an
-`ANTHROPIC_CUSTOM_HEADERS` line), and some environment variables meant for an
-app that starts Claude Code, such as Claude Desktop, let the environment Claude
-Code starts in override your `env` block, or set aside its address and model,
-without the checksum showing it. A developer can set them in their own shell,
-with no administrator rights. Use it to find stale or unmanaged machines, not as
-a security control; the model and headers you enforce are on the request itself.
-If you serve `ANTHROPIC_CUSTOM_HEADERS` in `env`, a repository can't add a
-line of its own, nor can a developer's shell unless it sets those variables, but
-your value also replaces any custom headers developers set themselves.
+and anyone with a bearer token can send any value (with curl or an
+`ANTHROPIC_CUSTOM_HEADERS` line). Use it to find stale or unmanaged machines,
+not as a security control; the model and headers you enforce are on the request
+itself. If you serve `ANTHROPIC_CUSTOM_HEADERS` in `env`, a repository can't
+add a line of its own, but your value also replaces the custom headers
+developers set in their own settings.
 
 Treat the header as sensitive, for example in access logs. It is a plain SHA-256
 with no secret key, and it also covers `env` entries added by a managed
@@ -240,13 +236,11 @@ A client that reaches you through `ANTHROPIC_BASE_URL` instead of `/login`
 `CLAUDE_CODE_GATEWAY_HINT_HEADERS` and `ANTHROPIC_BASE_URL` together in the
 managed settings they do take, such as a managed settings file or MDM profile.
 Otherwise the developer's own settings, or those of a repository they have
-trusted, decide which host receives the checksum. Even with both set there, a
-developer's shell that sets the variables above can send it elsewhere. If
-those machines take server-managed settings from Anthropic, a session that
-starts from its saved copy leaves out `managedMcpServers` and `env` entries
-such as proxy, certificate, endpoint, credential and custom-header variables
-until its first fetch answers, and its checksum covers only what is left: accept
-that value too.
+trusted, decide which host receives the checksum. If those machines take
+server-managed settings from Anthropic, a session that starts from its saved
+copy leaves out `managedMcpServers` and `env` entries such as proxy,
+certificate, endpoint, credential and custom-header variables until its first
+fetch answers, and its checksum covers only what is left: accept that value too.
 
 ## Models — optional
 

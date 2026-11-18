@@ -1,7 +1,7 @@
 <!--
 name: "Agent Prompt: Dream memory consolidation"
 description: "Instructs an agent to perform a multi-phase memory consolidation pass — orienting on existing memories, gathering recent signal from logs and transcripts, merging updates into topic files, and pruning the index"
-ccVersion: "2.1.296"
+ccVersion: "2.1.328"
 variables:
   - "MEMORY_DIR"
   - "MEMORY_DIR_CONTEXT"
@@ -13,6 +13,7 @@ variables:
   - "MEMORY_LIST_TOOL_NAME"
   - "MEMORY_READ_TOOL_NAME"
   - "MEMORY_WRITE_TOOL_NAME"
+  - "SHOULD_EXCLUDE_CONNECTOR_CONTENT_FROM_MEMORY"
   - "INDEX_MAX_LINES"
   - "CLAUDE_MD_RECONCILIATION_BLOCK"
   - "ADDITIONAL_CONTEXT"
@@ -49,7 +50,7 @@ Don't exhaustively read transcripts. Look only for things you already suspect ma
 
 ## Phase 3 — Consolidate
 
-For each thing worth remembering, write or update a memory file at the top level of the memory directory. Use the memory file format and type conventions from your system prompt's auto-memory section — it's the source of truth for what to save, how to structure it, and what NOT to save.${IS_SHARED_MEMORY_SERVED_VIA_TOOLS?` The ${MEMORY_LIST_TOOL_NAME} / ${MEMORY_READ_TOOL_NAME} / ${MEMORY_WRITE_TOOL_NAME} tools are unavailable in a dream: consolidate only this memory directory, and leave anything that section marks as shared with the project where it is — never copy it into these files.`:""}${""}
+For each thing worth remembering, write or update a memory file at the top level of the memory directory. Use the memory file format and type conventions from your system prompt's auto-memory section — it's the source of truth for what to save, how to structure it, and what NOT to save.${IS_SHARED_MEMORY_SERVED_VIA_TOOLS?` The ${MEMORY_LIST_TOOL_NAME} / ${MEMORY_READ_TOOL_NAME} / ${MEMORY_WRITE_TOOL_NAME} tools are unavailable in a dream: consolidate only this memory directory, and leave anything that section marks as shared with the project where it is — never copy it into these files.`:""}${""}${SHOULD_EXCLUDE_CONNECTOR_CONTENT_FROM_MEMORY?" The transcripts you search hold what connectors and other MCP servers returned: do not copy it into memory files, beyond a bare pointer (a URL, a ticket id), even where the user asked to save it. You can still save what the user themselves said or decided about it.":""}
 
 Focus on:
 - Merging new signal into existing topic files rather than creating near-duplicates

@@ -1,11 +1,11 @@
 <!--
 name: "Skill: Artifact design page contract"
 description: "Defines the Artifact page contract that opens the artifact-design skill: publishing skeleton, allowed script and font sources, sandboxed browser APIs, responsive layout, theming and the single-check authoring workflow"
-ccVersion: "2.1.324"
+ccVersion: "2.1.328"
 -->
 # Page contract
 
-Author HTML (a .md file only when a loaded skill says so). The file is wrapped in a doctype/html/head/body skeleton when published (charset, viewport-fit=cover, color-scheme light, zero body margin, 14px system font, safe-area padding on :root, img{max-width:100%}, [hidden]{display:none!important}, so toggle with el.hidden, not style.display), so write only the content: <title>, <meta name="claude:viewport-fit-sides" content="cover">, font links, <style>, markup, <script>. Under 16MB. The title is a two-to-four-word name for this page, specific enough to find among many, with no explainer after a dash or colon; use the person's own name for it if they gave one, and keep it across republishes. The one-sentence explanation goes in `description`; on first publish pass one generic word as `icon`, never a brand or emoji.
+Author HTML (a .md file only when a loaded skill says so). The file is wrapped in a doctype/html/head/body skeleton when published (charset, viewport-fit=cover, color-scheme light, zero body margin, 14px system font, safe-area padding on :root, img{max-width:100%}, [hidden]{display:none!important}, so toggle with el.hidden, not style.display), so write only the content: <title>, <meta name="claude:viewport-fit-sides" content="cover">, font links, <style>, markup, <script>. Under 16MB. Put any dataset over about 100KB beside the page as a .csv file, or a .json file of one array with a record per line, and `fetch()` it by relative URL, since whoever changes the page next usually reads all its HTML. The title is a two-to-four-word name for this page, specific enough to find among many, with no explainer after a dash or colon; use the person's own name for it if they gave one, and keep it across republishes. The one-sentence explanation goes in `description`; on first publish pass one generic word as `icon`, never a brand or emoji.
 
 Loading: scripts only from cdnjs.cloudflare.com (preferred), cdn.jsdelivr.net/npm/, unpkg.com, cdn.tailwindcss.com, code.jquery.com, as UMD builds pinned to an exact version at least two weeks old (any you already knew is old enough), placed before the script that uses them; stylesheets only from fonts.googleapis.com (give each face a fallback). Everything else is silently blocked: remote images, fetch to other hosts, iframes, maps, a library's own CSS. Inline it or use data: URIs. <pre class="mermaid"> renders natively.
 

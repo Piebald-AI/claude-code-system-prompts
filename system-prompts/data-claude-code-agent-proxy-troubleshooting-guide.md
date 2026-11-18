@@ -1,7 +1,7 @@
 <!--
 name: "Data: Claude Code agent proxy troubleshooting guide"
 description: "Troubleshooting guide for Claude Code's policy-enforcing HTTPS agent proxy, covering TLS trust setup, status checks, git, docker, and unsupported traffic"
-ccVersion: "2.1.327"
+ccVersion: "2.1.328"
 variables:
   - "AGENT_PROXY_URL"
   - "AGENT_PROXY_CA_BUNDLE_PATH"
@@ -76,7 +76,10 @@ it, so a tool with a short timeout of its own may report only a timeout. Run
 fewer downloads or requests at once, then retry. connectsWaitingForTunnel and
 openTunnels in the status output show the load. busyTunnels includes idle
 connections until one has to wait, so alone it does not show load, and it can
-pass maxBusyTunnels.
+pass maxBusyTunnels. busyTunnelsKeptForClaudeCode is the same count for connections
+of Claude Code itself that had to wait and took a tunnel kept for them. Those have
+a limit of their own, on top of maxBusyTunnels, and openTunnels includes them, so
+openTunnels can pass maxOpenTunnels.
 
 The proxy also answers 429 immediately when too many connections to it are open,
 idle ones included (too_many_connections in the [agent-proxy] lines under a

@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: Agent (usage notes)"
 description: "Usage notes and instructions for the Task/Agent tool, including guidance on launching subagents, background execution, resumption, and worktree isolation"
-ccVersion: "2.1.323"
+ccVersion: "2.1.328"
 variables:
   - "TOOL_BASE_DESCRIPTION"
   - "WHEN_NOT_TO_USE_NOTE"
@@ -46,5 +46,7 @@ ${WHEN_NOT_TO_USE_NOTE}
 - ${PARALLEL_WORKTREE_ISOLATION_NOTE}`:""}${IS_REMOTE_ISOLATION_AVAILABLE_FN()?'\n- You can set `isolation: "remote"` to run the agent in a remote CCR environment. This is always a background task; you'll be notified when it completes. Use for long-running tasks that need a fresh sandbox.':""}${IS_IN_PROCESS_TEAMMATE_CONTEXT_FN()?`
 - The run_in_background and name parameters are not available in this context. Only synchronous subagents are supported.`:IS_TEAMMATE_CONTEXT_FN()?`
 - The name parameter is not available in this context — teammates cannot spawn other teammates. Omit it to spawn a subagent.`:""}${FORK_USAGE_GUIDELINES}${WRITING_SUBAGENT_PROMPTS_GUIDANCE}
+
+**Never delegate understanding.** Don't write "based on your findings, fix the bug" or "based on the research, implement it." Those phrases push synthesis onto the agent instead of doing it yourself. Write prompts that prove you understood: include file paths, line numbers, what specifically to change.
 
 ${CAN_FORK_CONTEXT?FORK_CAPABLE_SUBAGENT_DELEGATION_EXAMPLES:NON_FORK_SUBAGENT_DELEGATION_EXAMPLES}

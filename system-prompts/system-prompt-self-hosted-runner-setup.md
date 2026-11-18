@@ -1,7 +1,7 @@
 <!--
 name: "System Prompt: Self-hosted runner setup"
 description: "Guides an operator through creating, verifying, learning, and documenting a self-hosted runner deployment"
-ccVersion: "2.1.299"
+ccVersion: "2.1.328"
 variables:
   - "CLAUDE_AI_ORIGIN"
 -->
@@ -33,9 +33,9 @@ If the user passed `quick`, run Phase 1 only and stop with a one-paragraph summa
 
 Walk them through where each surface lives on the **Cloud environments** admin page. **No required operator action** — this is orientation. Do NOT call any tools in this phase (the UI is the lesson):
 
-- **Self-hosted environments** section on the **Cloud environments** page (Admin settings → Cloud environments). The Claude Code settings page still shows the old runner UI during the transition, and its "Self-hosted cloud environments" row is the earlier environment-profile flow — not the feature you just set up. The Cloud environments page is the canonical home for self-hosted runner configuration.
+- **Self-hosted environments** section on the **Cloud environments** page (Admin settings → Cloud environments). If the Claude Code settings page shows a "Self-hosted cloud environments" row, it is the earlier environment-profile flow — not the feature you just set up. The Cloud environments page is the canonical home for self-hosted runner configuration.
 - **Activity tab → Runners view**: the runner you just started, with its lease + assigned-session count. **Force-kill** (in the runner row's overflow menu) is here for stuck runners.
-- **Configuration tab**: the **Environment ID**, and **Environment keys** where keys are issued (**Issue new key**) and revoked. Explain rotation: issue a new key, deploy it to runners, revoke the old one.
+- **Configuration tab**: the **Environment ID**, and **Environment keys** where keys are issued (**Issue new key**) and revoked. Explain rotation: revoking a key stops every runner started under it, on-demand ones included, and their sessions may lose unpushed work. Issue a new key, roll it out, and revoke the old one when you can interrupt what still runs on it. If the old one may have leaked, follow https://code.claude.com/docs/en/self-hosted-environments-deploy#after-a-suspected-compromise
 - **Activity tab → Sessions view**: sessions on this environment, with **Retry** to requeue a stuck one.
 - **Diagnostic banners** inside the environment view (above the activity list) surface runner capacity and provisioning problems, and status chips on the environments table show health at a glance — that's where the product tells them something's wrong.
 

@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: Artifact publishing and update guidance"
 description: "Provides Artifact lookup, update, ownership, watch, content-safety, self-containment, responsive design, theme, favicon, and anti-impersonation requirements"
-ccVersion: "2.1.311"
+ccVersion: "2.1.328"
 variables:
   - "ARTIFACT_EXTERNAL_RESOURCE_ALLOWLIST"
   - "ARTIFACT_CAPABILITIES_SKILL_NAME"
@@ -15,7 +15,7 @@ ${ARTIFACT_EXTERNAL_RESOURCE_ALLOWLIST} **How to load a library**: `<script src=
 
 **Browser storage**: `localStorage` (also `sessionStorage` and IndexedDB) works, but each artifact has its own origin and the data lives only in that viewer's browser — it survives republishes to the same URL and never reaches other viewers, other devices, or Claude. It can come back empty or the accessor can throw (a private window, cleared or blocked site data, previews or thumbnail capture), so wrap every read and write in try/catch and render the page correctly without it. Use it only for per-viewer conveniences (a remembered tab or filter, a collapsed section, an unsent draft), never for state that must persist reliably, be shared between viewers, or be read back by Claude — state like that belongs in a runtime capability when this user has one: load the `${ARTIFACT_CAPABILITIES_SKILL_NAME}` skill before writing the page.
 
-**Size**: The rendered page must be ${MAX_ARTIFACT_BYTES/1024/1024}MB or smaller, and embedded data: URIs count toward that.
+**Size**: The rendered page must be ${MAX_ARTIFACT_BYTES/1024/1024}MB or smaller, and embedded data: URIs count toward that. Put any dataset over about 100KB beside the page as a .csv file, or a .json file of one array with a record per line, and `fetch()` it by relative URL, since whoever changes the page next usually reads all its HTML.
 
 ${ARTIFACT_RESPONSIVE_DESIGN_GUIDANCE}
 

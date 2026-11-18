@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: REPL persistent helper interface"
 description: "Describes the persistent JavaScript helper interface, batching costs, returned and logged output, asynchronous execution and generated helper and tool declarations"
-ccVersion: "2.1.327"
+ccVersion: "2.1.328"
 variables:
   - "REPL_TOOL_ACCESS_GUIDANCE_BLOCK"
   - "REPL_OUTPUT_TRUNCATION_NOTE"
@@ -14,7 +14,7 @@ variables:
   - "GET_REPL_TOOL_SCHEMAS_FN"
   - "AVAILABLE_TOOLS"
   - "TOOL_PERMISSION_CONTEXT"
-  - "MCP_SERVER_DISCOVERY_GUIDANCE_BLOCK"
+  - "PRIMITIVE_TOOL_GRANT"
   - "GIT_WORKFLOW_GUIDANCE_BLOCK"
 -->
 
@@ -28,9 +28,8 @@ A script's output is its last expression's value plus anything it `self.log(...)
 
 To keep a long output out of your context, return `preview(out)` or `preview(out, 2000)` instead of the output itself: it gives the first characters, and when `out` is an awaited `$` result (not its `.text()` string) whose output the shell tool saved to a file, it starts with the output's size and the file's path.
 ${REPL_OUTPUT_DELIVERY_GUIDANCE_BLOCK}${REPL_PERMISSION_MODE_TIMEOUT_NOTE}
-${REPL_BATCHED_OPERATIONS_EXAMPLE}
-## Declarations
-${await BUILD_REPL_HELPER_DECLARATIONS_FN({agent:j,isBash:u,asyncLane:M,mcpThrows:l,tools:FORMAT_REPL_TOOL_TYPE_DECLARATIONS_FN(await GET_REPL_TOOL_SCHEMAS_FN(AVAILABLE_TOOLS,TOOL_PERMISSION_CONTEXT))})}
-${MCP_SERVER_DISCOVERY_GUIDANCE_BLOCK}${GIT_WORKFLOW_GUIDANCE_BLOCK?`
+${REPL_BATCHED_OPERATIONS_EXAMPLE}## Declarations
+${await BUILD_REPL_HELPER_DECLARATIONS_FN({agent:R,isBash:m,asyncLane:P,mcpThrows:f,tools:FORMAT_REPL_TOOL_TYPE_DECLARATIONS_FN(await GET_REPL_TOOL_SCHEMAS_FN(AVAILABLE_TOOLS,TOOL_PERMISSION_CONTEXT,PRIMITIVE_TOOL_GRANT)),unavailable:K})}
+${GIT_WORKFLOW_GUIDANCE_BLOCK?`
 ${GIT_WORKFLOW_GUIDANCE_BLOCK}
 `:""}
