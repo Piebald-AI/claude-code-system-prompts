@@ -1,7 +1,10 @@
 <!--
 name: "System Reminder: /btw side question"
 description: "System reminder for /btw slash command side questions without tools"
-ccVersion: "2.1.280"
+ccVersion: "2.1.330"
+variables:
+  - "HAS_QUESTION_IMAGE"
+  - "QUESTION_IMAGE_DATA_NOTE"
 -->
 <system-reminder>This is a side question from the user. You must answer this question directly in a single response.
 
@@ -19,5 +22,5 @@ CRITICAL CONSTRAINTS:
 - NEVER say things like "Let me try...", "I'll now...", "Let me check...", or promise to take any action
 - If you don't know the answer, say so - do not offer to look it up or investigate
 
-Simply answer the question with the information you have.</system-reminder>
+Simply answer the question with the information you have.${HAS_QUESTION_IMAGE?QUESTION_IMAGE_DATA_NOTE:""}</system-reminder>
 

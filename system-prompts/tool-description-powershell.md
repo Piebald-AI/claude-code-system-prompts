@@ -1,12 +1,13 @@
 <!--
 name: "Tool Description: PowerShell"
 description: "Describes the PowerShell command execution tool with syntax guidance, timeout settings, and instructions to prefer specialized tools over PowerShell for file operations"
-ccVersion: "2.1.328"
+ccVersion: "2.1.330"
 variables:
   - "RENDER_POWERSHELL_EDITION_GUIDANCE_FN"
   - "POWERSHELL_EDITION"
   - "DETECTED_DEVELOPER_TOOLS_NOTE"
   - "POWERSHELL_HELPER_NAMING_GUIDANCE"
+  - "GIT_COMMIT_EXAMPLE_COMMAND"
   - "MAX_TIMEOUT_MS_FN"
   - "DEFAULT_TIMEOUT_MS_FN"
   - "MAX_OUTPUT_CHARS_FN"
@@ -70,7 +71,7 @@ Interactive and blocking commands (this tool runs with -NonInteractive and stdin
 Passing multiline strings (commit messages, file content) to native executables:
    - Use a single-quoted here-string so PowerShell does not expand `$` or backticks inside. The closing `'@` MUST be at column 0 (no leading whitespace) on its own line — indenting it is a parse error:
 <example>
-git commit -m @'
+${GIT_COMMIT_EXAMPLE_COMMAND.isGitLeftOut?"tool":"git commit"} -m @'
 Commit message here.
 Second line with $literal dollar signs.
 '@

@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: CronCreate"
 description: "Describes the CronCreate tool for enqueuing one-shot or recurring cron-based jobs, with durable or session-only persistence, jitter and off-minute scheduling guidance"
-ccVersion: "2.1.329"
+ccVersion: "2.1.330"
 variables:
   - "CRON_DURABLE_FLAG"
   - "CRON_CREATE_TOOL_NAME"
@@ -41,7 +41,7 @@ Only use minute 0 or 30 when the user names that exact time and clearly means it
 
 ${CRON_DURABLE_FLAG?`## Durability
 
-By default (durable: false) the job lives only in this Claude session — nothing is written to disk, and the job is gone when Claude exits. Pass durable: true to write to .claude/scheduled_tasks.json so the job survives restarts. Only use durable: true when the user explicitly asks for the task to persist ("keep doing this every day", "set this up permanently"). Most "remind me in 5 minutes" / "check back in an hour" requests should stay session-only.`:`## Session-only
+By default (durable: false) the job lives only in this Claude session — nothing is written to disk, and the job is gone when Claude exits. Pass durable: true to write to .claude/scheduled_tasks.json so the job survives restarts. If Claude Code can't tell which organization this session is signed in to, the job stays session-only even with durable: true. If the result says "Session-only" after durable: true, tell the user that the job won't survive restarts. Only use durable: true when the user explicitly asks for the task to persist ("keep doing this every day", "set this up permanently"). Most "remind me in 5 minutes" / "check back in an hour" requests should stay session-only.`:`## Session-only
 
 Jobs live only in this Claude session — nothing is written to disk, and the job is gone when Claude exits.`}
 
@@ -51,8 +51,8 @@ ${CRON_CREATE_TOOL_NAME} re-runs a prompt at fixed wall-clock intervals. To watc
 
 ## Runtime behavior
 
-Jobs only fire while the REPL is idle (not mid-query). ${CRON_DURABLE_FLAG?"Durable jobs persist to .claude/scheduled_tasks.json and survive session restarts — on the next launch signed in to the same organization they resume automatically. One-shot durable tasks that were missed while the REPL was closed are surfaced for catch-up. Session-only jobs die with the process. ":""}The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to ${MATH_OBJECT.round(RECURRING_JITTER_FRACTION*100)}% of its period late (max ${RECURRING_JITTER_CAP_MS/60000} min), and a one-shot job landing on :00 or :30 runs up to ${ONE_SHOT_JITTER_MAX_MS/1000} s early. The result of this tool and of ${CRON_LIST_TOOL_NAME} gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
+Jobs only fire while the REPL is idle (not mid-query). ${CRON_DURABLE_FLAG?"Durable jobs that were saved to .claude/scheduled_tasks.json survive session restarts — on the next launch signed in to the same organization they resume automatically. One-shot durable tasks that were missed while the REPL was closed are surfaced for catch-up. Session-only jobs die with the process. ":""}The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to ${MATH_OBJECT.round(RECURRING_JITTER_FRACTION*100)}% of its period late (max ${RECURRING_JITTER_CAP_MS/60000} min), and a one-shot job landing on :00 or :30 runs up to ${ONE_SHOT_JITTER_MAX_MS/1000} s early. The result of this tool and of ${CRON_LIST_TOOL_NAME} gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
 
-Recurring tasks auto-expire after ${CANCEL_TIMEFRAME_DAYS} days — they fire one final time, then are deleted. This bounds session lifetime. Tell the user about the ${CANCEL_TIMEFRAME_DAYS}-day limit when scheduling recurring jobs.
+Recurring tasks auto-expire after ${CANCEL_TIMEFRAME_DAYS} days — they fire one final time, with a note that it is their last run, then are deleted. This bounds session lifetime. Tell the user about the ${CANCEL_TIMEFRAME_DAYS}-day limit when scheduling recurring jobs.
 
 Returns a job ID you can pass to ${CRON_DELETE_TOOL_NAME}.

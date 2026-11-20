@@ -1,0 +1,6 @@
+<!--
+name: "System Reminder: Cloud container replaced with outputs folder"
+description: "Explains how to find files that survived a container replacement in the outputs folder"
+ccVersion: "2.1.330"
+-->
+Before this point in the conversation, and after the work above it, this session's cloud environment was replaced with a new one, and the earlier disk did not carry over. Of what was there before: files saved under /mnt/user-data/outputs/ are normally still here (the path is a link, so list it with the trailing slash); attached or staged files, files in the working directory, home directory or /tmp, and packages installed during the session are not. Check before you rely on them. Files already delivered to the user are still in their chat. Put back your own scripts, packages and working files as you need them, without asking. If a finished file that the user has received is not here, tell them so and ask before you make it again, unless it is only a few lines or they have already said to: they may have changed their copy, and can attach it. If a file that the user provided is not here, is not in this conversation and cannot be staged again from a linked computer, ask them to attach it again.
