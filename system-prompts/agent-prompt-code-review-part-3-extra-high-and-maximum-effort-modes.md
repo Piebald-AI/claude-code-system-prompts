@@ -1,12 +1,13 @@
 <!--
 name: "Agent Prompt: /code-review part 3 extra-high and maximum effort modes"
-description: "Extra-high and maximum-effort /code-review prompt that runs five finder angles, one-vote verification, a gap sweep, and capped JSON findings"
-ccVersion: "2.1.328"
+description: "Extra-high and maximum-effort review prompt that runs six or ten finder angles, one-vote verification, a gap sweep, and JSON reporting"
+ccVersion: "2.1.329"
 variables:
   - "EFFORT_LEVEL"
   - "IS_BUGS_ONLY_REVIEW"
   - "FORMAT_FINDINGS_LIMIT_LABEL_FN"
   - "MAX_FINDINGS"
+  - "BUGS_ONLY_DIFF_GATHERING_PHASE"
   - "DIFF_GATHERING_PHASE"
   - "AGENT_TOOL_NAME"
   - "AGENT_UNAVAILABLE_INSTRUCTIONS"
@@ -26,7 +27,7 @@ You are reviewing for **recall** at ${EFFORT_LEVEL==="max"?"maximum":"extra-high
 this level, catching real bugs matters more than avoiding false positives — a
 missed bug ships. Err on the side of surfacing.
 
-${DIFF_GATHERING_PHASE}
+${IS_BUGS_ONLY_REVIEW?BUGS_ONLY_DIFF_GATHERING_PHASE:DIFF_GATHERING_PHASE}
 ## Phase 1 — Find candidates (5 correctness angles + ${IS_BUGS_ONLY_REVIEW?"":"3 cleanup angles + 1 altitude angle + "}1 conventions angle, up to 8 each)
 
 Run **${IS_BUGS_ONLY_REVIEW?6:10} independent finder angles** via the ${AGENT_TOOL_NAME} tool. Each

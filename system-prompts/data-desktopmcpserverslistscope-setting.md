@@ -1,0 +1,6 @@
+<!--
+name: "Data: desktopMcpServersListScope setting"
+description: "Describes where managed allow and deny lists apply to servers added in the Claude desktop app"
+ccVersion: "2.1.329"
+-->
+Claude desktop app only. Where your allow list and deny list apply to MCP servers added in the Claude desktop app. "code" (default): Your allow list also governs MCP servers added in the Claude desktop app, in Code tab sessions and the Artifact pane. "all": Your allow list and your deny list also govern MCP servers added in the Claude desktop app, in every tab (including Chat and Cowork). "off": Your allow list doesn't govern MCP servers added in the Claude desktop app. Read only from managed settings. Any other value counts as `all`. Where sources are merged or mixed, `off` counts as `all`. Leave the key out, or set it only in the managed source that holds your list. `deniedMcpServers` applies in Code tab sessions and the Artifact pane with every value, and in every tab with `all`. MCP servers sent to SSH hosts are not governed by these lists in this release. The Claude Code CLI reads nothing from this key, but written alone in a higher managed source it makes that source lead, and Claude Code skips the managed sources beneath it. Write it only beside the list it scopes.

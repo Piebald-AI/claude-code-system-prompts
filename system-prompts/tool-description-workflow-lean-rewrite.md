@@ -1,6 +1,6 @@
 <!--
 name: "Tool Description: Workflow (lean rewrite)"
-description: "Limits workflows to explicit user opt-in and directs Claude to individual subagents for other tasks"
+description: "Describes background workflow orchestration, explicit user opt-in confirmed by system messages, literal script metadata, and pipeline-based review"
 ccVersion: "2.1.328"
 variables:
   - "SYSTEM_MESSAGE_PHRASE"

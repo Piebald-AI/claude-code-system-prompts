@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: CronCreate"
 description: "Describes the CronCreate tool for enqueuing one-shot or recurring cron-based jobs, with durable or session-only persistence, jitter and off-minute scheduling guidance"
-ccVersion: "2.1.310"
+ccVersion: "2.1.329"
 variables:
   - "CRON_DURABLE_FLAG"
   - "CRON_CREATE_TOOL_NAME"
@@ -51,7 +51,7 @@ ${CRON_CREATE_TOOL_NAME} re-runs a prompt at fixed wall-clock intervals. To watc
 
 ## Runtime behavior
 
-Jobs only fire while the REPL is idle (not mid-query). ${CRON_DURABLE_FLAG?"Durable jobs persist to .claude/scheduled_tasks.json and survive session restarts — on next launch they resume automatically. One-shot durable tasks that were missed while the REPL was closed are surfaced for catch-up. Session-only jobs die with the process. ":""}The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to ${MATH_OBJECT.round(RECURRING_JITTER_FRACTION*100)}% of its period late (max ${RECURRING_JITTER_CAP_MS/60000} min), and a one-shot job landing on :00 or :30 runs up to ${ONE_SHOT_JITTER_MAX_MS/1000} s early. The result of this tool and of ${CRON_LIST_TOOL_NAME} gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
+Jobs only fire while the REPL is idle (not mid-query). ${CRON_DURABLE_FLAG?"Durable jobs persist to .claude/scheduled_tasks.json and survive session restarts — on the next launch signed in to the same organization they resume automatically. One-shot durable tasks that were missed while the REPL was closed are surfaced for catch-up. Session-only jobs die with the process. ":""}The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to ${MATH_OBJECT.round(RECURRING_JITTER_FRACTION*100)}% of its period late (max ${RECURRING_JITTER_CAP_MS/60000} min), and a one-shot job landing on :00 or :30 runs up to ${ONE_SHOT_JITTER_MAX_MS/1000} s early. The result of this tool and of ${CRON_LIST_TOOL_NAME} gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
 
 Recurring tasks auto-expire after ${CANCEL_TIMEFRAME_DAYS} days — they fire one final time, then are deleted. This bounds session lifetime. Tell the user about the ${CANCEL_TIMEFRAME_DAYS}-day limit when scheduling recurring jobs.
 

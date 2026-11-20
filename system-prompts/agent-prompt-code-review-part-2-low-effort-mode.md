@@ -1,7 +1,7 @@
 <!--
 name: "Agent Prompt: /code-review part 2 low effort mode"
 description: "Low-effort /code-review prompt that reads the diff once and returns up to four hunk-visible runtime correctness findings"
-ccVersion: "2.1.328"
+ccVersion: "2.1.329"
 variables:
   - "IS_BUGS_ONLY_REVIEW"
   - "FORMAT_FINDINGS_LIMIT_LABEL_FN"
@@ -15,7 +15,7 @@ variables:
 
 ## Turn 1 — read
 
-One tool call: read the unified diff (`git diff @{upstream}...HEAD; git diff HEAD`
+One tool call: read the unified diff (`git diff ${IS_BUGS_ONLY_REVIEW?"origin/HEAD":"@{upstream}"}...HEAD; git diff HEAD`
 to cover both committed and uncommitted changes, or `git diff main...HEAD` /
 the target passed as an argument). Skip test/fixture
 hunks (`test/`, `spec/`, `__tests__/`, `*_test.*`, `*.test.*`,

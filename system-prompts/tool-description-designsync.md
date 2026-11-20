@@ -1,7 +1,7 @@
 <!--
 name: "Tool Description: DesignSync"
 description: "Describes the DesignSync tool for reading and updating claude.ai/design design-system projects, including project listing, plan finalization, file writes and deletes, and asset registration"
-ccVersion: "2.1.317"
+ccVersion: "2.1.329"
 variables:
   - "SHOULD_INCLUDE_ARTIFACT_DESIGN_REDIRECTION"
   - "ARTIFACT_DESIGN_REDIRECTION_NOTE"
@@ -9,13 +9,13 @@ variables:
 -->
 Read and update the user's claude.ai/design design-system projects through their claude.ai login (or, for sessions without one, a dedicated design authorization from /design-login). Use this only with the /design-sync skill, which the user starts, to keep a local component library in sync with one of those projects — incrementally, one component at a time, never as a wholesale replace.${SHOULD_INCLUDE_ARTIFACT_DESIGN_REDIRECTION?ARTIFACT_DESIGN_REDIRECTION_NOTE:""}
 
-${STANDALONE_CLAUDE_DESIGN_CLOSURE_NOTE} If the server refuses a call because standalone Claude Design or the project has closed or moved, give the user the server's message as written and stop. For a project that has moved or is moving, call `get_project` once first: if it returns a `notice`, give that in place of the server's message.
+${STANDALONE_CLAUDE_DESIGN_CLOSURE_NOTE} If the server refuses a call because standalone Claude Design or the project has closed or moved, give the user the server's message as written and stop, unless /design-sync's own text says how to go on. For a project that has moved or is moving, call `get_project` once first: if it returns a `notice`, give that in place of the server's message.
 
 The tool dispatches on `method`:
 
 Read methods (no permission prompt once design scopes are granted — the first call may prompt to add design-system access to the claude.ai login):
 - `list_projects` — list design-system projects the user can write to. Returns name, owner, projectId, updatedAt. Filtered to writable projects only.
-- `get_project` — read one project's metadata (name, type, owner, canEdit). Use to verify a `--project <uuid>` target is actually `type: PROJECT_TYPE_DESIGN_SYSTEM` before pushing — that type is immutable at creation, so pushing to a regular project never makes it a design system. For a design system that has moved or is moving to Claude it also returns `moveState` and a `notice`: the server refuses uploads to it, so give the user the notice as written and stop.
+- `get_project` — read one project's metadata (name, type, owner, canEdit). Use to verify a `--project <uuid>` target is actually `type: PROJECT_TYPE_DESIGN_SYSTEM` before pushing — that type is immutable at creation, so pushing to a regular project never makes it a design system. For a design system that has moved or is moving to Claude it also returns `moveState` and a `notice`: an upload to it is refused, or reaches only the copy it left behind, so give the user the notice as written and stop, unless /design-sync's own text says how to go on. For one that has moved, `movedTo`, present only where claude.ai/design's record says the user can open it, is the link of its artifact in Claude. `movedToHeldBy`, present only where that record says so, is whose account the artifact is under: `you` (the user's), `owner` (the design system's owner's) or `someone_else` (another account in the design system's organization).
 - `list_files` — list paths in a project. Use this to build the structural diff.
 - `get_file` — read one remote file's content. Capped at 256 KiB. Only call this when you need to compare content for a specific component the user named.
 
