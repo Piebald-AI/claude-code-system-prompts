@@ -4,6 +4,53 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.329](https://github.com/Piebald-AI/claude-code-system-prompts/commit/a4d4c22)
+
+_+14,700 tokens_
+
+- **NEW:** Data: additionalDirectoryConfigRoots setting and SDK get_settings additionalDirectoryConfigRootsWithheld field — Let the host point added folders at another checkout for configuration and report what Claude Code couldn't load, without moving file access.
+- **NEW:** Data: desktopMcpServersListScope setting — Explains which Claude desktop tabs and panes apply managed MCP allow and deny lists, and excludes servers sent to SSH hosts.
+- **NEW:** Data: Organization sign-in not named by computer settings and Required Anthropic sign-in notices — Explain missing or unused sign-ins, host-managed providers, and organizations with gateway or cloud-provider settings that can't satisfy the requirement.
+- **NEW:** Data: Organization provider sign-in changed request refusal, Organization changed conversation restart refusal, and Conversation resume requires active organization settings — Explain when requests or resumes stop after sign-in changes and how to continue under the required organization.
+- **NEW:** Data: SDK get_task_output agent message frames field — Explains how clients receive agent tool calls, results, and selected narration, and which private or oversized content is left out.
+- **NEW:** Data: SDK get_workspace_diff newPath field — Describes which renamed, copied, or quoted diff rows get a readable path and how to pass it to `read_file`.
+- **NEW:** Skill: Code Review named target diff instructions and Code Review unavailable target diff fallback — Review the named diff without switching branches; if fetching fails, disclose a checkout fallback or stop when there's no target or diff.
+- **NEW:** Skill: Design-sync design system move to Claude and Design-sync artifact support unavailable — Help choose between an existing moved artifact and Claude Design, or stop and ask for a new session when publishing isn't available.
+- **NEW:** Skill: Design-sync Artifact tool call instructions and Design-sync Artifacts MCP call instructions — Describe how to list, read, create, and publish a design system using either tool interface, with conflict and refusal handling.
+- **NEW:** System Prompt: Artifact tool usage and publishing and Tool Description: Artifact publish action — Tell Claude when to publish work for other readers, leave sensitive or misleading work as files, and let users decide how to share it.
+- **NEW:** System Prompt: New user collaboration preferences and System Reminder: Suggested task approval check-in — Adapt to the user's setup choices and wait for approval before making changes on tasks started from Claude Code's suggestions.
+- **NEW:** System Prompt: Sandbox AWS STS and IAM credential masking — Explains why some AWS calls are refused and tells Claude to report the restriction rather than retry around it.
+- **NEW:** System Prompt: Windows sandbox worktree commands — Tells Claude to leave worktree creation and moves to the user outside the sandbox and report partly completed moves without retrying.
+- **NEW:** System Reminder: Background update empty reply guidance — Allows silence while other work runs, but still calls for reporting a failure, risk, requested result, or decision when it matters.
+- **NEW:** Tool Description: Artifact publish edits action — Documents publishing a small update through ordered text replacements and rereading the artifact when a newer version causes a conflict.
+- **NEW:** Tool Description: Artifact quickstart action and skill loading guidance and Artifact read action — Explain when to call quickstart for a new artifact, how to choose a type, and when reading returns a saved document or summary.
+- **NEW:** Tool Description: Claude in Chrome account switched-off guidance — Explains when to mention the account switch, offer another browser, or let the user know the switch can take time to reach the chat.
+- Agent Prompt: App task list end-of-turn check — Can begin while the answer is being written, using the start already shown as evidence instead of saying the turn has ended.
+- Agent Prompt: /code-review part 3 extra-high and maximum effort modes and /code-review unavailable-agent inline mode — Give the bugs-and-conventions variant its own diff instructions, separate from the standard review recipe.
+- Data: Sandbox Windows backend setting — Says Windows no longer picks a sandbox backend by default and refuses sandboxed commands until a backend is selected.
+- Skill: Code Review (Phase 0 — gather the diff) — Starts with the default branch comparison, falls back when needed, and avoids shell forms that trigger approval.
+- Tool Description: REPL call batching costs — Moves the existing advice on batching work inside one model round trip into a shared block.
+- Agent Prompt: /code-review part 2 low effort mode — Can use `origin/HEAD` instead of the upstream branch when gathering the review diff.
+- Data: Claude Code agent proxy troubleshooting guide — Reads `[agent-proxy]` diagnostics in failed foreground command output instead of querying a status endpoint, and checks Java trust through `JAVA_TOOL_OPTIONS`.
+- Data: Sandbox worktrees directory listing failure warning — Adds `gitdir` to the linked-worktree files that may still be writable on Windows when directory discovery fails.
+- Data: SDK API error kind field — Documents a macOS Keychain write refusal that leaves the stored login intact and prevents sending its refresh token.
+- Data: SDK get_settings policy_origins field — Clarifies that `parent` can include settings from an organization sign-in, as distinct from a claude.ai login.
+- Data: SDK result process_turn_threads field — Documents opt-in CPU sampling at the rate set by `CLAUDE_CODE_THREAD_CPU_ONE_IN` instead of the previous one-in-4,096 default.
+- Data: SDK ui_render component field — Documents desktop theme sound and style hashes and how the desktop can fetch the assets they identify.
+- Skill: Code Review (conventions dimension) — Searches for repo instructions separately from `git diff` and uses personal instructions only if they're already in context.
+- System Reminder: Bash refused on MXC sandbox backend — Tells Windows users to select `sandboxuser` and run `claude sandbox install` to use Bash through that backend.
+- System Reminder: Exited plan mode — Can point to the plan file for reference and drops the instruction to reuse the plan shown to the user.
+- System Reminder: Project document size limit refusal — Tells Claude to save all the text in smaller documents immediately if the project no longer has the earlier text.
+- System Reminder: Resumed command approval directory verification failure — Distinguishes a missing approval directory record from a tool host that didn't report the shell's current directory.
+- Tool Description: CronCreate — Says scheduled jobs saved to disk resume on a later launch signed in to the same organization.
+- Tool Description: DesignSync — Describes moved projects' artifact links and ownership, and lets `/design-sync` instructions continue where the tool would otherwise tell Claude to stop.
+- Tool Description: REPL asynchronous output and polling instructions and REPL dispatched script execution and event delivery — Explain that shell commands stop at timeout instead of continuing when background tasks are turned off.
+- Tool Description: REPL persistent helper interface — Can emphasize the cost of keeping large outputs in context and recommend smaller read and test summaries without doing less checking.
+- Tool Description: WebFetch and WebFetch (concise) — Omit the Bash workaround when a web-fetch MCP tool is configured; the full description also drops its generic MCP preference in that case.
+- Tool Parameter: matched ask rule — Includes `Artifact` as another name an ask rule can use to match calls to the Artifacts server.
+- **REMOVED:** Data: Artifact publish merged-over newer version file changes notice — Leaves this separately extracted entry out of the collection; the shipped tool still reports which files changed in the newer version.
+- **REMOVED:** Data: SDK can_use_tool server_policy_ask_only field — Leaves the separate entry out of the extraction. The shipped schema still documents the field, but no longer lists the file-tool asks here.
+
 # [2.1.328](https://github.com/Piebald-AI/claude-code-system-prompts/commit/6b91926)
 
 _+15,115 tokens_
