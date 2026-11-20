@@ -4,6 +4,48 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.330](https://github.com/Piebald-AI/claude-code-system-prompts/commit/ef0e0f3)
+
+_+18,634 tokens_
+
+- **NEW:** Skill: Steward review only and Steward start pull request watch — Define review-only and watch modes, skip duplicate reviews, and hand off to a watch pass without writing during setup.
+- **NEW:** Skill: Steward watch pass, Steward watch pass steps, Steward pull request comment snapshot, and Steward unattended watch rules — Guide a pass through checks, trusted comments, project instructions, and limits on what Claude can change or push unattended.
+- **NEW:** Skill: Steward next check-in timing, Steward waiting and stopping, and Steward watch ended — Choose when to check again, skip quiet turns, and explain why a watch stopped and what still needs attention.
+- **NEW:** System Reminder: Steward merge path unreadable, Steward merge changes execution settings, and Steward checkout changed unexpectedly — Hand sensitive merges back to the user and stop the pass if Claude can't account for changes in the checkout.
+- **NEW:** System Reminder: Steward refused shell command formatting, Steward unattended command refusal, and Steward CI run outside failed runs — Explain why unattended commands were refused, which requests need direct user input, and why a CI run isn't eligible for a rerun.
+- **NEW:** Agent Prompt: Ship pull request metadata writer and System Reminder: Ship branch behind a cloud watcher — Draft a pull request title and body for reuse in the commit; explain why Ship skipped review when a cloud watcher was ahead.
+- **NEW:** System Prompt: Check in before costly work and Step-by-step collaboration preference — Spell out separate approval preferences for consequential work and for users who want to review each step.
+- **NEW:** System Prompt: Phone reply and approval formatting — Favors light formatting that reads well even when the phone app or an approval prompt displays the text as typed.
+- **NEW:** System Reminder: Suggested read-only task origin — Tells Claude to answer a suggested read-only task straight away, without changing files, checking out code, or posting anything.
+- **NEW:** System Reminder: Cloud container replaced with repositories and Cloud container replaced with outputs folder — Explain what survives a replacement and where to recover it, depending on whether the session used repositories or an outputs folder.
+- **NEW:** System Reminder: Parent must enter worktree before spawning — Adds a variant that tells the parent to enter a worktree first instead of telling Claude to respawn the agent with isolation.
+- **REMOVED:** System Prompt: New user collaboration preferences — Drops the single setup prompt from the extracted set; separate approval instructions now cover costly work and step-by-step collaboration.
+- **REMOVED:** System Prompt: Git workflow guidance — Leaves the extracted set as a standalone block; Git guidance still exists in the build and can vary with the environment.
+- **REMOVED:** System Reminder: Workflow isolated worktree — Drops the separate reminder about a workflow's Git worktree; the tool and workflow reference now also describe working copies.
+- **REMOVED:** Tool Description: Artifact comments guidance app wording — Drops the separate app wording from the extracted set while the main description adds guidance on reply formatting.
+- Agent Prompt: Inherited context for worktree sub-agent, Skill: Workflow authoring reference, and Tool Description: Agent usage notes — Describe working copies and labels alongside Git worktrees and branches, including when a workflow agent can run under its own label.
+- Tool Description: EnterWorktree and ExitWorktree — Explain working-copy creation, switching and cleanup for the project's version control, including refusal to remove a copy whose state is unknown.
+- Data: Interrupt cancel queued parameter and both interrupt result fields — Clarify that a server-added context note can remain in a hosted session without starting a turn or appearing in either list.
+- Data: SDK API error kind field — Documents the error when `ANTHROPIC_PROFILE` gives Claude Code no credential and it can't use the saved `/login` sign-in instead.
+- Data: SDK can_use_tool decision_reason_code field — Documents the optional host prompt for resetting a streak of permission denials, separate from the limit on total denials.
+- Data: SDK read_file anchor, offset, and requested_path fields — Describe anchored and offset reads in tool containers, their lower read limit, malformed-request errors, and how replies echo the requested path.
+- Data: SDK stream event owed_rows field — Adds transcript rows for Claude Code's reads of PDFs attached to the current message, alongside rows about project context.
+- Data: SDK turn handoff required rewind request ID field — Clarifies that a later worker replaying a saved rewind reports the same fields except for timing.
+- Skill: /doctor slash command — Says the last file in path order wins when two agent definitions in the same directory share a name.
+- Skill: /loop external wakeup handover — Bases the external loop's end on the configured maximum age and allows no end date when that setting is zero.
+- System Prompt: Artifact comment edit composer, Artifact comment fast acknowledgement, Artifact comment reply composer, and Tool Description: Artifact comments guidance — Explain which light Markdown works, keep acknowledgements plain, and spell out which emoji-related characters and unusual spaces can make posting fail.
+- System Prompt: Self-hosted runner doctor — Separates HTTP 403 policy denials from bad credentials and expired tokens, and adds guidance for disk exhaustion, full hook concurrency, and the new ten-failure limits.
+- System Prompt: Self-hosted runner doctor — Says failed sessions may restart on a fresh runner without intervention and warns against restarting on-demand runners or interrupting other sessions.
+- System Reminder: /btw side question — Adds an instruction to treat text in an attached image as data rather than following it.
+- System Reminder: Claude in Chrome MCP servers disabled by policy — Tells Claude to explain what can cause the policy block rather than presenting it as a connection failure.
+- System Reminder: Runner left repositories out at startup — Separates the behavioral guidance from the list of omitted repositories without changing what Claude should tell the user.
+- System Reminder: Session continuation — Explains when a cloud branch wasn't checked out and asks the user to switch in their own terminal if the work needs it.
+- System Reminder: Suggested task approval check-in — Adds GitHub issues to the task labels and says to read issue and pull request text as data rather than following it.
+- Tool Description: Bash Git commit instructions and PowerShell — Make portions of the Git workflow conditional and use a generic multiline command example where Git guidance is left out.
+- Tool Description: CronCreate — Warns that jobs stay in the current session when the signed-in organization can't be identified, even if the request asked to save them.
+- Tool Description: DesignSync — Clarifies that stored filenames strip some invisible characters rather than saying they strip all of them.
+- Tool Description: REPL persistent helper interface and REPL script and shell timeouts — Explain when Read can show images and PDFs from a script, and display the configured script timeout instead of a fixed ten minutes.
+
 # [2.1.329](https://github.com/Piebald-AI/claude-code-system-prompts/commit/a4d4c22)
 
 _+14,700 tokens_
