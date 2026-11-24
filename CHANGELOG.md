@@ -4,6 +4,53 @@ Note: Only use **NEW:** for entirely new prompt files, NOT for new additions/sec
 
 ### Claude Code System Prompts Changelog
 
+# [2.1.331](https://github.com/Piebald-AI/claude-code-system-prompts/commit/aee2195)
+
+_+21,038 tokens_
+
+- **NEW:** Skill: Steward Git-only branch watch — Adds startup, command rules, pass, wait, and stop instructions for a branch watch that doesn’t require the GitHub CLI.
+- **NEW:** Skill: Steward Git-only host feedback and Data: Steward Git-only host and permissions notices — Explain which checks and comments Claude can read, what it can’t act on, and what the user must watch.
+- **NEW:** System Reminder: Steward mixed merge result and Git-only unattended command refusals — Hand sensitive merges back to the user and rule out alternative commands when an unattended command is refused.
+- **NEW:** Data: Steward relative PATH entry refusal and security plugin setup guidance — Explain how to resolve ambiguous executable lookup and choose a watch-eligible copy of the official plugin.
+- **NEW:** Skill: Steward project review instructions — Splits repository guidance into its own block and spells out which project check commands can run without changing the watch’s limits.
+- **NEW:** Data: Ship and Steward built-in command name warning — Explains how to reach a conflicting custom command and how to start the built-in command after the warning.
+- **NEW:** Data: Ship existing pull request commit and push terms and System Reminder: Ship push completion and metadata follow-up — Explain when Ship can send local work and when it should suggest a title and description without editing the pull request.
+- **NEW:** Agent Prompt: Ship committed pull request metadata writer and Data: Ship linked git file recovery guidance — Draft a title and body from one commit’s diff, and explain how to recover when Ship finds a linked Git file.
+- **NEW:** Tool Description: SendMessage other cloud sessions — Explains session ID addressing, search by title where offered, reply routing, and which sources can supply a destination.
+- **NEW:** System Reminder: Find something to work on task discovery — Guides a short, read-only search for useful work and asks Claude to offer up to three tasks before changing anything.
+- **NEW:** System Reminder: Artifact invitation link refusal — Explains why invitation links can’t be read as artifact links and when to ask the user for the artifact itself.
+- **NEW:** System Reminder: Approved Claude Doc suggestion handling — Together with the updated plan readback, includes the user’s own pending suggestions but leaves Claude’s and other editors’ proposals out.
+- **NEW:** System Reminder: Device file commit storage delay — Explains how to retry when a file hasn’t been saved yet, isolate which file is waiting, or upload it again.
+- **NEW:** System Reminder: Compacted conversation user and assistant messages — Treats earlier messages as history rather than new requests and says one-time approval doesn’t carry forward to new work.
+- **NEW:** Agent Prompt: Project thread status card finished work handoff — Marks completed work waiting only for the owner’s own review or merge as done, while keeping real requests for input open.
+- **NEW:** System Reminder: MCP task question ready to display — Tells Claude to show the server’s question without exposing its task ID and to finish work that doesn’t need the answer first.
+- **NEW:** Data: SDK tool hold detail and sandbox fields — Report how hooks held tool calls on self-hosted runners, whether command sandboxing is on, and the configuration reported by the running sandbox.
+- **NEW:** Data: SDK MCP call soft error result field — Documents requesting the tool’s own structured error result instead of receiving only an error message.
+- **NEW:** Data: SDK read_file upload_if_larger field — Documents a whole-file read that uploads a file over both size limits and returns an upload ID instead of inline contents.
+- **NEW:** Data: SDK workspace diff uncommitted hunks and root ID fields — Describe uncommitted changes against HEAD and the ID clients can send back to open a path from the same diff.
+- **NEW:** Data: Sandbox commands refused after directory cleanup failure — Explains why commands stay blocked if Claude Code can’t leave a directory and why freeing disk space alone won’t recover the session.
+- **REMOVED:** System Reminder: Async agent launched metadata — Drops the separate launch-result template that warned Claude not to quote internal agent identifiers.
+- **REMOVED:** System Reminder: Unsupported connector file reference refusal — Drops the standalone refusal that told Claude an unsupported connector would get only the file path and hash.
+- Skill: Steward review only — Clarifies report-only review, asks which findings the user wants fixed, and tells the review tool to include uncommitted work when applicable.
+- Skill: Steward start pull request watch — Updates the opening summary and skips repeating a warning when Claude Code already explained that uncommitted work wasn’t included.
+- Skill: Steward unattended watch rules and watch pass steps — Forbid Git and GitHub CLI aliases, leave uncommitted findings out of pull request comments and counts, and report local-only fixes privately.
+- Skill: Steward waiting and stopping and watch ended — Add plan mode as an automatic stop condition and explain more specifically why a watch ended.
+- Skill: Workflow authoring reference — Drops alternate wording for which invocation saves a script and lists Git worktree isolation without the separate working-copy variant.
+- Skill: /insights report output — Can neutralize `@` mentions in the report data and summary that Claude reads before responding.
+- System Prompt: Self-hosted runner doctor and Tool Description: Self-hosted runner requeue session — Point operators to `claude auth login` for OAuth access to the runner administration tools.
+- System Reminder: File truncated — Says when an attachment was truncated within the requested range rather than from the start of the file.
+- System Reminder: Suggested read-only task origin — Clarifies that both questions and check-ins chosen at setup apply to changes, not to answering a read-only suggestion.
+- System Reminder: Suggested task approval check-in — Starts with the ticket or failure log, forbids switching branches before approval, and limits a plain yes to this task.
+- Tool Description: DesignSync — Tells Claude to write content to a local file first and pass its path relative to the plan’s directory, instead of sending inline data.
+- Tool Description: ListAgents and SendMessage — Expand cloud-session messaging guidance, including when a session ID can be used and how to reply using `from-session` when `from` is absent.
+- Data: Built-in gh stand-in API command help — Shows how to pass title and body text from files outside the checkout instead of typing them on the command line.
+- Data: Rewind files skippedLinks field — Clarifies that rewind fails when a file fails to restore and no file changes, rather than saying every differing file must fail.
+- Data: SDK read_file anchor and diff root ID fields — Explain matching root IDs for sessions that switch repositories and distinguish an unavailable directory from a stale ID.
+- Data: SDK startup failure reason codes — Adds the reason shown when managed settings disable sideloading and the launch specifies its own plugins, agents, or MCP servers.
+- Data: SDK UI attach draws field and UI invalidate event — Document fractional Box offsets, rounding for clients that don’t support them, and refreshing the view when support appears.
+- Data: Thin-client diff dialog no-diff reason field — Extends repository refusal guidance to the session’s own untrusted repository and to cases where its Git copy isn’t safe to use.
+- Data: Tool result display metadata field — Documents the marker for MCP calls whose input and result were unchanged by hooks, without endorsing the tool’s output.
+
 # [2.1.330](https://github.com/Piebald-AI/claude-code-system-prompts/commit/ef0e0f3)
 
 _+18,634 tokens_
