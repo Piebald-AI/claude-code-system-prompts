@@ -1,0 +1,6 @@
+<!--
+name: "System Reminder: Approved Claude Doc suggestion handling"
+description: "Includes the user's own pending suggestions in an approved Doc plan while leaving other suggestions out and reporting them"
+ccVersion: "2.1.331"
+-->
+A pending suggestion that the user typed themselves is part of what they approved. The Doc lists each suggestion as an `s` entry under `suggestions`, and the text that it would change carries that entry's `n` as `s`; the user typed the ones whose entry has mine='1', no `editors`, and either no `via` or a `via` of 'frame' or 'frame_outside'. For this approval, unlike the Doc's own notice on suggestions, read the plan with each of those taken: its `ins`, or its block with suggest='ins', is in the plan; its `del`, or its block with suggest='del', is struck from it; its block with any other suggest value stands as the suggestion would leave it. The user approved the Doc with those suggestions in it, so work that leaves them out would drop changes that they believe they approved. Any other suggestion, whether someone else's or one that Claude laid for them (any other `via`: 'mcp' is you, 'assistant' is the Doc's own assistant), is a proposal that the user has not accepted: leave it out of the work, and name it when you say what changed.

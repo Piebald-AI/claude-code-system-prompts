@@ -1,7 +1,7 @@
 <!--
 name: "Skill: Steward waiting and stopping"
 description: "Explains automatic wake-ups, when the watch ends, and how to stop and report the pull request's status"
-ccVersion: "2.1.330"
+ccVersion: "2.1.331"
 variables:
   - "REPORT_BEFORE_WAKE"
   - "REPORT_INSTRUCTION"
@@ -29,7 +29,7 @@ Between your passes Claude Code looks at the pull request by itself, every two m
 
 ## Stopping
 
-Claude Code ends the watch by itself once the pull request is merged or closed, is no longer the user's to drive from this checkout, is aimed at another base branch, carries a hosted agent's label, the session goes into bypass mode or loses the fence, or ${MAX_WATCH_DAYS} days are over. Stop it yourself when:
+Claude Code ends the watch by itself once the pull request is merged or closed, is no longer the user's to drive from this checkout, is aimed at another base branch, carries a hosted agent's label, the session goes into bypass mode or plan mode or loses the fence, or ${MAX_WATCH_DAYS} days are over. Stop it yourself when:
 - The user says stop. Or a trusted person asks on the pull request that you stop, hold off or leave the branch alone, or says that they are handling it: push nothing more, and tell the user who asked.
 
 To stop: call ${SCHEDULE_WAKEUP_TOOL_NAME} with `stop: true` and nothing else, then ${FORMAT_USER_REPORT_FN({briefMode:IS_BRIEF_MODE_FN()})}: where the pull request stands, what is still open, why you stopped, and "Run /${STEWARD_COMMAND_NAME} again to keep watching."${REVIEW_HANDOFF_NOTE_FN()}

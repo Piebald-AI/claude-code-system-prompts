@@ -1,7 +1,7 @@
 <!--
 name: "Data: Built-in gh stand-in api command help"
 description: "Usage text for Claude Code's built-in gh stand-in, which supports only gh api REST requests to GitHub hosts through the session's GitHub proxy, listing its flags and how {owner}, {repo} and {branch} placeholders are filled in"
-ccVersion: "2.1.290"
+ccVersion: "2.1.331"
 variables:
   - "BUILT_IN_GH_CLIENT_DESCRIPTION"
   - "NO_GITHUB_CLI_REASON"
@@ -9,6 +9,7 @@ variables:
   - "DEFAULT_GITHUB_HOST"
   - "ADDITIONAL_GITHUB_HOSTS"
   - "ALLOWS_ADDITIONAL_GITHUB_HOSTS"
+  - "TEXT_FILE_INPUT_GUIDANCE"
 -->
 Usage: gh api <endpoint> [flags]
 
@@ -47,4 +48,5 @@ way, and the remote chosen names the host the request goes to.
 GH_HOST and a host in GH_REPO pick no host other than ${DEFAULT_GITHUB_HOST} here: name one
 with --hostname. A request to another host says so in one line on standard error.`:""}
 
-Example: gh api repos/{owner}/{repo}/pulls -f title='Fix' -f head='my-branch' -f base='main'
+Example: gh api repos/{owner}/{repo}/pulls -F title=@<title-file> -f head='my-branch' -f base='main'
+${TEXT_FILE_INPUT_GUIDANCE}
