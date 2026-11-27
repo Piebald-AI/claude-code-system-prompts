@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "taskId": {
+      "description": "The ID of the task to retrieve",
+      "type": "string"
+    }
+  },
+  "required": [
+    "taskId"
+  ],
+  "type": "object"
+}

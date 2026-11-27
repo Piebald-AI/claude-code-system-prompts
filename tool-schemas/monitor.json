@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "command": {
+      "description": "Shell command or script. Each stdout line is an event; exit ends the watch.",
+      "type": "string"
+    },
+    "description": {
+      "description": "Short human-readable description of what you are monitoring (shown in notifications).",
+      "type": "string"
+    },
+    "persistent": {
+      "default": false,
+      "description": "Run for the lifetime of the session (no timeout). Use for session-length watches like PR monitoring or log tails. Stop with TaskStop.",
+      "type": "boolean"
+    },
+    "timeout_ms": {
+      "default": 300000,
+      "description": "Kill the monitor after this deadline. Default 300000ms, max 3600000ms. Ignored when persistent is true.",
+      "minimum": 1000,
+      "type": "number"
+    }
+  },
+  "required": [
+    "description",
+    "timeout_ms",
+    "persistent",
+    "command"
+  ],
+  "type": "object"
+}

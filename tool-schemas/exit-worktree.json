@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "description": "\"keep\" leaves the worktree and branch on disk; \"remove\" deletes both.",
+      "enum": [
+        "keep",
+        "remove"
+      ],
+      "type": "string"
+    },
+    "discard_changes": {
+      "description": "Required true when action is \"remove\" and the worktree has uncommitted files or unmerged commits. The tool will refuse and list them otherwise.",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "action"
+  ],
+  "type": "object"
+}
